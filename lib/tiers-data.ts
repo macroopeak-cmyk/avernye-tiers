@@ -928,7 +928,6 @@ export const INITIAL_PLAYERS: Player[] = [
   { id: 2129, username: "Polar2129", region: "EU", tiers: { NethOP: "HT2", Vanilla: "LT3" } },
   { id: 2130, username: "Bee2130", region: "NA", tiers: { Sword: "HT2", NethOP: "LT3" } },
   { id: 2131, username: "Llama2131", region: "CIS", tiers: { SMP: "HT2", UHC: "LT3" } },
-    { id: 25000, username: "H0ma68", region: "CIS", tiers: { Spear: "HT1", Mace: "HT2", Vanilla: "HT3", Cart: "HT4" } },
   { id: 2132, username: "Trader2132", region: "AS", tiers: { Axe: "HT2", Pot: "LT3" } },
   { id: 2133, username: "IronGolem2133", region: "EU", tiers: { Vanilla: "HT2", Sword: "LT3" } },
   { id: 2134, username: "SnowGolem2134", region: "NA", tiers: { UHC: "HT2", NethPot: "LT3" } },
