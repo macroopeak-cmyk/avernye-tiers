@@ -201,7 +201,7 @@ export const INITIAL_PLAYERS: Player[] = [
     username: "XIII.",
     region: "EU",
     tiers: {},
-    staffRole: "Co-Owner",
+    staffRole: "",
   },
   {
     id: 77,
