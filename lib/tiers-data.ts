@@ -200,7 +200,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 76,
     username: "corps",
     region: "EU",
-    tiers: {},
+    tiers: { Vanilla: "LT3" },
   },
   {
     id: 77,
