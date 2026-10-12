@@ -28,7 +28,7 @@ export const INITIAL_PLAYERS: Player[] = [
     username: "ItzRealZevs",
     region: "EU",
     tiers: { 
-      Sword: "HT3", 
+      Sword: "LT4", 
       Vanilla: "HT1", 
       UHC: "HT2", 
       Axe: "HT4", 
@@ -43,13 +43,13 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 2,
     username: "x_q",
     region: "EU",
-    tiers: { Sword: "HT3", Vanilla: "HT3", UHC: "HT4", SMP: "HT5" },
+    tiers: { Sword: "LT4", Vanilla: "HT3", UHC: "HT4", SMP: "HT5" },
   },
   {
     id: 3,
     username: "Stqfe",
     region: "EU",
-    tiers: { Sword: "HT3", Vanilla: "HT2", UHC: "HT4", SMP: "HT5" },
+    tiers: { Sword: "LT4", Vanilla: "HT2", UHC: "HT4", SMP: "HT5" },
   },
   {
     id: 4,
@@ -75,7 +75,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 7,
     username: "ShadowMC",
     region: "EU",
-    tiers: { Sword: "HT3", Vanilla: "HT3", UHC: "HT3", SMP: "HT5" },
+    tiers: { Sword: "LT4", Vanilla: "HT3", UHC: "HT3", SMP: "HT5" },
   },
   {
     id: 1849,
@@ -182,7 +182,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 74,
     username: "NumaniaVSBG",
     region: "EU",
-    tiers: { SMP: "HT3", Sword: "HT3", Vanilla: "HT4" },
+    tiers: { SMP: "HT3", Sword: "LT4", Vanilla: "HT4" },
   },
   {
     id: 75,
@@ -235,7 +235,7 @@ export const INITIAL_PLAYERS: Player[] = [
       Axe: "HT4",
       NethOP: "HT1",
       Mace: "HT3",
-      Sword: "HT3",
+      Sword: "LT4",
       NethPot: "HT4",
       Pot: "LT4"
     },
@@ -276,7 +276,7 @@ export const INITIAL_PLAYERS: Player[] = [
     username: "eraq016",
     region: "EU",
     staffRole: "Tester",
-    tiers: { Sword: "HT3", Vanilla: "HT3" },
+    tiers: { Sword: "LT4", Vanilla: "HT3" },
   },
   {
     id: 83,
@@ -384,7 +384,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 51,
     username: "PixelKnight",
     region: "NA",
-    tiers: { Sword: "HT3", Vanilla: "HT2", Pot: "LT4", Axe: "HT5" },
+    tiers: { Sword: "LT4", Vanilla: "HT2", Pot: "LT4", Axe: "HT5" },
   },
   {
     id: 52,
@@ -396,13 +396,13 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 53,
     username: "StormBringer",
     region: "NA",
-    tiers: { Sword: "HT3", Pot: "HT4", Mace: "HT4", Axe: "HT4" },
+    tiers: { Sword: "LT4", Pot: "HT4", Mace: "HT4", Axe: "HT4" },
   },
   {
     id: 54,
     username: "GhostRider",
     region: "EU",
-    tiers: { Vanilla: "HT2", Sword: "HT3", NethPot: "LT4", SMP: "HT5" },
+    tiers: { Vanilla: "HT2", Sword: "LT4", NethPot: "LT4", SMP: "HT5" },
   },
   {
     id: 55,
@@ -426,7 +426,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 58,
     username: "IronGuard",
     region: "EU",
-    tiers: { Sword: "HT3", Axe: "HT4", Pot: "LT4", NethPot: "HT4" },
+    tiers: { Sword: "LT4", Axe: "HT4", Pot: "LT4", NethPot: "HT4" },
   },
   {
     id: 59,
@@ -450,19 +450,19 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 62,
     username: "CrimsonWolf",
     region: "EU",
-    tiers: { Sword: "HT3", NethOP: "HT2", SMP: "HT4", UHC: "HT5" },
+    tiers: { Sword: "LT4", NethOP: "HT2", SMP: "HT4", UHC: "HT5" },
   },
   {
     id: 63,
     username: "VortexMC",
     region: "NA",
-    tiers: { Sword: "HT3", Vanilla: "HT3", Axe: "LT4", NethPot: "HT4" },
+    tiers: { Sword: "LT4", Vanilla: "HT3", Axe: "LT4", NethPot: "HT4" },
   },
   {
     id: 64,
     username: "SolarFlare",
     region: "EU",
-    tiers: { UHC: "HT2", Sword: "HT3", Pot: "HT4", SMP: "HT5" },
+    tiers: { UHC: "HT2", Sword: "LT4", Pot: "HT4", SMP: "HT5" },
   },
   {
     id: 65,
@@ -474,7 +474,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 66,
     username: "AquaMarine",
     region: "EU",
-    tiers: { Sword: "HT3", UHC: "HT3", NethPot: "LT4", Vanilla: "HT4" },
+    tiers: { Sword: "LT4", UHC: "HT3", NethPot: "LT4", Vanilla: "HT4" },
   },
   {
     id: 67,
@@ -492,7 +492,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 69,
     username: "Blizzard",
     region: "NA",
-    tiers: { Sword: "HT3", Axe: "LT4", NethPot: "LT4", SMP: "HT4" },
+    tiers: { Sword: "LT4", Axe: "LT4", NethPot: "LT4", SMP: "HT4" },
   },
   {
     id: 113,
@@ -510,7 +510,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 201,
     username: "KiteRunner",
     region: "EU",
-    tiers: { Sword: "HT3", Vanilla: "LT3" },
+    tiers: { Sword: "LT4", Vanilla: "LT3" },
   },
   {
     id: 202,
@@ -552,7 +552,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 208,
     username: "Wavelet",
     region: "NA",
-    tiers: { Sword: "HT3", Axe: "LT4" },
+    tiers: { Sword: "LT4", Axe: "LT4" },
   },
   {
     id: 209,
@@ -600,7 +600,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 216,
     username: "Saber",
     region: "NA",
-    tiers: { Sword: "HT3", Mace: "HT5" },
+    tiers: { Sword: "LT4", Mace: "HT5" },
   },
   {
     id: 217,
@@ -684,7 +684,7 @@ export const INITIAL_PLAYERS: Player[] = [
     tiers: { NethOP: "LT2", NethPot: "LT4" }
   },
   { id: 320, username: "GammaRay", region: "AS",
-    tiers: { Vanilla: "HT2", Sword: "HT3" }
+    tiers: { Vanilla: "HT2", Sword: "LT4" }
   },
   { id: 321, username: "DeltaForce", region: "CIS",
     tiers: { UHC: "HT2", Axe: "LT4" }
@@ -723,7 +723,7 @@ export const INITIAL_PLAYERS: Player[] = [
     tiers: { Pot: "HT4", NethOP: "HT3" }
   },
   { id: 333, username: "ZenitsuAg", region: "NA",
-    tiers: { NethPot: "HT4", Sword: "HT3" }
+    tiers: { NethPot: "HT4", Sword: "LT4" }
   },
   { id: 334, username: "InosukeHash", region: "CIS",
     tiers: { SMP: "LT2", Axe: "LT4" }
@@ -804,7 +804,7 @@ export const INITIAL_PLAYERS: Player[] = [
   { id: 2006, username: "Neon2006", region: "NA", tiers: { Pot: "HT4", UHC: "LT3" } },
   { id: 2007, username: "Echo2007", region: "CIS", tiers: { Vanilla: "HT3", Mace: "LT2" } },
   { id: 2008, username: "Frost2008", region: "AS", tiers: { Axe: "HT4", NethOP: "LT4" } },
-  { id: 2009, username: "Void2009", region: "EU", tiers: { Sword: "HT3", SMP: "LT3" } },
+  { id: 2009, username: "Void2009", region: "EU", tiers: { Sword: "LT4", SMP: "LT3" } },
   { id: 2010, username: "Solar2010", region: "NA", tiers: { UHC: "HT2", Vanilla: "LT3" } },
   { id: 2011, username: "Lunar2011", region: "CIS", tiers: { Pot: "LT4", NethPot: "HT4" } },
   { id: 2012, username: "Cyber2012", region: "AS", tiers: { NethOP: "HT2", Sword: "LT4" } },
