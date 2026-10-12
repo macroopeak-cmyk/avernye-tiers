@@ -758,7 +758,7 @@ export const INITIAL_PLAYERS: Player[] = [
     username: "Ekho017",
     region: "EU",
     staffRole: "Co-Owner",
-    tiers: { Sword: "LT4", Pot: "LT3", Vanilla: "LT1", NethPot: "HT4", Mace: "LT4" },
+    tiers: { Sword: "LT4", Pot: "LT3", Vanilla: "LT1", NethPot: "HT4", Mace: "LT4", UHC: "LT4" },
   },
   {
     id: 412,
