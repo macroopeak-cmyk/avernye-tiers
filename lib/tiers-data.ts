@@ -254,7 +254,7 @@ export const INITIAL_PLAYERS: Player[] = [
     tiers: {
       Vanilla: "HT4",
       UHC: "LT2",
-      Pot: "LT3",
+      Pot: "LT4",
       NethOP: "HT3",
       NethPot: "LT4",
       SMP: "LT2",
