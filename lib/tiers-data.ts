@@ -753,6 +753,12 @@ export const INITIAL_PLAYERS: Player[] = [
     staffRole: "Tester",
     tiers: { Sword: "HT4", Pot: "LT4" }
   },
+   {
+    id: 413,
+    username: "Ekho017",
+    region: "EU",
+    tiers: { Sword: "LT4", Pot: "LT3", Vanilla: "HT3", NethPot: "HT4", Mace: "LT4" },
+  },
   {
     id: 412,
     username: "SunAqua",
