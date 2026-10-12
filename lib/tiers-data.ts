@@ -345,6 +345,12 @@ export const INITIAL_PLAYERS: Player[] = [
     tiers: { Vanilla: "HT4", Sword: "LT4", NethPot: "HT5" },
   },
   {
+    id: 414,
+    username: "k0mure",
+    region: "EU",
+    tiers: { UHC: "LT2" },
+  },
+  {
     id: 100,
     username: "CometPvP",
     region: "EU",
