@@ -125,7 +125,7 @@ export const INITIAL_PLAYERS: Player[] = [
     username: "Rivise",
     region: "EU",
     staffRole: "Owner",
-    tiers: { Vanilla: "LT4", Pot: "LT4", Axe: "HT4", NethOP: "LT2", UHC: "HT4", Sword: "LT3" },
+    tiers: { Vanilla: "LT4", Pot: "LT4", Axe: "LT4", NethOP: "LT2", UHC: "HT4", Sword: "LT3" },
   },
   {
     id: 73,
