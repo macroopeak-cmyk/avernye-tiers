@@ -157,7 +157,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 108,
     username: "Oneunubore",
     region: "EU",
-    tiers: { Axe: "LT3", Sword: "LT3", Vanilla: "LT4", UHC: "HT4", Mace: "LT4", Spear: "HT4", Cart: "HT4", Pot: "HT4", NethPot: "HT4", },
+    tiers: { Axe: "LT3", Sword: "LT3", Vanilla: "LT4", UHC: "HT4", Mace: "LT4", Spear: "HT4", Cart: "HT4", Pot: "HT5", NethPot: "HT4", },
   },
   {
     id: 109,
