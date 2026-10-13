@@ -767,7 +767,7 @@ export const INITIAL_PLAYERS: Player[] = [
     region: "EU",
     skinUsername: "strafikk",
     staffRole: "Co-Owner",
-    tiers: { Sword: "HT4", Pot: "LT3", Vanilla: "LT1", NethPot: "HT4", Mace: "LT4", UHC: "LT4", NethOP: "HT3", SMP: "HT4" },
+    tiers: { Sword: "HT4", Pot: "LT3", Vanilla: "LT1", NethPot: "LT4", Mace: "LT4", UHC: "LT4", NethOP: "HT3", SMP: "LT3", Spear: "HT4" },
   },
   {
     id: 412,
