@@ -773,7 +773,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 412,
     username: "SunAqua",
     region: "EU",
-    tiers: { Sword: "LT2", Pot: "LT2", Axe: "LT3", UHC: "LT3", Mace: "LT2", NethPot: "LT3", Vanilla: "LT3", SMP: "LT3" },
+    tiers: { Sword: "LT2", Pot: "LT2", Axe: "LT3", UHC: "LT3", Mace: "HT2", NethPot: "LT3", Vanilla: "LT3", SMP: "LT3" },
   },
   {
     id: 411,
