@@ -262,7 +262,7 @@ export const INITIAL_PLAYERS: Player[] = [
       SMP: "LT2",
       Sword: "HT4",
       Axe: "HT4",
-      Mace: "LT2",
+      Mace: "LT4",
       Cart: "HT3",
       Spear: "HT3",
     },
