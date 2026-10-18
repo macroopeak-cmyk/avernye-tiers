@@ -773,7 +773,16 @@ const RAW_PLAYERS: Player[] = [
     id: 412,
     username: "SunAqua",
     region: "EU",
-    tiers: { Sword: "LT3", Pot: "LT3", Axe: "LT3", UHC: "HT3", Mace: "LT3", NethPot: "LT3", Vanilla: "LT3", SMP: "LT3" },
+    tiers: {
+      Mace: "HT2",
+      Sword: "LT2",
+      Pot: "LT2",
+      Vanilla: "LT3",
+      UHC: "LT3",
+      NethOP: "LT3",
+      SMP: "LT3",
+      Axe: "LT3",
+    },
   },
   {
     id: 411,
