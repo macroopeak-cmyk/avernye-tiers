@@ -22,7 +22,7 @@ export interface RankedPlayer {
   staffRole?: StaffRole
 }
 
-export const INITIAL_PLAYERS: Player[] = [
+const RAW_PLAYERS: Player[] = [
   {
     id: 1,
     username: "ItzRealZevs",
@@ -60,14 +60,14 @@ export const INITIAL_PLAYERS: Player[] = [
   {
     id: 5,
     username: "Novawww",
-    skinUsername: "Marlowww", //
+    skinUsername: "Marlowww",
     region: "EU",
     tiers: { Sword: "HT4", Vanilla: "HT1", UHC: "LT3", Axe: "HT4", NethOP: "HT1", Pot: "HT4", SMP: "HT4", NethPot: "HT4", Mace: "HT4" },
   },
   {
     id: 6,
     username: "FrostByte",
-    skinUsername: "Swight", // Скин будет браться у Swight
+    skinUsername: "Swight",
     region: "NA",
     tiers: { Sword: "HT4", Vanilla: "HT3", UHC: "HT3", Axe: "HT4", NethOP: "HT4", Pot: "HT4", SMP: "HT3", NethPot: "LT4", Mace: "HT4" },
   },
@@ -81,7 +81,7 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 1849,
     username: "Mayowl1234561111",
     region: "EU",
-    tiers: { Sword: "HT4",Vanilla: "LT5" },
+    tiers: { Sword: "HT4", Vanilla: "LT5" },
   },
   {
     id: 8,
@@ -157,19 +157,19 @@ export const INITIAL_PLAYERS: Player[] = [
     id: 108,
     username: "Oneunubore",
     region: "EU",
-    tiers: { Axe: "LT3", Sword: "LT3", Vanilla: "HT5", UHC: "HT4", Mace: "LT4", Spear: "HT4", Cart: "HT4", Pot: "HT5", NethPot: "HT4", },
+    tiers: { Axe: "LT3", Sword: "LT3", Vanilla: "HT5", UHC: "HT4", Mace: "LT4", Spear: "HT4", Cart: "HT4", Pot: "HT5", NethPot: "HT4" },
   },
   {
     id: 109,
     username: "ChaosF1IIIeP",
     region: "EU",
-    tiers: { },
+    tiers: {},
   },
   {
     id: 111,
     username: "tuntutntun",
     region: "EU",
-    tiers: { Vanilla: "HT5",Axe: "HT4",Sword: "HT5",NethPot: "LT3",Mace: "LT3", NethOP: "HT4",  },
+    tiers: { Vanilla: "HT5", Axe: "HT4", Sword: "HT5", NethPot: "LT3", Mace: "LT3", NethOP: "HT4" },
     staffRole: "Tester",
   },
   {
@@ -239,7 +239,7 @@ export const INITIAL_PLAYERS: Player[] = [
       Mace: "HT3",
       Sword: "LT4",
       NethPot: "HT4",
-      Pot: "LT4"
+      Pot: "LT4",
     },
   },
   {
@@ -263,7 +263,7 @@ export const INITIAL_PLAYERS: Player[] = [
       Sword: "HT4",
       Axe: "HT4",
       Mace: "HT4",
-      Cart: "HT3",
+      Cart: "LT3",
       Spear: "HT3",
     },
   },
@@ -761,7 +761,7 @@ export const INITIAL_PLAYERS: Player[] = [
     staffRole: "Tester",
     tiers: { Sword: "HT4", Pot: "LT4" }
   },
-   {
+  {
     id: 413,
     username: "Ekho017",
     region: "EU",
@@ -785,7 +785,7 @@ export const INITIAL_PLAYERS: Player[] = [
       Pot: "HT1",
     },
   },
-  // --- 30 НОВЫХ ИГРОКОВ (все HT1 заменены на HT2) ---
+  // --- 30 НОВЫХ ИГРОКОВ ---
   { id: 1001, username: "ApexOverlord", region: "EU", tiers: { Sword: "HT4", Vanilla: "HT2", UHC: "HT3" } },
   { id: 1002, username: "TitanStriker", region: "NA", tiers: { Vanilla: "HT2", Axe: "HT4", Pot: "LT4" } },
   { id: 1003, username: "VortexGod", region: "CIS", tiers: { NethOP: "HT2", UHC: "HT3", Sword: "HT4" } },
@@ -817,7 +817,7 @@ export const INITIAL_PLAYERS: Player[] = [
   { id: 1029, username: "AnarchyGod", region: "NA", tiers: { Pot: "HT4", NethPot: "HT4", Axe: "LT4" } },
   { id: 1030, username: "OblivionLord", region: "CIS", tiers: { Sword: "HT4", Vanilla: "HT2", SMP: "HT4" } },
 
-  // --- 150 ИГРОКОВ СО СРЕДНИМ КОЛИЧЕСТВОМ ОЧКОВ (от 20 до 50) ---
+  // --- 150 ИГРОКОВ ---
   { id: 2001, username: "Pixel2001", region: "EU", tiers: { Sword: "HT4", Vanilla: "LT3" } },
   { id: 2002, username: "Shadow2002", region: "NA", tiers: { UHC: "HT3", Pot: "LT4" } },
   { id: 2003, username: "Ghost2003", region: "CIS", tiers: { NethOP: "HT3", Vanilla: "LT4" } },
@@ -969,6 +969,31 @@ export const INITIAL_PLAYERS: Player[] = [
   { id: 2149, username: "WanderingTrader2149", region: "EU", tiers: { Sword: "HT4", Pot: "LT3" } },
   { id: 2150, username: "Allay2150", region: "NA", tiers: { Vanilla: "HT2", NethPot: "LT3" } }
 ]
+
+// Автоматическая фильтрация: оставляем только ОДИН HT1 на каждый кит
+function enforceSingleHT1(players: Player[]): Player[] {
+  const seenHT1Kits = new Set<string>()
+
+  return players.map((player) => {
+    // Исключение для cherno (оставляем ее тиры как есть)
+    if (player.username === "cherno") return player
+
+    const newTiers = { ...player.tiers }
+    for (const [kit, tier] of Object.entries(newTiers)) {
+      if (tier.toUpperCase() === "HT1") {
+        if (seenHT1Kits.has(kit)) {
+          // Если на этот кит уже есть HT1 у предыдущего игрока, понижаем до HT2
+          newTiers[kit] = "HT2"
+        } else {
+          seenHT1Kits.add(kit)
+        }
+      }
+    }
+    return { ...player, tiers: newTiers }
+  })
+}
+
+export const INITIAL_PLAYERS: Player[] = enforceSingleHT1(RAW_PLAYERS)
 
 export const TIER_POINTS: Record<string, number> = {
   "HT1": 60,
