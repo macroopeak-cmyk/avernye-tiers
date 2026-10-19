@@ -7,12 +7,11 @@ import KitTier from "@/components/kit-tier"
 import { PlayerModal } from "@/components/player-modal"
 import { 
   Info, X, Palette, Search, 
-  Home as HomeIcon, Trophy, Disc, FileText, ChevronDown, ExternalLink, Server, Globe, Calendar, ArrowRight, Check, Plus, Minus
+  Home as HomeIcon, Trophy, Disc, FileText, ChevronDown, ExternalLink, Server, Globe, Calendar, ArrowRight, Plus, Minus
 } from "lucide-react"
 
 export default function Home() {
-  // Состояние активной вкладки: "home" или "rankings" (при входе теперь открывается Home)
-  const [activeTab, setActiveTab] = useState<"home" | "rankings">("home")
+  const [activeTab, setActiveTab] = useState<"home" | "rankings" | "server-ip" | "events">("home")
   const [selectedMode, setSelectedMode] = useState<string>("overall")
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
@@ -24,8 +23,6 @@ export default function Home() {
   
   const [theme, setTheme] = useState<"dark" | "midnight" | "sinus" | "light">("dark")
   const [isThemeOpen, setIsThemeOpen] = useState(false)
-  
-  // Состояние для FAQ (аккордеон)
   const [openFaq, setOpenFaq] = useState<number | null>(0)
 
   useEffect(() => {
@@ -71,7 +68,7 @@ export default function Home() {
   }
 
   const copyServerIp = () => {
-    navigator.clipboard.writeText("avernye.wellduck.org")
+    navigator.clipboard.writeText("mctiers.network")
     setCopiedIp(true)
     setTimeout(() => setCopiedIp(false), 2000)
   }
@@ -124,17 +121,17 @@ export default function Home() {
   return (
     <main className={`min-h-screen ${themeStyles.bg} ${themeStyles.textColor} flex flex-col items-center py-4 px-6 relative transition-colors duration-300 w-full`}>
       
-      {/* Шапка сайта (как на скриншоте 1 и 2) */}
+      {/* Шапка сайта */}
       <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-4 rounded-2xl shadow-lg mb-8`}>
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-8">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("home")}>
-            <img src="/logo.png" alt="SinusTiers" className="h-10 w-auto object-contain scale-105" />
+            <img src="/logo.png" alt="MCTiers" className="h-10 w-auto object-contain scale-105" />
           </div>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-400 font-medium">
+          <nav className="hidden md:flex items-center gap-5 text-xs text-zinc-400 font-medium">
             <button 
               onClick={() => setActiveTab("home")}
-              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "home" ? "text-white font-bold bg-zinc-800/60 px-3 py-1.5 rounded-xl border border-zinc-700/50" : "hover:text-zinc-200"}`}
+              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "home" ? "text-white font-bold" : "hover:text-zinc-200"}`}
             >
               <HomeIcon className="w-4 h-4 text-zinc-500" />
               <span>Home</span>
@@ -142,7 +139,7 @@ export default function Home() {
 
             <button 
               onClick={() => setActiveTab("rankings")}
-              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "rankings" ? "text-white font-bold bg-zinc-800/60 px-3 py-1.5 rounded-xl border border-zinc-700/50" : "hover:text-zinc-200"}`}
+              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "rankings" ? "text-white font-bold" : "hover:text-zinc-200"}`}
             >
               <Trophy className="w-4 h-4 text-amber-500" />
               <span>Rankings</span>
@@ -151,7 +148,7 @@ export default function Home() {
             <div className="relative">
               <button 
                 onClick={() => setIsDiscordMenuOpen(!isDiscordMenuOpen)}
-                className="flex items-center gap-1.5 hover:text-zinc-200 transition-colors cursor-pointer py-1.5 px-2"
+                className="flex items-center gap-1.5 hover:text-zinc-200 transition-colors cursor-pointer"
               >
                 <Disc className="w-4 h-4 text-zinc-500" />
                 <span>Discords</span>
@@ -182,21 +179,28 @@ export default function Home() {
             </div>
 
             <button 
-              onClick={copyServerIp} 
-              className="flex items-center gap-2 hover:text-zinc-200 transition-colors cursor-pointer py-1.5 px-2"
+              onClick={() => setActiveTab("server-ip")}
+              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "server-ip" ? "text-white font-bold" : "hover:text-zinc-200"}`}
             >
               <Server className="w-4 h-4 text-zinc-500" />
               <span>Server IP</span>
             </button>
 
-            <a href="#events" className="flex items-center gap-2 hover:text-zinc-200 transition-colors py-1.5 px-2">
+            <button 
+              onClick={() => setActiveTab("events")}
+              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "events" ? "text-white font-bold" : "hover:text-zinc-200"}`}
+            >
               <Calendar className="w-4 h-4 text-zinc-500" />
               <span>Events</span>
-            </a>
+            </button>
           </nav>
         </div>
 
         <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-zinc-900/60 border border-zinc-800 px-3 py-1.5 rounded-xl text-xs text-zinc-400">
+            <span className="text-base">🇺🇸</span>
+          </div>
+
           <div className="w-64 relative">
             <div className="relative flex items-center">
               <Search className="absolute left-3 w-4 h-4 text-zinc-500 pointer-events-none" />
@@ -248,22 +252,20 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Условие отображения: HOME или RANKINGS */}
-      {activeTab === "home" ? (
+      {/* ВКЛАДКА: HOME (Скриншоты 2, 3, 4, 5, 6) */}
+      {activeTab === "home" && (
         <div className="w-full max-w-[1720px] flex flex-col gap-8">
           
-          {/* Секция 1: Главный баннер с описанием и топ-3 игроками (как на скриншоте 2) */}
+          {/* Верхний блок: Приветствие + Топ-3 игрока */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Левая часть: Приветствие */}
             <div className={`lg:col-span-5 ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden`}>
-              <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
               <div>
-                <img src="/logo.png" alt="Logo" className="h-16 w-auto object-contain mb-6" />
+                <img src="/logo.png" alt="MCTiers Logo" className="h-14 w-auto object-contain mb-6" />
                 <h1 className="text-3xl lg:text-4xl font-black tracking-tight mb-4 text-white">
                   The Minecraft PvP Tier List
                 </h1>
                 <p className="text-zinc-400 text-sm leading-relaxed mb-8">
-                  AvernyeTiers is a Minecraft PvP tier list. Players are tested in eight gamemodes, placed in tiers from Tier 1 to Tier 5, and ranked on one overall leaderboard.
+                  MCTiers is a Minecraft PvP tier list. Players are tested in eight gamemodes, placed in tiers from Tier 1 to Tier 5, and ranked on one overall leaderboard.
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
@@ -283,7 +285,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Правая часть: Топ-3 игрока (как на скриншоте 2) */}
             <div className={`lg:col-span-7 ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col gap-4`}>
               <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-500 tracking-wider uppercase">
@@ -332,7 +333,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Секция 2: Статус сервера и выбор режимов (как на скриншоте 3) */}
+          {/* Статус сервера и режимы */}
           <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-4`}>
             <div className="flex items-center gap-4">
               <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -344,7 +345,7 @@ export default function Home() {
                   <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide">Online</span>
                   <span className="text-xs text-zinc-500">• 2,583 / 10,000 players online</span>
                 </div>
-                <div className="text-base font-extrabold text-white mt-0.5">avernye.wellduck.org</div>
+                <div className="text-base font-extrabold text-white mt-0.5">mctiers.network</div>
               </div>
             </div>
             <button 
@@ -356,7 +357,7 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Режимы игры карточками */}
+          {/* Сетка игровых режимов */}
           <div>
             <div className="text-lg font-bold text-white mb-4">Gamemodes</div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -367,7 +368,7 @@ export default function Home() {
                     setSelectedMode(mode.id)
                     setActiveTab("rankings")
                   }}
-                  className={`${themeStyles.cardId || themeStyles.cardBg} border ${themeStyles.border} hover:border-amber-500/50 p-5 rounded-2xl flex flex-col items-center justify-center gap-3 cursor-pointer transition group bg-black/20 hover:bg-black/40`}
+                  className={`border ${themeStyles.border} hover:border-amber-500/50 p-5 rounded-2xl flex flex-col items-center justify-center gap-3 cursor-pointer transition group bg-black/20 hover:bg-black/40`}
                 >
                   <img src={mode.icon} alt={mode.label} className="w-8 h-8 object-contain group-hover:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-zinc-300 group-hover:text-amber-400 transition-colors">{mode.label}</span>
@@ -376,16 +377,16 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Секция 3: Инструкция Get Tier Tested (как на скриншотах 3, 4) */}
+          {/* Инструкция получения тира (Get tier tested) */}
           <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`}>
             <div className="text-2xl font-black text-white mb-2">Get tier tested</div>
             <p className="text-xs text-zinc-400 mb-8">
-              Tier tests happen in-game on <span className="text-white font-semibold">avernye.wellduck.org</span>. Queue for a gamemode, fight one of our testers and get your tier.
+              Tier tests happen in-game on <span className="text-white font-semibold">mctiers.network</span>. Queue for a gamemode, fight one of our testers and get your tier.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               {[
-                { step: "1", title: "Join server", desc: "Join avernye.wellduck.org on Java or Bedrock." },
+                { step: "1", title: "Join server", desc: "Join mctiers.network on Java or Bedrock." },
                 { step: "2", title: "Type /tiertest", desc: "Choose the gamemode you want to be tested in." },
                 { step: "3", title: "Pick region", desc: "Join that gamemode's testing queue." },
                 { step: "4", title: "Private arena", desc: "When a tester is free, you're moved to a private arena." },
@@ -404,7 +405,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Секция 4: Tiers, Points and Titles (как на скриншотах 5, 6) */}
+          {/* Tiers, Points and Titles */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl`}>
               <div className="text-lg font-bold text-white mb-1">Tiers and points</div>
@@ -451,16 +452,16 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Секция 5: FAQ (как на скриншоте 7, 8) */}
-          <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`} id="faq">
+          {/* FAQ Секция */}
+          <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`}>
             <div className="text-2xl font-black text-white mb-1">Frequently asked questions</div>
             <p className="text-xs text-zinc-400 mb-6">Quick answers about tiers, tier tests, points and the server.</p>
 
             <div className="space-y-3">
               {[
-                { q: "What is AvernyeTiers?", a: "AvernyeTiers is a Minecraft PvP tier list. It ranks players in eight gamemodes from High Tier 1 to Low Tier 5, and combines those tiers into one overall leaderboard." },
+                { q: "What is MCTiers?", a: "MCTiers is a Minecraft PvP tier list. It ranks players in eight gamemodes from High Tier 1 to Low Tier 5, and combines those tiers into one overall leaderboard." },
                 { q: "What do HT1, LT1 and the other tiers mean?", a: "Tiers range from 1 to 5, split into High (HT) and Low (LT). HT1 is the highest and most elite tier possible in a gamemode." },
-                { q: "How do I get tier tested?", a: "Join our server avernye.wellduck.org, type /tiertest in chat, choose your preferred gamemode and queue up to fight a tester." },
+                { q: "How do I get tier tested?", a: "Join our server mctiers.network, type /tiertest in chat, choose your preferred gamemode and queue up to fight a tester." },
                 { q: "How is the overall leaderboard calculated?", a: "Every tier you hold in individual gamemodes awards points. The sum of all your points determines your position on the overall leaderboard." },
                 { q: "What are titles like Combat Master?", a: "Titles are prestigious ranks automatically assigned to your profile based on your cumulative total points." }
               ].map((faq, idx) => (
@@ -483,8 +484,10 @@ export default function Home() {
           </div>
 
         </div>
-      ) : (
-        /* РАЗДЕЛ RANKINGS (Таблица лидеров и режимы) */
+      )}
+
+      {/* ВКЛАДКА: RANKINGS (Скриншот 1 и 7) */}
+      {activeTab === "rankings" && (
         <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-xl overflow-hidden mb-3`}>
           <div className="p-3 pb-2 border-b border-zinc-800/50">
             <div className="flex items-end gap-1.5 overflow-x-auto scrollbar-none pt-2">
@@ -526,9 +529,78 @@ export default function Home() {
         </div>
       )}
 
+      {/* ВКЛАДКА: SERVER IP (Скриншот 8) */}
+      {activeTab === "server-ip" && (
+        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-8`}>
+          <div>
+            <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Minecraft Server</div>
+            <h1 className="text-4xl font-black text-white mb-4">MCTiers Server IP</h1>
+            <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed">
+              The MCTiers Minecraft server IP is <span className="text-white font-bold">mctiers.network</span>. Java players can join on any version from 1.21 - 26.3, and Bedrock players can join on port 19132.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={copyServerIp}
+              className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-3.5 rounded-xl transition text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
+            >
+              <span>{copiedIp ? "Copied!" : "mctiers.network"}</span>
+              <Server className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
+            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
+              <div className="text-xs text-zinc-500 font-semibold mb-1">SERVER ADDRESS</div>
+              <div className="text-white font-bold text-base">mctiers.network</div>
+            </div>
+            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
+              <div className="text-xs text-zinc-500 font-semibold mb-1">JAVA EDITION</div>
+              <div className="text-white font-bold text-base">1.21 - 26.3</div>
+            </div>
+            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
+              <div className="text-xs text-zinc-500 font-semibold mb-1">BEDROCK EDITION</div>
+              <div className="text-white font-bold text-base">Port 19132</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ВКЛАДКА: EVENTS */}
+      {activeTab === "events" && (
+        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-6`}>
+          <div>
+            <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Tournaments & Battles</div>
+            <h1 className="text-4xl font-black text-white mb-2">Upcoming Events</h1>
+            <p className="text-zinc-400 text-sm">Participate in community tournaments and win exclusive points.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+            {[
+              { date: "OCT 23", title: "Sword FFA Night", desc: "Up to 100 players, one arena and Sword kits only. Last player standing wins." },
+              { date: "NOV 1", title: "Mace Halloween Bash", desc: "A Halloween-themed Mace bracket on a spooky arena. Double elimination." },
+              { date: "NOV 7", title: "UHC Duos Showdown", desc: "Grab a partner for 2v2 UHC. 32 teams, best-of-3 matches." },
+            ].map((ev, idx) => (
+              <div key={idx} className="bg-black/30 border border-zinc-800 hover:border-amber-500/40 p-6 rounded-2xl flex flex-col justify-between gap-6 transition">
+                <div>
+                  <div className="text-xs font-black text-amber-500 mb-2">{ev.date}</div>
+                  <div className="text-lg font-bold text-white mb-2">{ev.title}</div>
+                  <div className="text-xs text-zinc-400 leading-relaxed">{ev.desc}</div>
+                </div>
+                <div className="text-xs font-semibold text-zinc-300 flex items-center gap-1">
+                  <span>Register soon</span>
+                  <ArrowRight className="w-3 h-3" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <PlayerModal player={selectedPlayer} isOpen={!!selectedPlayer} onClose={() => setSelectedPlayer(null)} />
 
-      {/* Модальное окно Инфо */}
+      {/* Модальное окно Information */}
       {isInfoOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
           <div className={`${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl w-full max-w-lg p-6 relative shadow-2xl`}>
@@ -682,7 +754,7 @@ export default function Home() {
                   <div>
                     <div className="font-bold text-zinc-300 mb-2">Tier 5</div>
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-,800 rounded-xl p-2.5 flex items-center gap-2">
                         <span className="text-zinc-400">▲</span> <strong className="text-zinc-300">2 Points</strong>
                       </div>
                       <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
