@@ -798,7 +798,7 @@ export default function Home() {
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                   <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide">{t("online")}</span>
-                  <span className="text-xs text-zinc-500">• 2,583 / 10,000 players online</span>
+                  <span className="text-xs text-zinc-500">• 67 / 10,000 players online</span>
                 </div>
                 <div className="text-base font-extrabold text-white mt-0.5">avernye.wellduck.org</div>
               </div>
