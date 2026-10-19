@@ -7,7 +7,7 @@ import KitTier from "@/components/kit-tier"
 import { PlayerModal } from "@/components/player-modal"
 import { 
   Info, X, Palette, Search, 
-  Home as HomeIcon, Trophy, Disc, FileText, ChevronDown, ExternalLink 
+  Home as HomeIcon, Trophy, Disc, FileText, ChevronDown, ExternalLink, Server, Globe 
 } from "lucide-react"
 
 export default function Home() {
@@ -18,6 +18,7 @@ export default function Home() {
   const [isInfoOpen, setIsInfoOpen] = useState<boolean>(false)
   const [isDiscordMenuOpen, setIsDiscordMenuOpen] = useState<boolean>(false)
   const [infoTab, setInfoTab] = useState<"titles" | "points">("titles")
+  const [copiedIp, setCopiedIp] = useState<boolean>(false)
   
   const [theme, setTheme] = useState<"dark" | "midnight" | "sinus" | "light">("dark")
   const [isThemeOpen, setIsThemeOpen] = useState(false)
@@ -64,6 +65,13 @@ export default function Home() {
     }
   }
 
+  const copyServerIp = () => {
+    navigator.clipboard.writeText("avernye.wellduck.org")
+    setCopiedIp(true)
+    setTimeout(() => setCopiedIp(false), 2000)
+  }
+
+  // Режимы без Cart и Spear
   const modes = [
     { id: "overall", label: "Overall", icon: "/overall.svg" },
     { id: "LTMs", label: "LTMs", icon: "/ltm's.svg" },
@@ -76,8 +84,6 @@ export default function Home() {
     { id: "Sword", label: "Sword", icon: "/sword.svg" },
     { id: "Axe", label: "Axe", icon: "/axe.svg" },
     { id: "Mace", label: "Mace", icon: "/mace.svg" },
-    { id: "Cart", label: "Cart", icon: "/minecart-e4204998.svg" },
-    { id: "Spear", label: "Spear", icon: "/spearmace.png" },
   ]
 
   const themeStyles = {
@@ -115,7 +121,7 @@ export default function Home() {
     <main className={`min-h-screen ${themeStyles.bg} ${themeStyles.textColor} flex flex-col items-center py-4 px-6 relative transition-colors duration-300 w-full`}>
       
       {/* Шапка сайта */}
-      <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-5 rounded-2xl shadow-lg mb-20`}>
+      <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-5 rounded-2xl shadow-lg mb-8`}>
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-2 cursor-pointer">
             <img src="/logo.png" alt="SinusTiers" className="h-11 w-auto object-contain scale-105" />
@@ -223,7 +229,40 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Основной объединенный блок с индивидуальными полукруглыми кончиками у каждого кита */}
+      {/* Информационный блок с IP сервера и статусом Bedrock */}
+      <div className={`w-full max-w-[1720px] grid grid-cols-1 md:grid-cols-2 gap-4 mb-6`}>
+        <div 
+          onClick={copyServerIp}
+          className={`${themeStyles.cardBg} border ${themeStyles.border} p-4 rounded-2xl flex items-center justify-between cursor-pointer hover:border-amber-500/50 transition shadow-md group`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <Server className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-xs text-zinc-400 font-medium">Java Edition IP</div>
+              <div className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors">avernye.wellduck.org</div>
+            </div>
+          </div>
+          <span className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-zinc-800 text-zinc-300 group-hover:bg-amber-500 group-hover:text-black transition">
+            {copiedIp ? "Скопировано!" : "Копировать IP"}
+          </span>
+        </div>
+
+        <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-4 rounded-2xl flex items-center justify-between shadow-md`}>
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20">
+              <Globe className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-xs text-zinc-400 font-medium">Bedrock Edition</div>
+              <div className="text-sm font-bold text-red-400">Временно недоступно</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Основной блок с режимами и таблицей */}
       <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-xl overflow-hidden mb-3`}>
         
         {/* Панель выбора режимов */}
