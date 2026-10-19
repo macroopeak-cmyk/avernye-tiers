@@ -157,7 +157,7 @@ const RAW_PLAYERS: Player[] = [
     id: 108,
     username: "Oneunubore",
     region: "EU",
-    tiers: { Axe: "LT3", Sword: "LT3", Vanilla: "HT5", UHC: "HT4", Mace: "LT4", Spear: "HT4", Cart: "HT4", Pot: "HT5", NethPot: "HT4" },
+    tiers: { Axe: "LT3", Sword: "LT3", Vanilla: "HT5", UHC: "HT4", Mace: "LT4", Pot: "HT5", NethPot: "HT4" },
   },
   {
     id: 109,
@@ -210,8 +210,6 @@ const RAW_PLAYERS: Player[] = [
     region: "EU",
     staffRole: "Co-Owner",
     tiers: {
-      Cart: "LT3",
-      Spear: "HT3",
       Vanilla: "HT4",
       UHC: "LT4",
       SMP: "LT4",
@@ -229,8 +227,6 @@ const RAW_PLAYERS: Player[] = [
     username: "reastryy",
     region: "EU",
     tiers: {
-      Cart: "LT3",
-      Spear: "HT3",
       Vanilla: "HT3",
       UHC: "HT3",
       SMP: "HT3",
@@ -263,8 +259,6 @@ const RAW_PLAYERS: Player[] = [
       Sword: "HT4",
       Axe: "HT4",
       Mace: "HT4",
-      Cart: "LT3",
-      Spear: "HT3",
     },
   },
   {
@@ -284,7 +278,7 @@ const RAW_PLAYERS: Player[] = [
     id: 83,
     username: "hen9i",
     region: "EU",
-    tiers: { Spear: "LT3" },
+    tiers: {},
   },
   {
     id: 90,
@@ -656,10 +650,10 @@ const RAW_PLAYERS: Player[] = [
     tiers: { Pot: "HT4", Mace: "HT3" }
   },
   { id: 308, username: "QuantumGamer", region: "EU",
-    tiers: { NethOP: "HT3", Cart: "LT2" }
+    tiers: { NethOP: "HT3" }
   },
   { id: 309, username: "ApexPredator2", region: "NA",
-    tiers: { Spear: "HT1" }
+    tiers: {}
   },
   { id: 310, username: "CyberKnight", region: "CIS",
     tiers: { Vanilla: "HT3", UHC: "HT3" }
@@ -677,10 +671,10 @@ const RAW_PLAYERS: Player[] = [
     tiers: { Pot: "HT4", Mace: "LT3" }
   },
   { id: 315, username: "VoidWalker2", region: "EU",
-    tiers: { Sword: "HT4", Spear: "HT3" }
+    tiers: { Sword: "HT4" }
   },
   { id: 316, username: "SolarFlare2", region: "CIS",
-    tiers: { Vanilla: "HT3", Cart: "HT4" }
+    tiers: { Vanilla: "HT3" }
   },
   { id: 317, username: "EchoSniper", region: "NA",
     tiers: { UHC: "HT3", Axe: "HT4" }
@@ -701,10 +695,10 @@ const RAW_PLAYERS: Player[] = [
     tiers: { Pot: "HT4", Mace: "LT3" }
   },
   { id: 323, username: "SigmaMale", region: "EU",
-    tiers: { NethOP: "HT3", Cart: "HT3" }
+    tiers: { NethOP: "HT3" }
   },
   { id: 324, username: "KiraLight", region: "CIS",
-    tiers: { Vanilla: "LT3", Spear: "LT3" }
+    tiers: { Vanilla: "LT3" }
   },
   { id: 325, username: "LelouchVi", region: "AS",
     tiers: { UHC: "HT3" }
@@ -722,7 +716,7 @@ const RAW_PLAYERS: Player[] = [
     tiers: { SMP: "LT3", Mace: "HT4" }
   },
   { id: 330, username: "KakashiHat", region: "AS",
-    tiers: { Cart: "HT3", Spear: "LT3" }
+    tiers: {}
   },
   { id: 331, username: "TanjiroKam", region: "EU",
     tiers: { Vanilla: "HT3", UHC: "HT3" }
@@ -737,10 +731,10 @@ const RAW_PLAYERS: Player[] = [
     tiers: { SMP: "LT3", Axe: "LT4" }
   },
   { id: 335, username: "AstaBlack", region: "EU",
-    tiers: { Mace: "LT3", Cart: "HT3" }
+    tiers: { Mace: "LT3" }
   },
   { id: 336, username: "YunoGrin", region: "AS",
-    tiers: { Spear: "LT3" }
+    tiers: {}
   },
   { id: 337, username: "NoelleSilva", region: "CIS",
     tiers: { Vanilla: "HT3", Pot: "HT4" }
@@ -767,7 +761,7 @@ const RAW_PLAYERS: Player[] = [
     region: "EU",
     skinUsername: "strafikk",
     staffRole: "Co-Owner",
-    tiers: { Sword: "HT4", Pot: "LT3", Vanilla: "HT4", NethPot: "LT4", Mace: "LT4", UHC: "LT4", NethOP: "HT3", SMP: "LT3", Spear: "HT4" },
+    tiers: { Sword: "HT4", Pot: "LT3", Vanilla: "HT4", NethPot: "LT4", Mace: "LT4", UHC: "LT4", NethOP: "HT3", SMP: "LT3" },
   },
   {
     id: 412,
