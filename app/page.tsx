@@ -5,6 +5,7 @@ import { INITIAL_PLAYERS, calculatePlayerPoints, getPlayerTitle, RankedPlayer, P
 import { RankingTable } from "@/components/ranking-table"
 import KitTier from "@/components/kit-tier"
 import { PlayerModal } from "@/components/player-modal"
+import { PlayerBody } from "@/components/player-body"
 import { 
   Info, X, Palette, Search, 
   Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Check
@@ -158,7 +159,7 @@ const translations: Record<string, Record<string, string>> = {
     allEvents: "Tous les événements",
     serverAddress: "ADRESSE DU SERVEUR",
     javaEdition: "ÉDITION JAVA",
-    bedrockEdition: "BEDROCK EDITION",
+    bedrockEdition: "ÉDITION BEDROCK",
     copied: "Copié !",
     copyIp: "Copier l'IP",
   },
@@ -208,7 +209,7 @@ const translations: Record<string, Record<string, string>> = {
     fullLeaderboard: "Pełny ranking",
     online: "Online",
     gamemodes: "Tryby gry",
-    getTierTestedTitle: "Przetestuj свой уровень",
+    getTierTestedTitle: "Przetestuj swój poziom",
     getTierTestedDesc: "Testy odbywają się na avernye.wellduck.org.",
     tiersAndPoints: "Poziomy i punkty",
     tiersAndPointsDesc: "Każdy tryb dzieli graczy na pięć poziomów.",
@@ -244,8 +245,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Ogni modalità classifica in cinque tier.",
     titles: "Titoli",
     titlesDesc: "Il tuo titolo dipende dai punti totali.",
-    faqTitle: "Domande frequenti",
-    faqDesc: "Risposte rapide sui tier.",
     upcomingEvents: "Prossimi eventi",
     allEvents: "Tutti gli eventi",
     serverAddress: "INDIRIZZO SERVER",
@@ -276,8 +275,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Elke modus rangschikt in vijf tiers.",
     titles: "Titels",
     titlesDesc: "Je titel volgt je totale punten.",
-    faqTitle: "Veelgestelde vragen",
-    faqDesc: "Snelle antwoorden over tiers.",
     upcomingEvents: "Aankomende evenementen",
     allEvents: "Alle evenementen",
     serverAddress: "SERVERADRES",
@@ -308,8 +305,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Her mod oyuncuları beş seviyeye ayırır.",
     titles: "Unvanlar",
     titlesDesc: "Unvanınız toplam puanınıza göre belirlenir.",
-    faqTitle: "Sıkça Sorulan Sorular",
-    faqDesc: "Seviyeler hakkında hızlı yanıtlar.",
     upcomingEvents: "Yaklaşan etkinlikler",
     allEvents: "Tüm etkinlikler",
     serverAddress: "SUNUCU ADRESİ",
@@ -340,8 +335,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Každý mód řadí hráče do pěti tierů.",
     titles: "Tituly",
     titlesDesc: "Tvůj titul závisí na celkových bodech.",
-    faqTitle: "Často kladené otázky",
-    faqDesc: "Rychlé odpovědi o tierech.",
     upcomingEvents: "Nadcházející události",
     allEvents: "Všechny události",
     serverAddress: "ADRESA SERVERU",
@@ -728,7 +721,7 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Компактный ТОП ИГРОКОВ со структурой как на Скриншоте 2 */}
+              {/* Компактный ТОП ИГРОКОВ со структурой PlayerBody */}
               <div className="flex flex-col gap-2.5">
                 {rankedPlayers.slice(0, 3).map((player) => {
                   const rankBg = player.rank === 1 
@@ -737,7 +730,6 @@ export default function Home() {
                     ? "bg-gradient-to-r from-zinc-200 to-zinc-300 text-black" 
                     : "bg-gradient-to-r from-amber-700 to-amber-800 text-white"
 
-                  const skinName = player.skinUsername || player.username
                   const playerTitleInfo = getPlayerTitle(player.points, player.tiers)
 
                   return (
@@ -747,17 +739,15 @@ export default function Home() {
                       className="bg-[#0e121b] hover:bg-[#121824] border border-zinc-800/80 hover:border-amber-500/40 p-2.5 px-3 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
                     >
                       <div className="flex items-center gap-3">
-                        {/* Наклонный номер места с 3D-моделью */}
+                        {/* Наклонный номер места с компонентом PlayerBody */}
                         <div className={`w-28 h-12 rounded-xl flex items-center justify-between px-3 font-black text-base italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shadow-inner shrink-0`}>
                           <span className="skew-x-[12deg] z-10">{player.rank}.</span>
                           <div className="absolute right-1 -bottom-1 h-14 w-12 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
-                            <img 
-                              src={`https://minotar.net/armor/body/${skinName}/100.png`} 
-                              alt={player.username} 
-                              className="h-16 w-auto object-contain transform translate-y-1 scale-125"
-                              onError={(e) => {
-                                (e.currentTarget as HTMLImageElement).src = `https://minotar.net/avatar/${skinName}/100.png`
-                              }}
+                            <PlayerBody 
+                              username={player.username} 
+                              skinUsername={player.skinUsername} 
+                              height={52} 
+                              className="transform translate-y-1 scale-125"
                             />
                           </div>
                         </div>
