@@ -388,7 +388,7 @@ const translations: Record<string, Record<string, string>> = {
     titlesDesc: "Din titel beror på dina totala poäng.",
     faqTitle: "Vanliga frågor",
     faqDesc: "Snabba svar om tiers.",
-    upcomingEvents: "Kommande evenemang",
+    upcomingEvents: "Kommende evenemang",
     allEvents: "Alla evenemang",
     serverAddress: "SERVERADRESS",
     javaEdition: "JAVA-UTGÅVA",
@@ -734,43 +734,60 @@ export default function Home() {
                 </button>
               </div>
 
+              {/* Топ игроков с наклонными блоками мест и скинами полурост как на скриншоте 2 */}
               <div className="flex flex-col gap-3">
-                {rankedPlayers.slice(0, 3).map((player) => (
-                  <div 
-                    key={player.id}
-                    onClick={() => setSelectedPlayer(player)}
-                    className="bg-black/30 hover:bg-black/50 border border-zinc-800/80 hover:border-amber-500/40 p-3.5 rounded-2xl flex items-center justify-between cursor-pointer transition"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm ${
-                        player.rank === 1 ? "bg-amber-500 text-black shadow-lg shadow-amber-500/30" :
-                        player.rank === 2 ? "bg-zinc-300 text-black" : "bg-amber-700 text-white"
-                      }`}>
-                        {player.rank}
-                      </div>
-                      <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 overflow-hidden flex items-center justify-center">
-                        <img src={`https://minotar.net/avatar/${player.username}/100.png`} alt={player.username} className="w-full h-full object-cover" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-white text-sm">{player.username}</div>
-                        <div className="text-[11px] text-amber-400/90 font-medium">
-                          {player.staffRole || "Combat Master"} ({player.points} очк.)
+                {rankedPlayers.slice(0, 3).map((player) => {
+                  const rankBg = player.rank === 1 
+                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-black shadow-lg shadow-amber-500/20" 
+                    : player.rank === 2 
+                    ? "bg-gradient-to-r from-zinc-200 to-zinc-300 text-black" 
+                    : "bg-gradient-to-r from-amber-700 to-amber-800 text-white"
+
+                  return (
+                    <div 
+                      key={player.id}
+                      onClick={() => setSelectedPlayer(player)}
+                      className="bg-black/30 hover:bg-black/50 border border-zinc-800/80 hover:border-amber-500/40 p-3.5 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
+                    >
+                      <div className="flex items-center gap-4">
+                        {/* Наклонный блок с номером места и скином полурост */}
+                        <div className={`w-28 h-14 rounded-xl flex items-center justify-between px-3 font-black text-lg italic skew-x-[-10deg] ${rankBg} relative overflow-hidden shadow-inner`}>
+                          <span className="skew-x-[10deg]">{player.rank}.</span>
+                          <div className="absolute right-1 -bottom-1 h-16 w-12 skew-x-[10deg] flex items-end justify-center overflow-hidden">
+                            <img 
+                              src={`https://minotar.net/skin/${player.username}`} 
+                              alt={player.username} 
+                              className="h-20 w-auto object-cover scale-150 transform translate-y-2"
+                              onError={(e)=>{
+                                // Запасной вариант на случай ошибки загрузки скина
+                                (e.target as HTMLElement).style.display = 'none';
+                              }}
+                            />
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1.5 mt-1.5">
-                          {modes.filter(m => m.id !== "overall").slice(0, 7).map((m, idx) => (
-                            <span key={idx} className="flex items-center gap-0.5 bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-[9px] text-amber-400 font-bold">
-                              <img src={m.icon} alt={m.label} className="w-2.5 h-2.5 object-contain" />
-                              <span>HT1</span>
-                            </span>
-                          ))}
+
+                        <div>
+                          <div className="font-bold text-white text-sm">{player.username}</div>
+                          <div className="text-[11px] text-amber-400/90 font-medium">
+                            {player.staffRole || "Combat Master"} ({player.points} очк.)
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-1.5">
+                            {modes.filter(m => m.id !== "overall").slice(0, 7).map((m, idx) => (
+                              <span key={idx} className="flex items-center gap-0.5 bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-[9px] text-amber-400 font-bold">
+                                <img src={m.icon} alt={m.label} className="w-2.5 h-2.5 object-contain" />
+                                <span>HT1</span>
+                              </span>
+                            ))}
+                          </div>
                         </div>
+                      </div>
+
+                      <div className="text-xs font-bold px-2.5 py-1 rounded-lg bg-zinc-800 text-zinc-300">
+                        {player.region}
                       </div>
                     </div>
-                    <div className="text-xs font-bold px-2.5 py-1 rounded-lg bg-zinc-800 text-zinc-300">
-                      {player.region}
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </div>
