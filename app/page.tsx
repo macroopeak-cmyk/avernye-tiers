@@ -7,10 +7,12 @@ import KitTier from "@/components/kit-tier"
 import { PlayerModal } from "@/components/player-modal"
 import { 
   Info, X, Palette, Search, 
-  Home as HomeIcon, Trophy, Disc, FileText, ChevronDown, ExternalLink, Server, Globe 
+  Home as HomeIcon, Trophy, Disc, FileText, ChevronDown, ExternalLink, Server, Globe, Calendar, ArrowRight, Check, Plus, Minus
 } from "lucide-react"
 
 export default function Home() {
+  // Состояние активной вкладки: "home" или "rankings" (при входе теперь открывается Home)
+  const [activeTab, setActiveTab] = useState<"home" | "rankings">("home")
   const [selectedMode, setSelectedMode] = useState<string>("overall")
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
@@ -22,6 +24,9 @@ export default function Home() {
   
   const [theme, setTheme] = useState<"dark" | "midnight" | "sinus" | "light">("dark")
   const [isThemeOpen, setIsThemeOpen] = useState(false)
+  
+  // Состояние для FAQ (аккордеон)
+  const [openFaq, setOpenFaq] = useState<number | null>(0)
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("combat_tiers_theme") as "dark" | "midnight" | "sinus" | "light"
@@ -71,7 +76,6 @@ export default function Home() {
     setTimeout(() => setCopiedIp(false), 2000)
   }
 
-  // Режимы без Cart и Spear
   const modes = [
     { id: "overall", label: "Overall", icon: "/overall.svg" },
     { id: "LTMs", label: "LTMs", icon: "/ltm's.svg" },
@@ -120,27 +124,34 @@ export default function Home() {
   return (
     <main className={`min-h-screen ${themeStyles.bg} ${themeStyles.textColor} flex flex-col items-center py-4 px-6 relative transition-colors duration-300 w-full`}>
       
-      {/* Шапка сайта */}
-      <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-5 rounded-2xl shadow-lg mb-8`}>
+      {/* Шапка сайта (как на скриншоте 1 и 2) */}
+      <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-4 rounded-2xl shadow-lg mb-8`}>
         <div className="flex items-center gap-10">
-          <div className="flex items-center gap-2 cursor-pointer">
-            <img src="/logo.png" alt="SinusTiers" className="h-11 w-auto object-contain scale-105" />
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("home")}>
+            <img src="/logo.png" alt="SinusTiers" className="h-10 w-auto object-contain scale-105" />
           </div>
 
-          <nav className="hidden md:flex items-center gap-7 text-xs text-zinc-400 font-medium">
-            <a href="#" className="flex items-center gap-2 hover:text-zinc-200 transition-colors">
+          <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-400 font-medium">
+            <button 
+              onClick={() => setActiveTab("home")}
+              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "home" ? "text-white font-bold bg-zinc-800/60 px-3 py-1.5 rounded-xl border border-zinc-700/50" : "hover:text-zinc-200"}`}
+            >
               <HomeIcon className="w-4 h-4 text-zinc-500" />
               <span>Home</span>
-            </a>
-            <a href="#" className="flex items-center gap-2 text-zinc-200 transition-colors">
+            </button>
+
+            <button 
+              onClick={() => setActiveTab("rankings")}
+              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "rankings" ? "text-white font-bold bg-zinc-800/60 px-3 py-1.5 rounded-xl border border-zinc-700/50" : "hover:text-zinc-200"}`}
+            >
               <Trophy className="w-4 h-4 text-amber-500" />
               <span>Rankings</span>
-            </a>
+            </button>
             
             <div className="relative">
               <button 
                 onClick={() => setIsDiscordMenuOpen(!isDiscordMenuOpen)}
-                className="flex items-center gap-1.5 hover:text-zinc-200 transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 hover:text-zinc-200 transition-colors cursor-pointer py-1.5 px-2"
               >
                 <Disc className="w-4 h-4 text-zinc-500" />
                 <span>Discords</span>
@@ -170,15 +181,23 @@ export default function Home() {
               )}
             </div>
 
-            <a href="#" className="flex items-center gap-2 hover:text-zinc-200 transition-colors">
-              <FileText className="w-4 h-4 text-zinc-500" />
-              <span>API Docs</span>
+            <button 
+              onClick={copyServerIp} 
+              className="flex items-center gap-2 hover:text-zinc-200 transition-colors cursor-pointer py-1.5 px-2"
+            >
+              <Server className="w-4 h-4 text-zinc-500" />
+              <span>Server IP</span>
+            </button>
+
+            <a href="#events" className="flex items-center gap-2 hover:text-zinc-200 transition-colors py-1.5 px-2">
+              <Calendar className="w-4 h-4 text-zinc-500" />
+              <span>Events</span>
             </a>
           </nav>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="w-72 relative">
+          <div className="w-64 relative">
             <div className="relative flex items-center">
               <Search className="absolute left-3 w-4 h-4 text-zinc-500 pointer-events-none" />
               <input
@@ -229,82 +248,283 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Информационный блок с IP сервера и статусом Bedrock */}
-      <div className={`w-full max-w-[1720px] grid grid-cols-1 md:grid-cols-2 gap-4 mb-6`}>
-        <div 
-          onClick={copyServerIp}
-          className={`${themeStyles.cardBg} border ${themeStyles.border} p-4 rounded-2xl flex items-center justify-between cursor-pointer hover:border-amber-500/50 transition shadow-md group`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
-              <Server className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-xs text-zinc-400 font-medium">Java Edition IP</div>
-              <div className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors">avernye.wellduck.org</div>
-            </div>
-          </div>
-          <span className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-zinc-800 text-zinc-300 group-hover:bg-amber-500 group-hover:text-black transition">
-            {copiedIp ? "Скопировано!" : "Копировать IP"}
-          </span>
-        </div>
-
-        <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-4 rounded-2xl flex items-center justify-between shadow-md`}>
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20">
-              <Globe className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-xs text-zinc-400 font-medium">Bedrock Edition</div>
-              <div className="text-sm font-bold text-red-400">Временно недоступно</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Основной блок с режимами и таблицей */}
-      <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-xl overflow-hidden mb-3`}>
-        
-        {/* Панель выбора режимов */}
-        <div className="p-3 pb-2 border-b border-zinc-800/50">
-          <div className="flex items-end gap-1.5 overflow-x-auto scrollbar-none pt-2">
-            {modes.map((mode) => {
-              const isActive = selectedMode === mode.id
-
-              return (
-                <button
-                  key={mode.id}
-                  onClick={() => setSelectedMode(mode.id)}
-                  title={mode.label}
-                  className={`flex-1 flex flex-col items-center justify-center gap-1.5 py-3 px-3 transition-all duration-150 cursor-pointer shrink-0 border-x border-t ${
-                    isActive
-                      ? "bg-[#161f30] border-amber-500/80 text-white shadow-sm ring-1 ring-amber-500/30 rounded-t-2xl -mt-2 pt-5"
-                      : "border-transparent hover:bg-zinc-800/40 text-zinc-400 hover:text-zinc-200 rounded-t-xl"
-                  }`}
+      {/* Условие отображения: HOME или RANKINGS */}
+      {activeTab === "home" ? (
+        <div className="w-full max-w-[1720px] flex flex-col gap-8">
+          
+          {/* Секция 1: Главный баннер с описанием и топ-3 игроками (как на скриншоте 2) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Левая часть: Приветствие */}
+            <div className={`lg:col-span-5 ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden`}>
+              <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+              <div>
+                <img src="/logo.png" alt="Logo" className="h-16 w-auto object-contain mb-6" />
+                <h1 className="text-3xl lg:text-4xl font-black tracking-tight mb-4 text-white">
+                  The Minecraft PvP Tier List
+                </h1>
+                <p className="text-zinc-400 text-sm leading-relaxed mb-8">
+                  AvernyeTiers is a Minecraft PvP tier list. Players are tested in eight gamemodes, placed in tiers from Tier 1 to Tier 5, and ranked on one overall leaderboard.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-4">
+                <button 
+                  onClick={() => setActiveTab("rankings")}
+                  className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold px-5 py-3 rounded-xl transition shadow-lg shadow-amber-500/20 text-xs cursor-pointer"
                 >
-                  <img 
-                    src={mode.icon} 
-                    alt={mode.label} 
-                    className={`w-5 h-5 object-contain ${isActive ? "opacity-100 filter drop-shadow(0 0 5px rgba(245,158,11,0.5))" : "opacity-50"}`} 
-                  />
-                  <span className={`text-[11px] font-medium tracking-wide ${isActive ? "text-amber-400 font-bold" : ""}`}>
-                    {mode.label}
-                  </span>
+                  <span>View rankings</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
-              )
-            })}
+                <button 
+                  onClick={copyServerIp}
+                  className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-medium px-5 py-3 rounded-xl transition text-xs border border-zinc-700 cursor-pointer"
+                >
+                  <span>Get tier tested</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Правая часть: Топ-3 игрока (как на скриншоте 2) */}
+            <div className={`lg:col-span-7 ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col gap-4`}>
+              <div className="flex items-center justify-between px-2">
+                <div className="flex items-center gap-2 text-xs font-bold text-amber-500 tracking-wider uppercase">
+                  <Trophy className="w-4 h-4" />
+                  <span>Top Players</span>
+                </div>
+                <button 
+                  onClick={() => setActiveTab("rankings")}
+                  className="text-xs text-zinc-400 hover:text-white transition flex items-center gap-1 cursor-pointer font-medium"
+                >
+                  <span>Full leaderboard</span>
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {rankedPlayers.slice(0, 3).map((player) => (
+                  <div 
+                    key={player.id}
+                    onClick={() => setSelectedPlayer(player)}
+                    className="bg-black/30 hover:bg-black/50 border border-zinc-800/80 hover:border-amber-500/40 p-3.5 rounded-2xl flex items-center justify-between cursor-pointer transition"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm ${
+                        player.rank === 1 ? "bg-amber-500 text-black shadow-lg shadow-amber-500/30" :
+                        player.rank === 2 ? "bg-zinc-300 text-black" : "bg-amber-700 text-white"
+                      }`}>
+                        {player.rank}
+                      </div>
+                      <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 overflow-hidden flex items-center justify-center">
+                        <img src={`https://minotar.net/avatar/${player.username}/100.png`} alt={player.username} className="w-full h-full object-cover" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-white text-sm">{player.username}</div>
+                        <div className="text-[11px] text-amber-400/90 font-medium">
+                          {player.staffRole || "Combat Master"} ({player.points} points)
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-xs font-bold px-2.5 py-1 rounded-lg bg-zinc-800 text-zinc-300">
+                      {player.region}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Секция 2: Статус сервера и выбор режимов (как на скриншоте 3) */}
+          <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-4`}>
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                <Server className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide">Online</span>
+                  <span className="text-xs text-zinc-500">• 2,583 / 10,000 players online</span>
+                </div>
+                <div className="text-base font-extrabold text-white mt-0.5">avernye.wellduck.org</div>
+              </div>
+            </div>
+            <button 
+              onClick={copyServerIp}
+              className="bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold px-5 py-3 rounded-xl transition cursor-pointer flex items-center gap-2"
+            >
+              <span>{copiedIp ? "IP Copied!" : "Copy Server IP"}</span>
+              <Server className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Режимы игры карточками */}
+          <div>
+            <div className="text-lg font-bold text-white mb-4">Gamemodes</div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {modes.filter(m => m.id !== "overall").map((mode) => (
+                <div 
+                  key={mode.id}
+                  onClick={() => {
+                    setSelectedMode(mode.id)
+                    setActiveTab("rankings")
+                  }}
+                  className={`${themeStyles.cardId || themeStyles.cardBg} border ${themeStyles.border} hover:border-amber-500/50 p-5 rounded-2xl flex flex-col items-center justify-center gap-3 cursor-pointer transition group bg-black/20 hover:bg-black/40`}
+                >
+                  <img src={mode.icon} alt={mode.label} className="w-8 h-8 object-contain group-hover:scale-110 transition-transform" />
+                  <span className="text-xs font-bold text-zinc-300 group-hover:text-amber-400 transition-colors">{mode.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Секция 3: Инструкция Get Tier Tested (как на скриншотах 3, 4) */}
+          <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`}>
+            <div className="text-2xl font-black text-white mb-2">Get tier tested</div>
+            <p className="text-xs text-zinc-400 mb-8">
+              Tier tests happen in-game on <span className="text-white font-semibold">avernye.wellduck.org</span>. Queue for a gamemode, fight one of our testers and get your tier.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              {[
+                { step: "1", title: "Join server", desc: "Join avernye.wellduck.org on Java or Bedrock." },
+                { step: "2", title: "Type /tiertest", desc: "Choose the gamemode you want to be tested in." },
+                { step: "3", title: "Pick region", desc: "Join that gamemode's testing queue." },
+                { step: "4", title: "Private arena", desc: "When a tester is free, you're moved to a private arena." },
+                { step: "5", title: "Get ranked", desc: "Fight your tester and earn your profile tier." },
+              ].map((s, idx) => (
+                <div key={idx} className="bg-black/30 border border-zinc-800/80 p-4 rounded-2xl flex flex-col justify-between">
+                  <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 font-bold text-xs flex items-center justify-center border border-amber-500/20 mb-3">
+                    {s.step}
+                  </div>
+                  <div>
+                    <div className="font-bold text-white text-xs mb-1">{s.title}</div>
+                    <div className="text-[11px] text-zinc-400 leading-relaxed">{s.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Секция 4: Tiers, Points and Titles (как на скриншотах 5, 6) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl`}>
+              <div className="text-lg font-bold text-white mb-1">Tiers and points</div>
+              <p className="text-xs text-zinc-400 mb-6">Each gamemode ranks players in five tiers, split into High and Low.</p>
+              
+              <div className="space-y-3">
+                {[
+                  { tier: "Tier 1", points: "HT1 · 60 pts", lt: "LT1 · 45 pts", bg: "bg-amber-950/40 border-amber-900/50" },
+                  { tier: "Tier 2", points: "HT2 · 30 pts", lt: "LT2 · 20 pts", bg: "bg-zinc-900 border-zinc-800" },
+                  { tier: "Tier 3", points: "HT3 · 10 pts", lt: "LT3 · 6 pts", bg: "bg-amber-900/20 border-amber-900/30" },
+                  { tier: "Tier 4", points: "HT4 · 4 pts", lt: "LT4 · 3 pts", bg: "bg-black/30 border-zinc-800" },
+                  { tier: "Tier 5", points: "HT5 · 2 pts", lt: "LT5 · 1 pt", bg: "bg-black/30 border-zinc-800" },
+                ].map((t, idx) => (
+                  <div key={idx} className={`p-3.5 rounded-2xl border ${t.bg} flex items-center justify-between`}>
+                    <span className="font-bold text-white text-xs">{t.tier}</span>
+                    <div className="flex gap-2">
+                      <span className="text-[10px] font-semibold bg-black/40 px-2 py-1 rounded-lg text-amber-400 border border-white/5">{t.points}</span>
+                      <span className="text-[10px] font-semibold bg-black/40 px-2 py-1 rounded-lg text-zinc-300 border border-white/5">{t.lt}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl`}>
+              <div className="text-lg font-bold text-white mb-1">Titles</div>
+              <p className="text-xs text-zinc-400 mb-6">Your title follows your total points across every gamemode.</p>
+
+              <div className="space-y-3">
+                {[
+                  { title: "Combat Grandmaster", req: "400+ points", color: "text-amber-400" },
+                  { title: "Combat Master", req: "250+ points", color: "text-amber-400" },
+                  { title: "Combat Ace", req: "100+ points", color: "text-rose-400" },
+                  { title: "Combat Specialist", req: "50+ points", color: "text-purple-300" },
+                  { title: "Combat Cadet", req: "20+ points", color: "text-purple-300" },
+                  { title: "Rookie", req: "Under 10 points", color: "text-zinc-400" },
+                ].map((ti, idx) => (
+                  <div key={idx} className="p-3.5 rounded-2xl border border-zinc-800/80 bg-black/30 flex items-center justify-between">
+                    <span className={`font-bold text-xs ${ti.color}`}>{ti.title}</span>
+                    <span className="text-xs text-zinc-400 font-medium">{ti.req}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Секция 5: FAQ (как на скриншоте 7, 8) */}
+          <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`} id="faq">
+            <div className="text-2xl font-black text-white mb-1">Frequently asked questions</div>
+            <p className="text-xs text-zinc-400 mb-6">Quick answers about tiers, tier tests, points and the server.</p>
+
+            <div className="space-y-3">
+              {[
+                { q: "What is AvernyeTiers?", a: "AvernyeTiers is a Minecraft PvP tier list. It ranks players in eight gamemodes from High Tier 1 to Low Tier 5, and combines those tiers into one overall leaderboard." },
+                { q: "What do HT1, LT1 and the other tiers mean?", a: "Tiers range from 1 to 5, split into High (HT) and Low (LT). HT1 is the highest and most elite tier possible in a gamemode." },
+                { q: "How do I get tier tested?", a: "Join our server avernye.wellduck.org, type /tiertest in chat, choose your preferred gamemode and queue up to fight a tester." },
+                { q: "How is the overall leaderboard calculated?", a: "Every tier you hold in individual gamemodes awards points. The sum of all your points determines your position on the overall leaderboard." },
+                { q: "What are titles like Combat Master?", a: "Titles are prestigious ranks automatically assigned to your profile based on your cumulative total points." }
+              ].map((faq, idx) => (
+                <div key={idx} className="border border-zinc-800 rounded-2xl overflow-hidden bg-black/20">
+                  <button 
+                    onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                    className="w-full p-4 text-left flex items-center justify-between font-bold text-xs text-white hover:bg-zinc-800/40 transition cursor-pointer"
+                  >
+                    <span>0{idx + 1}. {faq.q}</span>
+                    {openFaq === idx ? <Minus className="w-4 h-4 text-amber-400" /> : <Plus className="w-4 h-4 text-zinc-500" />}
+                  </button>
+                  {openFaq === idx && (
+                    <div className="p-4 pt-0 text-xs text-zinc-400 leading-relaxed border-t border-zinc-800/50">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      ) : (
+        /* РАЗДЕЛ RANKINGS (Таблица лидеров и режимы) */
+        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-xl overflow-hidden mb-3`}>
+          <div className="p-3 pb-2 border-b border-zinc-800/50">
+            <div className="flex items-end gap-1.5 overflow-x-auto scrollbar-none pt-2">
+              {modes.map((mode) => {
+                const isActive = selectedMode === mode.id
+
+                return (
+                  <button
+                    key={mode.id}
+                    onClick={() => setSelectedMode(mode.id)}
+                    title={mode.label}
+                    className={`flex-1 flex flex-col items-center justify-center gap-1.5 py-3 px-3 transition-all duration-150 cursor-pointer shrink-0 border-x border-t ${
+                      isActive
+                        ? "bg-[#161f30] border-amber-500/80 text-white shadow-sm ring-1 ring-amber-500/30 rounded-t-2xl -mt-2 pt-5"
+                        : "border-transparent hover:bg-zinc-800/40 text-zinc-400 hover:text-zinc-200 rounded-t-xl"
+                    }`}
+                  >
+                    <img 
+                      src={mode.icon} 
+                      alt={mode.label} 
+                      className={`w-5 h-5 object-contain ${isActive ? "opacity-100 filter drop-shadow(0 0 5px rgba(245,158,11,0.5))" : "opacity-50"}`} 
+                    />
+                    <span className={`text-[11px] font-medium tracking-wide ${isActive ? "text-amber-400 font-bold" : ""}`}>
+                      {mode.label}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="p-3 pt-4">
+            {selectedMode === "overall" ? (
+              <RankingTable players={rankedPlayers} selectedMode={selectedMode} />
+            ) : (
+              <KitTier selectedKit={selectedMode} />
+            )}
           </div>
         </div>
-
-        {/* Содержимое таблицы / китов */}
-        <div className="p-3 pt-4">
-          {selectedMode === "overall" ? (
-            <RankingTable players={rankedPlayers} selectedMode={selectedMode} />
-          ) : (
-            <KitTier selectedKit={selectedMode} />
-          )}
-        </div>
-      </div>
+      )}
 
       <PlayerModal player={selectedPlayer} isOpen={!!selectedPlayer} onClose={() => setSelectedPlayer(null)} />
 
