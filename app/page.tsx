@@ -158,7 +158,7 @@ const translations: Record<string, Record<string, string>> = {
     allEvents: "Tous les événements",
     serverAddress: "ADRESSE DU SERVEUR",
     javaEdition: "ÉDITION JAVA",
-    bedrockEdition: "ÉDITION BEDROCK",
+    bedrockEdition: "BEDROCK EDITION",
     copied: "Copié !",
     copyIp: "Copier l'IP",
   },
@@ -208,7 +208,7 @@ const translations: Record<string, Record<string, string>> = {
     fullLeaderboard: "Pełny ranking",
     online: "Online",
     gamemodes: "Tryby gry",
-    getTierTestedTitle: "Przetestuj swój poziom",
+    getTierTestedTitle: "Przetestuj свой уровень",
     getTierTestedDesc: "Testy odbywają się na avernye.wellduck.org.",
     tiersAndPoints: "Poziomy i punkty",
     tiersAndPointsDesc: "Każdy tryb dzieli graczy na pięć poziomów.",
@@ -244,6 +244,8 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Ogni modalità classifica in cinque tier.",
     titles: "Titoli",
     titlesDesc: "Il tuo titolo dipende dai punti totali.",
+    faqTitle: "Domande frequenti",
+    faqDesc: "Risposte rapide sui tier.",
     upcomingEvents: "Prossimi eventi",
     allEvents: "Tutti gli eventi",
     serverAddress: "INDIRIZZO SERVER",
@@ -274,6 +276,8 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Elke modus rangschikt in vijf tiers.",
     titles: "Titels",
     titlesDesc: "Je titel volgt je totale punten.",
+    faqTitle: "Veelgestelde vragen",
+    faqDesc: "Snelle antwoorden over tiers.",
     upcomingEvents: "Aankomende evenementen",
     allEvents: "Alle evenementen",
     serverAddress: "SERVERADRES",
@@ -304,6 +308,8 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Her mod oyuncuları beş seviyeye ayırır.",
     titles: "Unvanlar",
     titlesDesc: "Unvanınız toplam puanınıza göre belirlenir.",
+    faqTitle: "Sıkça Sorulan Sorular",
+    faqDesc: "Seviyeler hakkında hızlı yanıtlar.",
     upcomingEvents: "Yaklaşan etkinlikler",
     allEvents: "Tüm etkinlikler",
     serverAddress: "SUNUCU ADRESİ",
@@ -334,6 +340,8 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Každý mód řadí hráče do pěti tierů.",
     titles: "Tituly",
     titlesDesc: "Tvůj titul závisí na celkových bodech.",
+    faqTitle: "Často kladené otázky",
+    faqDesc: "Rychlé odpovědi o tierech.",
     upcomingEvents: "Nadcházející události",
     allEvents: "Všechny události",
     serverAddress: "ADRESA SERVERU",
@@ -429,7 +437,7 @@ export default function Home() {
     setIsLangMenuOpen(false)
   }
 
-  // Динамический пересчет очков и сортировка мест в реальном времени
+  // Расчет очков и ранжирование игроков
   const sortedRawPlayers = [...INITIAL_PLAYERS].map((player) => ({
     ...player,
     points: calculatePlayerPoints(player.tiers),
@@ -476,6 +484,17 @@ export default function Home() {
     { id: "Axe", label: "Axe", icon: "/axe.svg" },
     { id: "Mace", label: "Mace", icon: "/mace.svg" },
   ]
+
+  const modeIconMap: Record<string, string> = {
+    Vanilla: "/vanilla.svg",
+    UHC: "/uhc.svg",
+    Pot: "/pot.svg",
+    NethOP: "/nethop.svg",
+    SMP: "/smp.svg",
+    Sword: "/sword.svg",
+    Axe: "/axe.svg",
+    Mace: "/mace.svg",
+  }
 
   const themeStyles = {
     dark: {
@@ -579,7 +598,6 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-4">
-          
           {/* Выбор языка */}
           <div className="relative">
             <button
@@ -710,8 +728,8 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Топ игроков с корректным рендером объемного 3D-тела (Minotar armor/body) */}
-              <div className="flex flex-col gap-3">
+              {/* Компактный ТОП ИГРОКОВ со структурой как на Скриншоте 2 */}
+              <div className="flex flex-col gap-2.5">
                 {rankedPlayers.slice(0, 3).map((player) => {
                   const rankBg = player.rank === 1 
                     ? "bg-gradient-to-r from-amber-400 to-amber-500 text-black shadow-lg shadow-amber-500/20" 
@@ -726,17 +744,17 @@ export default function Home() {
                     <div 
                       key={player.id}
                       onClick={() => setSelectedPlayer(player)}
-                      className="bg-black/30 hover:bg-black/50 border border-zinc-800/80 hover:border-amber-500/40 p-3.5 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
+                      className="bg-[#0e121b] hover:bg-[#121824] border border-zinc-800/80 hover:border-amber-500/40 p-2.5 px-3 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
                     >
-                      <div className="flex items-center gap-4">
-                        {/* Наклонный блок места с точным 3D рендером кожи */}
-                        <div className={`w-36 h-14 rounded-xl flex items-center justify-between px-3.5 font-black text-lg italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shadow-inner`}>
+                      <div className="flex items-center gap-3">
+                        {/* Наклонный номер места с 3D-моделью */}
+                        <div className={`w-28 h-12 rounded-xl flex items-center justify-between px-3 font-black text-base italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shadow-inner shrink-0`}>
                           <span className="skew-x-[12deg] z-10">{player.rank}.</span>
-                          <div className="absolute right-2 -bottom-2 h-18 w-16 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
+                          <div className="absolute right-1 -bottom-1 h-14 w-12 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
                             <img 
                               src={`https://minotar.net/armor/body/${skinName}/100.png`} 
                               alt={player.username} 
-                              className="h-20 w-auto object-contain transform translate-y-1 scale-125"
+                              className="h-16 w-auto object-contain transform translate-y-1 scale-125"
                               onError={(e) => {
                                 (e.currentTarget as HTMLImageElement).src = `https://minotar.net/avatar/${skinName}/100.png`
                               }}
@@ -744,23 +762,35 @@ export default function Home() {
                           </div>
                         </div>
 
-                        <div>
-                          <div className="font-bold text-white text-sm">{player.username}</div>
-                          <div className={`text-[11px] font-medium ${playerTitleInfo.color}`}>
-                            {player.staffRole || playerTitleInfo.title} ({player.points} очк.)[cite: 15]
+                        {/* Информация про игрока */}
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-white text-sm">{player.username}</span>
+                            {player.rank === 1 && <Trophy className="w-3.5 h-3.5 text-amber-400 inline" />}
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-zinc-800/90 text-zinc-300 border border-zinc-700/50">
+                              {player.region}
+                            </span>
                           </div>
-                          <div className="flex items-center gap-1.5 mt-1.5">
-                            {Object.entries(player.tiers).slice(0, 7).map(([kitName, tierVal], idx) => (
-                              <span key={idx} className="flex items-center gap-0.5 bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-[9px] text-amber-400 font-bold">
-                                <span>{kitName}: {tierVal}</span>
-                              </span>
-                            ))}
+                          
+                          <div className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-400 mt-0.5">
+                            <span className="inline-block w-2 h-2 rotate-45 bg-rose-500/80 rounded-sm"></span>
+                            <span className={playerTitleInfo.color}>{player.staffRole || playerTitleInfo.title}</span>
+                            <span className="text-zinc-500">({player.points} points)</span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="text-xs font-bold px-2.5 py-1 rounded-lg bg-zinc-800 text-zinc-300">
-                        {player.region}
+                      {/* Плашки тиров с иконками режимов справа в компактном блоке */}
+                      <div className="bg-[#080b10] border border-zinc-800/60 p-1.5 px-2 rounded-xl flex items-center gap-1.5 overflow-x-auto max-w-[50%] scrollbar-none">
+                        {Object.entries(player.tiers).map(([kitName, tierVal], idx) => {
+                          const iconUrl = modeIconMap[kitName] || "/overall.svg"
+                          return (
+                            <div key={idx} className="flex items-center gap-1 bg-[#121722] border border-zinc-800/80 px-2 py-1 rounded-lg shrink-0">
+                              <img src={iconUrl} alt={kitName} className="w-3.5 h-3.5 object-contain" />
+                              <span className="text-[10px] font-black text-amber-400 tracking-tight">{tierVal}</span>
+                            </div>
+                          )
+                        })}
                       </div>
                     </div>
                   )
@@ -1052,7 +1082,7 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="text-sm font-bold text-zinc-200 mb-3">Как рассчитываются очки рейтинга</div>
                 <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-1 text-xs text-zinc-400">
-                  <p>Каждый тир в режимах дает определенное количество очков, которые суммируются в общий рейтинг игрока на AvernyeTiers[cite: 15].</p>
+                  <p>Каждый тир в режимах дает определенное количество очков, которые суммируются в общий рейтинг игрока на AvernyeTiers.</p>
                 </div>
               </div>
             )}
