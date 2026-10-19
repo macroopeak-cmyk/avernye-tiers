@@ -7,8 +7,412 @@ import KitTier from "@/components/kit-tier"
 import { PlayerModal } from "@/components/player-modal"
 import { 
   Info, X, Palette, Search, 
-  Home as HomeIcon, Trophy, Disc, FileText, ChevronDown, ExternalLink, Server, Globe, Calendar, ArrowRight, Plus, Minus
+  Home as HomeIcon, Trophy, Disc, FileText, ChevronDown, ExternalLink, Server, Globe, Calendar, ArrowRight, Plus, Minus, Check
 } from "lucide-react"
+
+// Словарь переводов для интерфейса
+const translations: Record<string, Record<string, string>> = {
+  English: {
+    home: "Home",
+    rankings: "Rankings",
+    discords: "Discords",
+    serverIp: "Server IP",
+    events: "Events",
+    searchPlaceholder: "Search player...",
+    information: "Information",
+    heroTitle: "The Minecraft PvP Tier List",
+    heroDesc: "AvernyeTiers is a Minecraft PvP tier list. Players are tested in eight gamemodes, placed in tiers from Tier 1 to Tier 5, and ranked on one overall leaderboard.",
+    viewRankings: "View rankings",
+    getTierTested: "Get tier tested",
+    topPlayers: "Top players",
+    fullLeaderboard: "Full leaderboard",
+    online: "Online",
+    gamemodes: "Gamemodes",
+    getTierTestedTitle: "Get tier tested",
+    getTierTestedDesc: "Tier tests happen in-game on mctiers.network. Queue for a gamemode, fight one of our testers and get your tier.",
+    tiersAndPoints: "Tiers and points",
+    tiersAndPointsDesc: "Each gamemode ranks players in five tiers, split into High and Low.",
+    titles: "Titles",
+    titlesDesc: "Your title follows your total points across every gamemode.",
+    faqTitle: "Frequently asked questions",
+    faqDesc: "Quick answers about tiers, tier tests, points and the AvernyeTiers server.",
+    upcomingEvents: "Upcoming events",
+    allEvents: "All events",
+    serverAddress: "SERVER ADDRESS",
+    javaEdition: "JAVA EDITION",
+    bedrockEdition: "BEDROCK EDITION",
+    copied: "Copied!",
+    copyIp: "Copy Server IP",
+  },
+  Русский: {
+    home: "Главная",
+    rankings: "Рейтинги",
+    discords: "Дискорды",
+    serverIp: "IP Сервера",
+    events: "Ивенты",
+    searchPlaceholder: "Поиск игрока...",
+    information: "Информация",
+    heroTitle: "Список тиров PvP Minecraft",
+    heroDesc: "AvernyeTiers — это список тиров PvP в Minecraft. Игроки тестируются в восьми режимах, распределяются по тирам от Tier 1 до Tier 5 и ранжируются в общей таблице лидеров.",
+    viewRankings: "Смотреть рейтинги",
+    getTierTested: "Пройти тест",
+    topPlayers: "Топ игроков",
+    fullLeaderboard: "Вся таблица лидеров",
+    online: "Онлайн",
+    gamemodes: "Игровые режимы",
+    getTierTestedTitle: "Пройти проверку тира",
+    getTierTestedDesc: "Тестирование тиров проходит прямо в игре на mctiers.network. Встаньте в очередь режима, сразитесь с тестером и получите свой тир.",
+    tiersAndPoints: "Тиры и очки",
+    tiersAndPointsDesc: "Каждый режим ранжирует игроков по пяти тирам, разделенным на High и Low.",
+    titles: "Титулы",
+    titlesDesc: "Ваш титул зависит от общего количества очков во всех режимах.",
+    faqTitle: "Часто задаваемые вопросы",
+    faqDesc: "Быстрые ответы о тирах, тестах, очках и сервере AvernyeTiers.",
+    upcomingEvents: "Ближайшие ивенты",
+    allEvents: "Все ивенты",
+    serverAddress: "АДРЕС СЕРВЕРА",
+    javaEdition: "JAVA ИЗДАНИЕ",
+    bedrockEdition: "BEDROCK ИЗДАНИЕ",
+    copied: "Скопировано!",
+    copyIp: "Копировать IP",
+  },
+  Español: {
+    home: "Inicio",
+    rankings: "Clasificación",
+    discords: "Discords",
+    serverIp: "IP del Servidor",
+    events: "Eventos",
+    searchPlaceholder: "Buscar jugador...",
+    information: "Información",
+    heroTitle: "La lista de niveles de PvP de Minecraft",
+    heroDesc: "AvernyeTiers es una lista de niveles de PvP en Minecraft. Los jugadores son evaluados en ocho modos de juego, colocados en niveles del 1 al 5.",
+    viewRankings: "Ver clasificación",
+    getTierTested: "Obtener nivel",
+    topPlayers: "Mejores jugadores",
+    fullLeaderboard: "Tabla completa",
+    online: "En línea",
+    gamemodes: "Modos de juego",
+    getTierTestedTitle: "Obtener prueba de nivel",
+    getTierTestedDesc: "Las pruebas ocurren en mctiers.network.",
+    tiersAndPoints: "Niveles y puntos",
+    tiersAndPointsDesc: "Cada modo clasifica a los jugadores en cinco niveles.",
+    titles: "Títulos",
+    titlesDesc: "Tu título sigue tus puntos totales.",
+    faqTitle: "Preguntas frecuentes",
+    faqDesc: "Respuestas rápidas sobre niveles y pruebas.",
+    upcomingEvents: "Próximos eventos",
+    allEvents: "Todos los eventos",
+    serverAddress: "DIRECCIÓN DEL SERVIDOR",
+    javaEdition: "EDICIÓN JAVA",
+    bedrockEdition: "EDICIÓN BEDROCK",
+    copied: "¡Copiado!",
+    copyIp: "Copiar IP",
+  },
+  Português: {
+    home: "Início",
+    rankings: "Classificação",
+    discords: "Discords",
+    serverIp: "IP do Servidor",
+    events: "Eventos",
+    searchPlaceholder: "Pesquisar jogador...",
+    information: "Informações",
+    heroTitle: "A Tier List de PvP do Minecraft",
+    heroDesc: "AvernyeTiers é uma tier list de PvP do Minecraft. Jogadores são testados em oito modos.",
+    viewRankings: "Ver rankings",
+    getTierTested: "Ser testado",
+    topPlayers: "Melhores jogadores",
+    fullLeaderboard: "Leaderboard completa",
+    online: "Online",
+    gamemodes: "Modos de jogo",
+    getTierTestedTitle: "Fazer teste de tier",
+    getTierTestedDesc: "Testes acontecem em mctiers.network.",
+    tiersAndPoints: "Tiers e pontos",
+    tiersAndPointsDesc: "Cada modo classifica em cinco tiers.",
+    titles: "Títulos",
+    titlesDesc: "Seu título acompanha seus pontos totais.",
+    faqTitle: "Perguntas frequentes",
+    faqDesc: "Respostas rápidas sobre tiers e testes.",
+    upcomingEvents: "Próximos eventos",
+    allEvents: "Todos os eventos",
+    serverAddress: "ENDEREÇO DO SERVIDOR",
+    javaEdition: "EDIÇÃO JAVA",
+    bedrockEdition: "EDIÇÃO BEDROCK",
+    copied: "Copiado!",
+    copyIp: "Copiar IP",
+  },
+  Français: {
+    home: "Accueil",
+    rankings: "Classements",
+    discords: "Discords",
+    serverIp: "IP du serveur",
+    events: "Événements",
+    searchPlaceholder: "Rechercher un joueur...",
+    information: "Information",
+    heroTitle: "La Tier List PvP Minecraft",
+    heroDesc: "AvernyeTiers est une tier list PvP Minecraft. Les joueurs sont testés dans huit modes.",
+    viewRankings: "Voir les classements",
+    getTierTested: "Passer un test",
+    topPlayers: "Meilleurs joueurs",
+    fullLeaderboard: "Classement complet",
+    online: "En ligne",
+    gamemodes: "Modes de jeu",
+    getTierTestedTitle: "Passer un test de tier",
+    getTierTestedDesc: "Les tests ont lieu sur mctiers.network.",
+    tiersAndPoints: "Tiers et points",
+    tiersAndPointsDesc: "Chaque mode classe les joueurs en cinq tiers.",
+    titles: "Titres",
+    titlesDesc: "Votre titre dépend de vos points totaux.",
+    faqTitle: "Foire aux questions",
+    faqDesc: "Réponses rapides sur les tiers.",
+    upcomingEvents: "Événements à venir",
+    allEvents: "Tous les événements",
+    serverAddress: "ADRESSE DU SERVEUR",
+    javaEdition: "ÉDITION JAVA",
+    bedrockEdition: "ÉDITION BEDROCK",
+    copied: "Copié !",
+    copyIp: "Copier l'IP",
+  },
+  Deutsch: {
+    home: "Startseite",
+    rankings: "Rangliste",
+    discords: "Discords",
+    serverIp: "Server-IP",
+    events: "Events",
+    searchPlaceholder: "Spieler suchen...",
+    information: "Informationen",
+    heroTitle: "Die Minecraft PvP Tier List",
+    heroDesc: "AvernyeTiers ist eine Minecraft PvP Tier List.",
+    viewRankings: "Rangliste ansehen",
+    getTierTested: "Testen lassen",
+    topPlayers: "Top-Spieler",
+    fullLeaderboard: "Komplette Bestenliste",
+    online: "Online",
+    gamemodes: "Spielmodi",
+    getTierTestedTitle: "Tier-Test machen",
+    getTierTestedDesc: "Tests finden auf mctiers.network statt.",
+    tiersAndPoints: "Tiers und Punkte",
+    tiersAndPointsDesc: "Jeder Modus ordnet Spieler in fünf Tiers ein.",
+    titles: "Titel",
+    titlesDesc: "Dein Titel basiert auf deinen Gesamtpunkten.",
+    faqTitle: "Häufig gestellte Fragen",
+    faqDesc: "Schnelle Antworten zu Tiers.",
+    upcomingEvents: "Kommende Events",
+    allEvents: "Alle Events",
+    serverAddress: "SERVER-ADRESSE",
+    javaEdition: "JAVA EDITION",
+    bedrockEdition: "BEDROCK EDITION",
+    copied: "Kopiert!",
+    copyIp: "Server-IP kopieren",
+  },
+  Polski: {
+    home: "Strona główna",
+    rankings: "Rankingi",
+    discords: "Discords",
+    serverIp: "IP serwera",
+    events: "Wydarzenia",
+    searchPlaceholder: "Szukaj gracza...",
+    information: "Informacje",
+    heroTitle: "Lista poziomów PvP w Minecraft",
+    heroDesc: "AvernyeTiers to lista poziomów PvP w Minecraft.",
+    viewRankings: "Zobacz rankingi",
+    getTierTested: "Zdobądź poziom",
+    topPlayers: "Najlepsi gracze",
+    fullLeaderboard: "Pełny ranking",
+    online: "Online",
+    gamemodes: "Tryby gry",
+    getTierTestedTitle: "Przetestuj swój poziom",
+    getTierTestedDesc: "Testy odbywają się na mctiers.network.",
+    tiersAndPoints: "Poziomy i punkty",
+    tiersAndPointsDesc: "Każdy tryb dzieli graczy na pięć poziomów.",
+    titles: "Tytuły",
+    titlesDesc: "Twój tytuł zależy od łącznej liczby punktów.",
+    faqTitle: "Często zadawane pytania",
+    faqDesc: "Szybkie odpowiedzi dotyczące poziomów.",
+    upcomingEvents: "Nadchodzące wydarzenia",
+    allEvents: "Wszystkie wydarzenia",
+    serverAddress: "ADRES SERWERA",
+    javaEdition: "WERSJA JAVA",
+    bedrockEdition: "WERSJA BEDROCK",
+    copied: "Skopiowano!",
+    copyIp: "Kopiuj IP",
+  },
+  Italiano: {
+    home: "Home",
+    rankings: "Classifiche",
+    discords: "Discords",
+    serverIp: "IP Server",
+    events: "Eventi",
+    searchPlaceholder: "Cerca giocatore...",
+    information: "Informazioni",
+    heroTitle: "La Tier List PvP di Minecraft",
+    heroDesc: "AvernyeTiers è una tier list PvP di Minecraft.",
+    viewRankings: "Vedi classifiche",
+    getTierTested: "Ottieni tier",
+    topPlayers: "Migliori giocatori",
+    fullLeaderboard: "Classifica completa",
+    online: "Online",
+    gamemodes: "Modalità di gioco",
+    getTierTestedTitle: "Ottieni un test",
+    getTierTestedDesc: "I test avvengono su mctiers.network.",
+    tiersAndPoints: "Tier e punti",
+    tiersAndPointsDesc: "Ogni modalità classifica in cinque tier.",
+    titles: "Titoli",
+    titlesDesc: "Il tuo titolo dipende dai punti totali.",
+    faqTitle: "Domande frequenti",
+    faqDesc: "Risposte rapide sui tier.",
+    upcomingEvents: "Prossimi eventi",
+    allEvents: "Tutti gli eventi",
+    serverAddress: "INDIRIZZO SERVER",
+    javaEdition: "EDIZIONE JAVA",
+    bedrockEdition: "EDIZIONE BEDROCK",
+    copied: "Copiato!",
+    copyIp: "Copia IP",
+  },
+  Nederlands: {
+    home: "Home",
+    rankings: "Ranglijst",
+    discords: "Discords",
+    serverIp: "Server IP",
+    events: "Evenementen",
+    searchPlaceholder: "Zoek speler...",
+    information: "Informatie",
+    heroTitle: "De Minecraft PvP Tierlijst",
+    heroDesc: "AvernyeTiers is een Minecraft PvP tierlijst.",
+    viewRankings: "Bekijk ranglijst",
+    getTierTested: "Test aanvragen",
+    topPlayers: "Topspelers",
+    fullLeaderboard: "Volledige leaderboard",
+    online: "Online",
+    gamemodes: "Spelmodi",
+    getTierTestedTitle: "Word getest",
+    getTierTestedDesc: "Tests vinden plaats op mctiers.network.",
+    tiersAndPoints: "Tiers en punten",
+    tiersAndPointsDesc: "Elke modus rangschikt in vijf tiers.",
+    titles: "Titels",
+    titlesDesc: "Je titel volgt je totale punten.",
+    faqTitle: "Veelgestelde vragen",
+    faqDesc: "Snelle antwoorden over tiers.",
+    upcomingEvents: "Aankomende evenementen",
+    allEvents: "Alle evenementen",
+    serverAddress: "SERVERADRES",
+    javaEdition: "JAVA EDITIE",
+    bedrockEdition: "BEDROCK EDITIE",
+    copied: "Gekopieerd!",
+    copyIp: "Kopieer IP",
+  },
+  Türkçe: {
+    home: "Ana Sayfa",
+    rankings: "Sıralama",
+    discords: "Discordlar",
+    serverIp: "Sunucu IP",
+    events: "Etkinlikler",
+    searchPlaceholder: "Oyuncu ara...",
+    information: "Bilgi",
+    heroTitle: "Minecraft PvP Seviye Listesi",
+    heroDesc: "AvernyeTiers bir Minecraft PvP tier listesidir.",
+    viewRankings: "Sıralamaları gör",
+    getTierTested: "Test ol",
+    topPlayers: "En İyi Oyuncular",
+    fullLeaderboard: "Tam sıralama",
+    online: "Çevrimiçi",
+    gamemodes: "Oyun Modları",
+    getTierTestedTitle: "Seviye testi ol",
+    getTierTestedDesc: "Testler mctiers.network üzerinde yapılır.",
+    tiersAndPoints: "Seviyeler ve Puanlar",
+    tiersAndPointsDesc: "Her mod oyuncuları beş seviyeye ayırır.",
+    titles: "Unvanlar",
+    titlesDesc: "Unvanınız toplam puanınıza göre belirlenir.",
+    faqTitle: "Sıkça Sorulan Sorular",
+    faqDesc: "Seviyeler hakkında hızlı yanıtlar.",
+    upcomingEvents: "Yaklaşan etkinlikler",
+    allEvents: "Tüm etkinlikler",
+    serverAddress: "SUNUCU ADRESİ",
+    javaEdition: "JAVA SÜRÜMÜ",
+    bedrockEdition: "BEDROCK SÜRÜMÜ",
+    copied: "Kopyalandı!",
+    copyIp: "IP'yi Kopyala",
+  },
+  Čeština: {
+    home: "Domů",
+    rankings: "Žebříček",
+    discords: "Discords",
+    serverIp: "IP serveru",
+    events: "Události",
+    searchPlaceholder: "Hledat hráče...",
+    information: "Informace",
+    heroTitle: "Minecraft PvP Tier List",
+    heroDesc: "AvernyeTiers je Minecraft PvP tier list.",
+    viewRankings: "Zobrazit žebříček",
+    getTierTested: "Získat tier",
+    topPlayers: "Nejlepší hráči",
+    fullLeaderboard: "Celý žebříček",
+    online: "Online",
+    gamemodes: "Herní módy",
+    getTierTestedTitle: "Získat tier test",
+    getTierTestedDesc: "Testy probíhají na mctiers.network.",
+    tiersAndPoints: "Tiers a body",
+    tiersAndPointsDesc: "Každý mód řadí hráče do pěti tierů.",
+    titles: "Tituly",
+    titlesDesc: "Tvůj titul závisí na celkových bodech.",
+    faqTitle: "Často kladené otázky",
+    faqDesc: "Rychlé odpovědi o tierech.",
+    upcomingEvents: "Nadcházející události",
+    allEvents: "Všechny události",
+    serverAddress: "ADRESA SERVERU",
+    javaEdition: "JAVA EDICE",
+    bedrockEdition: "BEDROCK EDICE",
+    copied: "Zkopírováno!",
+    copyIp: "Kopírovat IP",
+  },
+  Svenska: {
+    home: "Hem",
+    rankings: "Ranking",
+    discords: "Discords",
+    serverIp: "Server-IP",
+    events: "Evenemang",
+    searchPlaceholder: "Sök spelare...",
+    information: "Information",
+    heroTitle: "Minecraft PvP Tier List",
+    heroDesc: "AvernyeTiers är en Minecraft PvP tier list.",
+    viewRankings: "Visa ranking",
+    getTierTested: "Testa tier",
+    topPlayers: "Toppspelare",
+    fullLeaderboard: "Fullständig ranking",
+    online: "Online",
+    gamemodes: "Spellägen",
+    getTierTestedTitle: "Få tier-test",
+    getTierTestedDesc: "Tester sker på mctiers.network.",
+    tiersAndPoints: "Tiers och poäng",
+    tiersAndPointsDesc: "Varje läge rankar spelare i fem tiers.",
+    titles: "Titlar",
+    titlesDesc: "Din titel beror på dina totala poäng.",
+    faqTitle: "Vanliga frågor",
+    faqDesc: "Snabba svar om tiers.",
+    upcomingEvents: "Kommande evenemang",
+    allEvents: "Alla evenemang",
+    serverADDRESS: "SERVERADRESS",
+    javaEdition: "JAVA-UTGÅVA",
+    bedrockEdition: "BEDROCK-UTGÅVA",
+    copied: "Kopierad!",
+    copyIp: "Kopiera IP",
+  }
+}
+
+// Список языков с флагами (как на скриншоте 2)
+const languages = [
+  { name: "English", flag: "🇺🇸" },
+  { name: "Español", flag: "🇪🇸" },
+  { name: "Português", flag: "🇧🇷" },
+  { name: "Français", flag: "🇫🇷" },
+  { name: "Deutsch", flag: "🇩🇪" },
+  { name: "Polski", flag: "🇵🇱" },
+  { name: "Italiano", flag: "🇮🇹" },
+  { name: "Nederlands", flag: "🇳🇱" },
+  { name: "Русский", flag: "🇷🇺" },
+  { name: "Türkçe", flag: "🇹🇷" },
+  { name: "Čeština", flag: "🇨🇿" },
+  { name: "Svenska", flag: "🇸🇪" },
+]
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"home" | "rankings" | "server-ip" | "events">("home")
@@ -21,16 +425,27 @@ export default function Home() {
   const [infoTab, setInfoTab] = useState<"titles" | "points">("titles")
   const [copiedIp, setCopiedIp] = useState<boolean>(false)
   
+  // Выбор языка и меню языков
+  const [currentLang, setCurrentLang] = useState<string>("English")
+  const [isLangMenuOpen, setIsLangMenuOpen] = useState<boolean>(false)
+
   const [theme, setTheme] = useState<"dark" | "midnight" | "sinus" | "light">("dark")
   const [isThemeOpen, setIsThemeOpen] = useState(false)
-  
-  // Состояние для аккордеона FAQ (всего 9 вопросов как на оригинале)
   const [openFaq, setOpenFaq] = useState<number | null>(0)
+
+  // Функция получения перевода
+  const t = (key: string) => {
+    return translations[currentLang]?.[key] || translations["English"][key] || key
+  }
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("combat_tiers_theme") as "dark" | "midnight" | "sinus" | "light"
     if (savedTheme) {
       setTheme(savedTheme)
+    }
+    const savedLang = localStorage.getItem("avernye_lang")
+    if (savedLang && translations[savedLang]) {
+      setCurrentLang(savedLang)
     }
   }, [])
 
@@ -38,6 +453,12 @@ export default function Home() {
     setTheme(newTheme)
     localStorage.setItem("combat_tiers_theme", newTheme)
     setIsThemeOpen(false)
+  }
+
+  const changeLanguage = (langName: string) => {
+    setCurrentLang(langName)
+    localStorage.setItem("avernye_lang", langName)
+    setIsLangMenuOpen(false)
   }
 
   const sortedRawPlayers = [...INITIAL_PLAYERS].map((player) => ({
@@ -75,7 +496,6 @@ export default function Home() {
     setTimeout(() => setCopiedIp(false), 2000)
   }
 
-  // Строго актуальные режимы как на оригинале
   const modes = [
     { id: "overall", label: "Overall", icon: "/overall.svg" },
     { id: "LTMs", label: "LTMs", icon: "/ltm's.svg" },
@@ -120,23 +540,25 @@ export default function Home() {
     },
   }[theme]
 
+  const activeLangFlag = languages.find(l => l.name === currentLang)?.flag || "🇺🇸"
+
   return (
     <main className={`min-h-screen ${themeStyles.bg} ${themeStyles.textColor} flex flex-col items-center py-4 px-6 relative transition-colors duration-300 w-full`}>
       
-      {/* Шапка сайта */}
-      <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-4 rounded-2xl shadow-lg mb-8`}>
+      {/* Шапка сайта точь-в-точь как на скриншоте 1 */}
+      <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-4 rounded-2xl shadow-lg mb-8 relative`}>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("home")}>
             <img src="/logo.png" alt="AvernyeTiers Logo" className="h-10 w-auto object-contain scale-105" />
           </div>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-400 font-medium">
+          <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-300 font-medium">
             <button 
               onClick={() => setActiveTab("home")}
               className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "home" ? "text-white font-bold" : "hover:text-zinc-200"}`}
             >
-              <HomeIcon className="w-4 h-4 text-zinc-500" />
-              <span>Home</span>
+              <HomeIcon className="w-4 h-4 text-zinc-400" />
+              <span>{t("home")}</span>
             </button>
 
             <button 
@@ -144,7 +566,7 @@ export default function Home() {
               className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "rankings" ? "text-white font-bold" : "hover:text-zinc-200"}`}
             >
               <Trophy className="w-4 h-4 text-amber-500" />
-              <span>Rankings</span>
+              <span>{t("rankings")}</span>
             </button>
             
             <div className="relative">
@@ -152,9 +574,9 @@ export default function Home() {
                 onClick={() => setIsDiscordMenuOpen(!isDiscordMenuOpen)}
                 className="flex items-center gap-1.5 hover:text-zinc-200 transition-colors cursor-pointer"
               >
-                <Disc className="w-4 h-4 text-zinc-500" />
-                <span>Discords</span>
-                <ChevronDown className="w-3 h-3 text-zinc-500" />
+                <Disc className="w-4 h-4 text-zinc-400" />
+                <span>{t("discords")}</span>
+                <ChevronDown className="w-3 h-3 text-zinc-400" />
               </button>
               {isDiscordMenuOpen && (
                 <div className={`absolute left-0 top-full mt-2 w-56 ${themeStyles.cardBg} border ${themeStyles.border} rounded-xl shadow-xl overflow-hidden z-50 p-1.5 flex flex-col gap-1 text-left`}>
@@ -184,23 +606,59 @@ export default function Home() {
               onClick={() => setActiveTab("server-ip")}
               className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "server-ip" ? "text-white font-bold" : "hover:text-zinc-200"}`}
             >
-              <Server className="w-4 h-4 text-zinc-500" />
-              <span>Server IP</span>
+              <Server className="w-4 h-4 text-zinc-400" />
+              <span>{t("serverIp")}</span>
             </button>
 
             <button 
               onClick={() => setActiveTab("events")}
               className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "events" ? "text-white font-bold" : "hover:text-zinc-200"}`}
             >
-              <Calendar className="w-4 h-4 text-zinc-500" />
-              <span>Events</span>
+              <Calendar className="w-4 h-4 text-zinc-400" />
+              <span>{t("events")}</span>
             </button>
           </nav>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-zinc-900/60 border border-zinc-800 px-3 py-1.5 rounded-xl text-xs text-zinc-400">
-            <span className="text-base">🇺🇸</span>
+          
+          {/* Кнопка выбора языка со скриншота 2 */}
+          <div className="relative">
+            <button
+              onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+              className="flex items-center gap-2 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 px-3 py-1.5 rounded-xl text-xs text-zinc-200 cursor-pointer transition"
+            >
+              <span className="text-base">{activeLangFlag}</span>
+            </button>
+
+            {/* Выпадающее окно языков как на скриншоте 2 */}
+            {isLangMenuOpen && (
+              <div className={`absolute right-0 top-full mt-2 w-72 ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-2xl overflow-hidden z-50 p-3 grid grid-cols-2 gap-1.5`}>
+                <div className="col-span-2 text-[10px] font-bold text-zinc-500 uppercase px-2 pb-1 tracking-wider">
+                  Language
+                </div>
+                {languages.map((lang) => {
+                  const isSelected = currentLang === lang.name
+                  return (
+                    <button
+                      key={lang.name}
+                      onClick={() => changeLanguage(lang.name)}
+                      className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium cursor-pointer transition ${
+                        isSelected 
+                          ? "bg-zinc-800 text-white border border-zinc-700 shadow-sm" 
+                          : "hover:bg-zinc-800/50 text-zinc-400 hover:text-zinc-200 border border-transparent"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-base">{lang.flag}</span>
+                        <span>{lang.name}</span>
+                      </div>
+                      {isSelected && <Check className="w-3.5 h-3.5 text-amber-400" />}
+                    </button>
+                  )
+                })}
+              </div>
+            )}
           </div>
 
           <div className="w-64 relative">
@@ -208,7 +666,7 @@ export default function Home() {
               <Search className="absolute left-3 w-4 h-4 text-zinc-500 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Search player..."
+                placeholder={t("searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value)
@@ -248,7 +706,7 @@ export default function Home() {
               className={`flex items-center gap-2 px-3 py-2 rounded-xl ${theme === "light" ? "bg-zinc-100 hover:bg-zinc-200" : "bg-black/30 hover:bg-zinc-800/60"} border ${themeStyles.border} text-xs font-medium transition-colors cursor-pointer`}
             >
               <Info className="w-4 h-4 text-cyan-400" />
-              <span>Information</span>
+              <span>{t("information")}</span>
             </button>
           </div>
         </div>
@@ -258,16 +716,15 @@ export default function Home() {
       {activeTab === "home" && (
         <div className="w-full max-w-[1720px] flex flex-col gap-8">
           
-          {/* Верхний блок: Описание проекта и Топ-3 игрока */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className={`lg:col-span-5 ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden`}>
               <div>
                 <img src="/logo.png" alt="AvernyeTiers Logo" className="h-14 w-auto object-contain mb-6" />
                 <h1 className="text-3xl lg:text-4xl font-black tracking-tight mb-4 text-white">
-                  The Minecraft PvP Tier List
+                  {t("heroTitle")}
                 </h1>
                 <p className="text-zinc-400 text-sm leading-relaxed mb-8">
-                  AvernyeTiers is a Minecraft PvP tier list. Players are tested in eight gamemodes, placed in tiers from Tier 1 to Tier 5, and ranked on one overall leaderboard.
+                  {t("heroDesc")}
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
@@ -275,14 +732,14 @@ export default function Home() {
                   onClick={() => setActiveTab("rankings")}
                   className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold px-5 py-3 rounded-xl transition shadow-lg shadow-amber-500/20 text-xs cursor-pointer"
                 >
-                  <span>View rankings</span>
+                  <span>{t("viewRankings")}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <button 
                   onClick={copyServerIp}
                   className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-medium px-5 py-3 rounded-xl transition text-xs border border-zinc-700 cursor-pointer"
                 >
-                  <span>Get tier tested</span>
+                  <span>{t("getTierTested")}</span>
                 </button>
               </div>
             </div>
@@ -291,13 +748,13 @@ export default function Home() {
               <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-500 tracking-wider uppercase">
                   <Trophy className="w-4 h-4" />
-                  <span>Top Players</span>
+                  <span>{t("topPlayers")}</span>
                 </div>
                 <button 
                   onClick={() => setActiveTab("rankings")}
                   className="text-xs text-zinc-400 hover:text-white transition flex items-center gap-1 cursor-pointer font-medium"
                 >
-                  <span>Full leaderboard</span>
+                  <span>{t("fullLeaderboard")}</span>
                   <ArrowRight className="w-3 h-3" />
                 </button>
               </div>
@@ -335,7 +792,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Статус сервера */}
           <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-4`}>
             <div className="flex items-center gap-4">
               <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -344,7 +800,7 @@ export default function Home() {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide">Online</span>
+                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide">{t("online")}</span>
                   <span className="text-xs text-zinc-500">• 2,583 / 10,000 players online</span>
                 </div>
                 <div className="text-base font-extrabold text-white mt-0.5">mctiers.network</div>
@@ -354,14 +810,13 @@ export default function Home() {
               onClick={copyServerIp}
               className="bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold px-5 py-3 rounded-xl transition cursor-pointer flex items-center gap-2"
             >
-              <span>{copiedIp ? "IP Copied!" : "Copy Server IP"}</span>
+              <span>{copiedIp ? t("copied") : t("copyIp")}</span>
               <Server className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Сетка игровых режимов */}
           <div>
-            <div className="text-lg font-bold text-white mb-4">Gamemodes</div>
+            <div className="text-lg font-bold text-white mb-4">{t("gamemodes")}</div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {modes.filter(m => m.id !== "overall").map((mode) => (
                 <div 
@@ -379,11 +834,10 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Инструкция получения тира (Get tier tested) из 5 шагов */}
           <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`}>
-            <div className="text-2xl font-black text-white mb-2">Get tier tested</div>
+            <div className="text-2xl font-black text-white mb-2">{t("getTierTestedTitle")}</div>
             <p className="text-xs text-zinc-400 mb-8">
-              Tier tests happen in-game on <span className="text-white font-semibold">mctiers.network</span>. Queue for a gamemode, fight one of our testers and get your tier.
+              {t("getTierTestedDesc")}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -407,11 +861,10 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Tiers, Points and Titles */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl`}>
-              <div className="text-lg font-bold text-white mb-1">Tiers and points</div>
-              <p className="text-xs text-zinc-400 mb-6">Each gamemode ranks players in five tiers, split into High and Low.</p>
+              <div className="text-lg font-bold text-white mb-1">{t("tiersAndPoints")}</div>
+              <p className="text-xs text-zinc-400 mb-6">{t("tiersAndPointsDesc")}</p>
               
               <div className="space-y-3">
                 {[
@@ -420,12 +873,12 @@ export default function Home() {
                   { tier: "Tier 3", points: "HT3 · 10 pts", lt: "LT3 · 6 pts", bg: "bg-amber-900/20 border-amber-900/30" },
                   { tier: "Tier 4", points: "HT4 · 4 pts", lt: "LT4 · 3 pts", bg: "bg-black/30 border-zinc-800" },
                   { tier: "Tier 5", points: "HT5 · 2 pts", lt: "LT5 · 1 pt", bg: "bg-black/30 border-zinc-800" },
-                ].map((t, idx) => (
-                  <div key={idx} className={`p-3.5 rounded-2xl border ${t.bg} flex items-center justify-between`}>
-                    <span className="font-bold text-white text-xs">{t.tier}</span>
+                ].map((tItem, idx) => (
+                  <div key={idx} className={`p-3.5 rounded-2xl border ${tItem.bg} flex items-center justify-between`}>
+                    <span className="font-bold text-white text-xs">{tItem.tier}</span>
                     <div className="flex gap-2">
-                      <span className="text-[10px] font-semibold bg-black/40 px-2 py-1 rounded-lg text-amber-400 border border-white/5">{t.points}</span>
-                      <span className="text-[10px] font-semibold bg-black/40 px-2 py-1 rounded-lg text-zinc-300 border border-white/5">{t.lt}</span>
+                      <span className="text-[10px] font-semibold bg-black/40 px-2 py-1 rounded-lg text-amber-400 border border-white/5">{tItem.points}</span>
+                      <span className="text-[10px] font-semibold bg-black/40 px-2 py-1 rounded-lg text-zinc-300 border border-white/5">{tItem.lt}</span>
                     </div>
                   </div>
                 ))}
@@ -433,8 +886,8 @@ export default function Home() {
             </div>
 
             <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl`}>
-              <div className="text-lg font-bold text-white mb-1">Titles</div>
-              <p className="text-xs text-zinc-400 mb-6">Your title follows your total points across every gamemode.</p>
+              <div className="text-lg font-bold text-white mb-1">{t("titles")}</div>
+              <p className="text-xs text-zinc-400 mb-6">{t("titlesDesc")}</p>
 
               <div className="space-y-3">
                 {[
@@ -454,12 +907,11 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Блок Upcoming events */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <div className="text-lg font-bold text-white">Upcoming events</div>
+              <div className="text-lg font-bold text-white">{t("upcomingEvents")}</div>
               <button onClick={() => setActiveTab("events")} className="text-xs text-zinc-400 hover:text-white transition flex items-center gap-1 cursor-pointer">
-                <span>All events</span>
+                <span>{t("allEvents")}</span>
                 <ArrowRight className="w-3 h-3" />
               </button>
             </div>
@@ -480,10 +932,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* FAQ Секция (9 вопросов как в оригинале) */}
           <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`}>
-            <div className="text-2xl font-black text-white mb-1">Frequently asked questions</div>
-            <p className="text-xs text-zinc-400 mb-6">Quick answers about tiers, tier tests, points and the AvernyeTiers server.</p>
+            <div className="text-2xl font-black text-white mb-1">{t("faqTitle")}</div>
+            <p className="text-xs text-zinc-400 mb-6">{t("faqDesc")}</p>
 
             <div className="space-y-3">
               {[
@@ -577,22 +1028,22 @@ export default function Home() {
               onClick={copyServerIp}
               className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-3.5 rounded-xl transition text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
             >
-              <span>{copiedIp ? "Copied!" : "mctiers.network"}</span>
+              <span>{copiedIp ? t("copied") : "mctiers.network"}</span>
               <Server className="w-4 h-4" />
             </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
             <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
-              <div className="text-xs text-zinc-500 font-semibold mb-1">SERVER ADDRESS</div>
+              <div className="text-xs text-zinc-500 font-semibold mb-1">{t("serverAddress")}</div>
               <div className="text-white font-bold text-base">mctiers.network</div>
             </div>
             <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
-              <div className="text-xs text-zinc-500 font-semibold mb-1">JAVA EDITION</div>
+              <div className="text-xs text-zinc-500 font-semibold mb-1">{t("javaEdition")}</div>
               <div className="text-white font-bold text-base">1.21 - 26.3</div>
             </div>
             <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
-              <div className="text-xs text-zinc-500 font-semibold mb-1">BEDROCK EDITION</div>
+              <div className="text-xs text-zinc-500 font-semibold mb-1">{t("bedrockEdition")}</div>
               <div className="text-white font-bold text-base">Port 19132</div>
             </div>
           </div>
@@ -604,7 +1055,7 @@ export default function Home() {
         <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-6`}>
           <div>
             <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Tournaments & Battles</div>
-            <h1 className="text-4xl font-black text-white mb-2">Upcoming Events</h1>
+            <h1 className="text-4xl font-black text-white mb-2">{t("upcomingEvents")}</h1>
             <p className="text-zinc-400 text-sm">Participate in community tournaments and win exclusive points.</p>
           </div>
 
