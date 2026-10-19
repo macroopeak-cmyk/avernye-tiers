@@ -734,7 +734,7 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Топ игроков с наклонными блоками мест и скинами полурост как на скриншоте 2 */}
+              {/* Исправленное отображение скинов игроков в полурост в наклонных плашках мест */}
               <div className="flex flex-col gap-3">
                 {rankedPlayers.slice(0, 3).map((player) => {
                   const rankBg = player.rank === 1 
@@ -750,16 +750,15 @@ export default function Home() {
                       className="bg-black/30 hover:bg-black/50 border border-zinc-800/80 hover:border-amber-500/40 p-3.5 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
                     >
                       <div className="flex items-center gap-4">
-                        {/* Наклонный блок с номером места и скином полурост */}
-                        <div className={`w-28 h-14 rounded-xl flex items-center justify-between px-3 font-black text-lg italic skew-x-[-10deg] ${rankBg} relative overflow-hidden shadow-inner`}>
-                          <span className="skew-x-[10deg]">{player.rank}.</span>
-                          <div className="absolute right-1 -bottom-1 h-16 w-12 skew-x-[10deg] flex items-end justify-center overflow-hidden">
+                        {/* Наклонный блок места с аккуратно вписанным скином */}
+                        <div className={`w-32 h-14 rounded-xl flex items-center justify-between px-3.5 font-black text-lg italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shadow-inner`}>
+                          <span className="skew-x-[12deg] z-10">{player.rank}.</span>
+                          <div className="absolute right-1 bottom-0 h-16 w-14 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
                             <img 
                               src={`https://minotar.net/skin/${player.username}`} 
                               alt={player.username} 
-                              className="h-20 w-auto object-cover scale-150 transform translate-y-2"
+                              className="h-16 w-auto object-contain transform translate-y-1"
                               onError={(e)=>{
-                                // Запасной вариант на случай ошибки загрузки скина
                                 (e.target as HTMLElement).style.display = 'none';
                               }}
                             />
