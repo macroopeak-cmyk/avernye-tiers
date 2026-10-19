@@ -23,6 +23,8 @@ export default function Home() {
   
   const [theme, setTheme] = useState<"dark" | "midnight" | "sinus" | "light">("dark")
   const [isThemeOpen, setIsThemeOpen] = useState(false)
+  
+  // Состояние для аккордеона FAQ (всего 9 вопросов как на оригинале)
   const [openFaq, setOpenFaq] = useState<number | null>(0)
 
   useEffect(() => {
@@ -73,6 +75,7 @@ export default function Home() {
     setTimeout(() => setCopiedIp(false), 2000)
   }
 
+  // Строго актуальные режимы как на оригинале
   const modes = [
     { id: "overall", label: "Overall", icon: "/overall.svg" },
     { id: "LTMs", label: "LTMs", icon: "/ltm's.svg" },
@@ -80,7 +83,6 @@ export default function Home() {
     { id: "UHC", label: "UHC", icon: "/uhc.svg" },
     { id: "Pot", label: "Pot", icon: "/pot.svg" },
     { id: "NethOP", label: "NethOP", icon: "/smp.svg" },
-    { id: "NethPot", label: "NethPot", icon: "/nethop.svg" },
     { id: "SMP", label: "SMP", icon: "/smp2.png" },
     { id: "Sword", label: "Sword", icon: "/sword.svg" },
     { id: "Axe", label: "Axe", icon: "/axe.svg" },
@@ -125,10 +127,10 @@ export default function Home() {
       <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-4 rounded-2xl shadow-lg mb-8`}>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("home")}>
-            <img src="/logo.png" alt="MCTiers" className="h-10 w-auto object-contain scale-105" />
+            <img src="/logo.png" alt="AvernyeTiers Logo" className="h-10 w-auto object-contain scale-105" />
           </div>
 
-          <nav className="hidden md:flex items-center gap-5 text-xs text-zinc-400 font-medium">
+          <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-400 font-medium">
             <button 
               onClick={() => setActiveTab("home")}
               className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "home" ? "text-white font-bold" : "hover:text-zinc-200"}`}
@@ -252,20 +254,20 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ВКЛАДКА: HOME (Скриншоты 2, 3, 4, 5, 6) */}
+      {/* ВКЛАДКА: HOME */}
       {activeTab === "home" && (
         <div className="w-full max-w-[1720px] flex flex-col gap-8">
           
-          {/* Верхний блок: Приветствие + Топ-3 игрока */}
+          {/* Верхний блок: Описание проекта и Топ-3 игрока */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className={`lg:col-span-5 ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden`}>
               <div>
-                <img src="/logo.png" alt="MCTiers Logo" className="h-14 w-auto object-contain mb-6" />
+                <img src="/logo.png" alt="AvernyeTiers Logo" className="h-14 w-auto object-contain mb-6" />
                 <h1 className="text-3xl lg:text-4xl font-black tracking-tight mb-4 text-white">
                   The Minecraft PvP Tier List
                 </h1>
                 <p className="text-zinc-400 text-sm leading-relaxed mb-8">
-                  MCTiers is a Minecraft PvP tier list. Players are tested in eight gamemodes, placed in tiers from Tier 1 to Tier 5, and ranked on one overall leaderboard.
+                  AvernyeTiers is a Minecraft PvP tier list. Players are tested in eight gamemodes, placed in tiers from Tier 1 to Tier 5, and ranked on one overall leaderboard.
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
@@ -333,7 +335,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Статус сервера и режимы */}
+          {/* Статус сервера */}
           <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-4`}>
             <div className="flex items-center gap-4">
               <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -360,7 +362,7 @@ export default function Home() {
           {/* Сетка игровых режимов */}
           <div>
             <div className="text-lg font-bold text-white mb-4">Gamemodes</div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {modes.filter(m => m.id !== "overall").map((mode) => (
                 <div 
                   key={mode.id}
@@ -377,7 +379,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Инструкция получения тира (Get tier tested) */}
+          {/* Инструкция получения тира (Get tier tested) из 5 шагов */}
           <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`}>
             <div className="text-2xl font-black text-white mb-2">Get tier tested</div>
             <p className="text-xs text-zinc-400 mb-8">
@@ -452,18 +454,48 @@ export default function Home() {
             </div>
           </div>
 
-          {/* FAQ Секция */}
+          {/* Блок Upcoming events */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="text-lg font-bold text-white">Upcoming events</div>
+              <button onClick={() => setActiveTab("events")} className="text-xs text-zinc-400 hover:text-white transition flex items-center gap-1 cursor-pointer">
+                <span>All events</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                { date: "OCT 23", title: "Sword FFA Night", desc: "Up to 100 players, one arena and Sword kits only. Last player standing wins the round." },
+                { date: "NOV 1", title: "Mace Halloween Bash", desc: "A Halloween-themed Mace bracket on a spooky arena. Double elimination, so everyone..." },
+                { date: "NOV 7", title: "UHC Duos Showdown", desc: "Grab a partner for 2v2 UHC. 32 teams, best-of-3 matches, single elimination." },
+              ].map((ev, idx) => (
+                <div key={idx} className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl flex flex-col justify-between gap-6`}>
+                  <div>
+                    <div className="text-xs font-black text-amber-500 mb-2">{ev.date}</div>
+                    <div className="text-base font-bold text-white mb-2">{ev.title}</div>
+                    <div className="text-xs text-zinc-400 leading-relaxed">{ev.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* FAQ Секция (9 вопросов как в оригинале) */}
           <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`}>
             <div className="text-2xl font-black text-white mb-1">Frequently asked questions</div>
-            <p className="text-xs text-zinc-400 mb-6">Quick answers about tiers, tier tests, points and the server.</p>
+            <p className="text-xs text-zinc-400 mb-6">Quick answers about tiers, tier tests, points and the AvernyeTiers server.</p>
 
             <div className="space-y-3">
               {[
-                { q: "What is MCTiers?", a: "MCTiers is a Minecraft PvP tier list. It ranks players in eight gamemodes from High Tier 1 to Low Tier 5, and combines those tiers into one overall leaderboard." },
+                { q: "What is AvernyeTiers?", a: "AvernyeTiers is a Minecraft PvP tier list. It ranks players in eight gamemodes (Vanilla/Crystal PvP, UHC, Pot, NethOP, SMP, Sword, Axe and Mace) from High Tier 1 to Low Tier 5, and combines those tiers into one overall leaderboard." },
                 { q: "What do HT1, LT1 and the other tiers mean?", a: "Tiers range from 1 to 5, split into High (HT) and Low (LT). HT1 is the highest and most elite tier possible in a gamemode." },
                 { q: "How do I get tier tested?", a: "Join our server mctiers.network, type /tiertest in chat, choose your preferred gamemode and queue up to fight a tester." },
                 { q: "How is the overall leaderboard calculated?", a: "Every tier you hold in individual gamemodes awards points. The sum of all your points determines your position on the overall leaderboard." },
-                { q: "What are titles like Combat Master?", a: "Titles are prestigious ranks automatically assigned to your profile based on your cumulative total points." }
+                { q: "What are titles like Combat Master?", a: "Titles are prestigious ranks automatically assigned to your profile based on your cumulative total points." },
+                { q: "What does a retired tier mean?", a: "Retired tiers represent legacy achievements or inactive historical ranks that no longer actively modify current seasonal points." },
+                { q: "How do I look up a player's tiers?", a: "Use the search bar at the top of the page to type a player's username and view their full profile modal." },
+                { q: "What is the AvernyeTiers server IP?", a: "The server IP is mctiers.network for Java version 1.21 - 26.3 and Bedrock port 19132." },
+                { q: "Does AvernyeTiers run events?", a: "Yes! We regularly host community-wide tournaments, FFA nights, and special seasonal brackets." }
               ].map((faq, idx) => (
                 <div key={idx} className="border border-zinc-800 rounded-2xl overflow-hidden bg-black/20">
                   <button 
@@ -486,7 +518,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* ВКЛАДКА: RANKINGS (Скриншот 1 и 7) */}
+      {/* ВКЛАДКА: RANKINGS */}
       {activeTab === "rankings" && (
         <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-xl overflow-hidden mb-3`}>
           <div className="p-3 pb-2 border-b border-zinc-800/50">
@@ -529,14 +561,14 @@ export default function Home() {
         </div>
       )}
 
-      {/* ВКЛАДКА: SERVER IP (Скриншот 8) */}
+      {/* ВКЛАДКА: SERVER IP */}
       {activeTab === "server-ip" && (
         <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-8`}>
           <div>
             <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Minecraft Server</div>
-            <h1 className="text-4xl font-black text-white mb-4">MCTiers Server IP</h1>
+            <h1 className="text-4xl font-black text-white mb-4">AvernyeTiers Server IP</h1>
             <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed">
-              The MCTiers Minecraft server IP is <span className="text-white font-bold">mctiers.network</span>. Java players can join on any version from 1.21 - 26.3, and Bedrock players can join on port 19132.
+              The AvernyeTiers Minecraft server IP is <span className="text-white font-bold">mctiers.network</span>. Java players can join on any version from 1.21 - 26.3, and Bedrock players can join on port 19132.
             </p>
           </div>
 
@@ -754,7 +786,7 @@ export default function Home() {
                   <div>
                     <div className="font-bold text-zinc-300 mb-2">Tier 5</div>
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-black/30 border border-zinc-,800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
                         <span className="text-zinc-400">▲</span> <strong className="text-zinc-300">2 Points</strong>
                       </div>
                       <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
