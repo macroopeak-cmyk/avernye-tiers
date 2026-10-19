@@ -390,7 +390,7 @@ const translations: Record<string, Record<string, string>> = {
     faqDesc: "Snabba svar om tiers.",
     upcomingEvents: "Kommende evenemang",
     allEvents: "Alla evenemang",
-    serverAddress: "SERVERADRESS",
+    serverADDRESS: "SERVERADRESS",
     javaEdition: "JAVA-UTGÅVA",
     bedrockEdition: "BEDROCK-UTGÅVA",
     copied: "Kopierad!",
@@ -398,7 +398,6 @@ const translations: Record<string, Record<string, string>> = {
   }
 }
 
-// Список языков со смайликами-флагами
 const languages = [
   { name: "English", flag: "🇺🇸" },
   { name: "Español", flag: "🇪🇸" },
@@ -636,7 +635,7 @@ export default function Home() {
 
         <div className="flex items-center gap-4">
           
-          {/* Меню выбора языка со стильной сеткой как на скриншоте */}
+          {/* Меню выбора языка со стильной сеткой */}
           <div className="relative">
             <button
               onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
