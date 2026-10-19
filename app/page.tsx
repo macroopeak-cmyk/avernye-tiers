@@ -7,7 +7,7 @@ import KitTier from "@/components/kit-tier"
 import { PlayerModal } from "@/components/player-modal"
 import { 
   Info, X, Palette, Search, 
-  Home as HomeIcon, Trophy, Disc, FileText, ChevronDown, ExternalLink, Server, Globe, Calendar, ArrowRight, Plus, Minus, Check
+  Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Plus, Minus, Check
 } from "lucide-react"
 
 // Словарь переводов для интерфейса
@@ -48,7 +48,7 @@ const translations: Record<string, Record<string, string>> = {
     home: "Главная",
     rankings: "Рейтинги",
     discords: "Дискорды",
-    serverIp: "IP Сервера",
+    serverIp: "IP сервера",
     events: "Ивенты",
     searchPlaceholder: "Поиск игрока...",
     information: "Информация",
@@ -388,9 +388,9 @@ const translations: Record<string, Record<string, string>> = {
     titlesDesc: "Din titel beror på dina totala poäng.",
     faqTitle: "Vanliga frågor",
     faqDesc: "Snabba svar om tiers.",
-    upcomingEvents: "Kommande evenemang",
+    upcomingEvents: "Kommende evenemang",
     allEvents: "Alla evenemang",
-    serverADDRESS: "SERVERADRESS",
+    serverAddress: "SERVERADRESS",
     javaEdition: "JAVA-UTGÅVA",
     bedrockEdition: "BEDROCK-UTGÅVA",
     copied: "Kopierad!",
@@ -398,7 +398,7 @@ const translations: Record<string, Record<string, string>> = {
   }
 }
 
-// Список языков с флагами (как на скриншоте 2)
+// Список языков со смайликами-флагами
 const languages = [
   { name: "English", flag: "🇺🇸" },
   { name: "Español", flag: "🇪🇸" },
@@ -425,7 +425,6 @@ export default function Home() {
   const [infoTab, setInfoTab] = useState<"titles" | "points">("titles")
   const [copiedIp, setCopiedIp] = useState<boolean>(false)
   
-  // Выбор языка и меню языков
   const [currentLang, setCurrentLang] = useState<string>("English")
   const [isLangMenuOpen, setIsLangMenuOpen] = useState<boolean>(false)
 
@@ -433,7 +432,6 @@ export default function Home() {
   const [isThemeOpen, setIsThemeOpen] = useState(false)
   const [openFaq, setOpenFaq] = useState<number | null>(0)
 
-  // Функция получения перевода
   const t = (key: string) => {
     return translations[currentLang]?.[key] || translations["English"][key] || key
   }
@@ -543,19 +541,23 @@ export default function Home() {
   const activeLangFlag = languages.find(l => l.name === currentLang)?.flag || "🇺🇸"
 
   return (
-    <main className={`min-h-screen ${themeStyles.bg} ${themeStyles.textColor} flex flex-col items-center py-4 px-6 relative transition-colors duration-300 w-full`}>
+    <main className={`min-h-screen ${themeStyles.bg} ${themeStyles.textColor} flex flex-col items-center py-6 px-6 relative transition-colors duration-300 w-full`}>
       
-      {/* Шапка сайта точь-в-точь как на скриншоте 1 */}
-      <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-4 rounded-2xl shadow-lg mb-8 relative`}>
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("home")}>
-            <img src="/logo.png" alt="AvernyeTiers Logo" className="h-10 w-auto object-contain scale-105" />
+      {/* Плавная, нежная и крупная верхняя менюшка */}
+      <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-5 rounded-3xl shadow-xl mb-8 relative backdrop-blur-md`}>
+        <div className="flex items-center gap-10">
+          <div className="flex items-center gap-2 cursor-pointer transition hover:opacity-90" onClick={() => setActiveTab("home")}>
+            <img src="/logo.png" alt="AvernyeTiers Logo" className="h-11 w-auto object-contain scale-105" />
           </div>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-300 font-medium">
+          <nav className="hidden md:flex items-center gap-7 text-sm text-zinc-300 font-medium">
             <button 
               onClick={() => setActiveTab("home")}
-              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "home" ? "text-white font-bold" : "hover:text-zinc-200"}`}
+              className={`flex items-center gap-2.5 px-4 py-2 rounded-2xl transition-all cursor-pointer ${
+                activeTab === "home" 
+                  ? "bg-zinc-800/80 text-white font-semibold shadow-sm border border-zinc-700/50" 
+                  : "hover:bg-zinc-800/40 hover:text-zinc-100"
+              }`}
             >
               <HomeIcon className="w-4 h-4 text-zinc-400" />
               <span>{t("home")}</span>
@@ -563,28 +565,32 @@ export default function Home() {
 
             <button 
               onClick={() => setActiveTab("rankings")}
-              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "rankings" ? "text-white font-bold" : "hover:text-zinc-200"}`}
+              className={`flex items-center gap-2.5 px-4 py-2 rounded-2xl transition-all cursor-pointer ${
+                activeTab === "rankings" 
+                  ? "bg-zinc-800/80 text-white font-semibold shadow-sm border border-zinc-700/50" 
+                  : "hover:bg-zinc-800/40 hover:text-zinc-100"
+              }`}
             >
-              <Trophy className="w-4 h-4 text-amber-500" />
+              <Trophy className="w-4 h-4 text-amber-400" />
               <span>{t("rankings")}</span>
             </button>
             
             <div className="relative">
               <button 
                 onClick={() => setIsDiscordMenuOpen(!isDiscordMenuOpen)}
-                className="flex items-center gap-1.5 hover:text-zinc-200 transition-colors cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2 rounded-2xl hover:bg-zinc-800/40 hover:text-zinc-100 transition-all cursor-pointer"
               >
                 <Disc className="w-4 h-4 text-zinc-400" />
                 <span>{t("discords")}</span>
-                <ChevronDown className="w-3 h-3 text-zinc-400" />
+                <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
               </button>
               {isDiscordMenuOpen && (
-                <div className={`absolute left-0 top-full mt-2 w-56 ${themeStyles.cardBg} border ${themeStyles.border} rounded-xl shadow-xl overflow-hidden z-50 p-1.5 flex flex-col gap-1 text-left`}>
+                <div className={`absolute left-0 top-full mt-2 w-56 ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-2xl overflow-hidden z-50 p-2 flex flex-col gap-1 text-left`}>
                   <a 
                     href="https://discord.gg/Y8e2REfz3A" 
                     target="_blank" 
                     rel="noreferrer" 
-                    className="w-full px-3 py-2 rounded-lg text-xs hover:bg-zinc-800/60 text-zinc-300 hover:text-white flex items-center justify-between transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl text-xs hover:bg-zinc-800/80 text-zinc-300 hover:text-white flex items-center justify-between transition-colors"
                   >
                     <span className="font-medium">STiers</span>
                     <ExternalLink className="w-3.5 h-3.5 text-zinc-500" />
@@ -593,7 +599,7 @@ export default function Home() {
                     href="https://discord.gg/YFXEmEC8y2" 
                     target="_blank" 
                     rel="noreferrer" 
-                    className="w-full px-3 py-2 rounded-lg text-xs hover:bg-zinc-800/60 text-zinc-300 hover:text-white flex items-center justify-between transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl text-xs hover:bg-zinc-800/80 text-zinc-300 hover:text-white flex items-center justify-between transition-colors"
                   >
                     <span className="font-medium">Avernye</span>
                     <ExternalLink className="w-3.5 h-3.5 text-zinc-500" />
@@ -604,7 +610,11 @@ export default function Home() {
 
             <button 
               onClick={() => setActiveTab("server-ip")}
-              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "server-ip" ? "text-white font-bold" : "hover:text-zinc-200"}`}
+              className={`flex items-center gap-2.5 px-4 py-2 rounded-2xl transition-all cursor-pointer ${
+                activeTab === "server-ip" 
+                  ? "bg-zinc-800/80 text-white font-semibold shadow-sm border border-zinc-700/50" 
+                  : "hover:bg-zinc-800/40 hover:text-zinc-100"
+              }`}
             >
               <Server className="w-4 h-4 text-zinc-400" />
               <span>{t("serverIp")}</span>
@@ -612,7 +622,11 @@ export default function Home() {
 
             <button 
               onClick={() => setActiveTab("events")}
-              className={`flex items-center gap-2 transition-colors cursor-pointer ${activeTab === "events" ? "text-white font-bold" : "hover:text-zinc-200"}`}
+              className={`flex items-center gap-2.5 px-4 py-2 rounded-2xl transition-all cursor-pointer ${
+                activeTab === "events" 
+                  ? "bg-zinc-800/80 text-white font-semibold shadow-sm border border-zinc-700/50" 
+                  : "hover:bg-zinc-800/40 hover:text-zinc-100"
+              }`}
             >
               <Calendar className="w-4 h-4 text-zinc-400" />
               <span>{t("events")}</span>
@@ -622,20 +636,19 @@ export default function Home() {
 
         <div className="flex items-center gap-4">
           
-          {/* Кнопка выбора языка со скриншота 2 */}
+          {/* Меню выбора языка со стильной сеткой как на скриншоте */}
           <div className="relative">
             <button
               onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-              className="flex items-center gap-2 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 px-3 py-1.5 rounded-xl text-xs text-zinc-200 cursor-pointer transition"
+              className="flex items-center gap-2.5 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 px-3.5 py-2.5 rounded-2xl text-sm text-zinc-200 cursor-pointer transition shadow-sm"
             >
-              <span className="text-base">{activeLangFlag}</span>
+              <span className="text-lg">{activeLangFlag}</span>
             </button>
 
-            {/* Выпадающее окно языков как на скриншоте 2 */}
             {isLangMenuOpen && (
-              <div className={`absolute right-0 top-full mt-2 w-72 ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-2xl overflow-hidden z-50 p-3 grid grid-cols-2 gap-1.5`}>
-                <div className="col-span-2 text-[10px] font-bold text-zinc-500 uppercase px-2 pb-1 tracking-wider">
-                  Language
+              <div className={`absolute right-0 top-full mt-3 w-80 ${themeStyles.cardBg} border ${themeStyles.border} rounded-3xl shadow-2xl overflow-hidden z-50 p-4 grid grid-cols-2 gap-2`}>
+                <div className="col-span-2 text-[11px] font-bold text-zinc-400 uppercase px-2 pb-1 tracking-wider">
+                  Язык
                 </div>
                 {languages.map((lang) => {
                   const isSelected = currentLang === lang.name
@@ -643,17 +656,14 @@ export default function Home() {
                     <button
                       key={lang.name}
                       onClick={() => changeLanguage(lang.name)}
-                      className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium cursor-pointer transition ${
+                      className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-medium cursor-pointer transition ${
                         isSelected 
-                          ? "bg-zinc-800 text-white border border-zinc-700 shadow-sm" 
-                          : "hover:bg-zinc-800/50 text-zinc-400 hover:text-zinc-200 border border-transparent"
+                          ? "bg-zinc-800 text-white border border-zinc-700 shadow-md ring-1 ring-amber-500/20" 
+                          : "hover:bg-zinc-800/50 text-zinc-300 hover:text-white border border-transparent"
                       }`}
                     >
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-base">{lang.flag}</span>
-                        <span>{lang.name}</span>
-                      </div>
-                      {isSelected && <Check className="w-3.5 h-3.5 text-amber-400" />}
+                      <span className="text-lg">{lang.flag}</span>
+                      <span className="truncate">{lang.name}</span>
                     </button>
                   )
                 })}
@@ -661,9 +671,9 @@ export default function Home() {
             )}
           </div>
 
-          <div className="w-64 relative">
+          <div className="w-72 relative">
             <div className="relative flex items-center">
-              <Search className="absolute left-3 w-4 h-4 text-zinc-500 pointer-events-none" />
+              <Search className="absolute left-3.5 w-4 h-4 text-zinc-400 pointer-events-none" />
               <input
                 type="text"
                 placeholder={t("searchPlaceholder")}
@@ -673,12 +683,12 @@ export default function Home() {
                   if (errorText) setErrorText("")
                 }}
                 onKeyDown={handleKeyDown}
-                className={`w-full ${theme === "light" ? "bg-zinc-100" : "bg-black/30"} border ${themeStyles.border} rounded-xl pl-9 pr-9 py-2 text-xs placeholder-zinc-500 focus:outline-none ${themeStyles.accentInput} transition-colors`}
+                className={`w-full ${theme === "light" ? "bg-zinc-100" : "bg-black/30"} border ${themeStyles.border} rounded-2xl pl-10 pr-10 py-2.5 text-xs placeholder-zinc-400 focus:outline-none ${themeStyles.accentInput} transition-colors shadow-inner`}
               />
               <span className="absolute right-3 text-[10px] text-zinc-500 border border-zinc-700/50 px-1.5 py-0.5 rounded">/</span>
             </div>
             {errorText && (
-              <span className="absolute -bottom-4 left-1 text-[10px] text-red-400 font-medium">
+              <span className="absolute -bottom-5 left-1 text-[11px] text-red-400 font-medium">
                 {errorText}
               </span>
             )}
@@ -687,23 +697,23 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsThemeOpen(!isThemeOpen)}
-              className={`p-2 rounded-xl ${theme === "light" ? "bg-zinc-100 hover:bg-zinc-200" : "bg-black/30 hover:bg-zinc-800/60"} border ${themeStyles.border} text-xs transition-colors cursor-pointer relative`}
+              className={`p-2.5 rounded-2xl ${theme === "light" ? "bg-zinc-100 hover:bg-zinc-200" : "bg-black/30 hover:bg-zinc-800/60"} border ${themeStyles.border} text-xs transition-colors cursor-pointer relative shadow-sm`}
               title="Тема"
             >
               <Palette className="w-4 h-4 text-amber-400" />
               {isThemeOpen && (
-                <div className={`absolute right-0 top-full mt-2 w-36 ${themeStyles.cardBg} border ${themeStyles.border} rounded-xl shadow-xl overflow-hidden z-50 p-1 flex flex-col gap-1 text-left`}>
-                  <button onClick={() => changeTheme("dark")} className="w-full px-2 py-1.5 rounded text-[11px] hover:bg-zinc-800/60 cursor-pointer">Dark</button>
-                  <button onClick={() => changeTheme("midnight")} className="w-full px-2 py-1.5 rounded text-[11px] hover:bg-zinc-800/60 cursor-pointer">Midnight</button>
-                  <button onClick={() => changeTheme("sinus")} className="w-full px-2 py-1.5 rounded text-[11px] hover:bg-zinc-800/60 cursor-pointer">Sinus</button>
-                  <button onClick={() => changeTheme("light")} className="w-full px-2 py-1.5 rounded text-[11px] hover:bg-zinc-800/60 cursor-pointer">Light ☀️</button>
+                <div className={`absolute right-0 top-full mt-2 w-36 ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-xl overflow-hidden z-50 p-1 flex flex-col gap-1 text-left`}>
+                  <button onClick={() => changeTheme("dark")} className="w-full px-3 py-2 rounded-xl text-xs hover:bg-zinc-800/60 cursor-pointer">Dark</button>
+                  <button onClick={() => changeTheme("midnight")} className="w-full px-3 py-2 rounded-xl text-xs hover:bg-zinc-800/60 cursor-pointer">Midnight</button>
+                  <button onClick={() => changeTheme("sinus")} className="w-full px-3 py-2 rounded-xl text-xs hover:bg-zinc-800/60 cursor-pointer">Sinus</button>
+                  <button onClick={() => changeTheme("light")} className="w-full px-3 py-2 rounded-xl text-xs hover:bg-zinc-800/60 cursor-pointer">Light ☀️</button>
                 </div>
               )}
             </button>
 
             <button
               onClick={() => setIsInfoOpen(true)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl ${theme === "light" ? "bg-zinc-100 hover:bg-zinc-200" : "bg-black/30 hover:bg-zinc-800/60"} border ${themeStyles.border} text-xs font-medium transition-colors cursor-pointer`}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl ${theme === "light" ? "bg-zinc-100 hover:bg-zinc-200" : "bg-black/30 hover:bg-zinc-800/60"} border ${themeStyles.border} text-xs font-semibold transition-colors cursor-pointer shadow-sm`}
             >
               <Info className="w-4 h-4 text-cyan-400" />
               <span>{t("information")}</span>
@@ -730,14 +740,14 @@ export default function Home() {
               <div className="flex flex-wrap gap-4">
                 <button 
                   onClick={() => setActiveTab("rankings")}
-                  className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold px-5 py-3 rounded-xl transition shadow-lg shadow-amber-500/20 text-xs cursor-pointer"
+                  className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-3.5 rounded-2xl transition shadow-lg shadow-amber-500/20 text-xs cursor-pointer"
                 >
                   <span>{t("viewRankings")}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <button 
                   onClick={copyServerIp}
-                  className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-medium px-5 py-3 rounded-xl transition text-xs border border-zinc-700 cursor-pointer"
+                  className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-medium px-6 py-3.5 rounded-2xl transition text-xs border border-zinc-700 cursor-pointer shadow-sm"
                 >
                   <span>{t("getTierTested")}</span>
                 </button>
@@ -764,7 +774,7 @@ export default function Home() {
                   <div 
                     key={player.id}
                     onClick={() => setSelectedPlayer(player)}
-                    className="bg-black/30 hover:bg-black/50 border border-zinc-800/80 hover:border-amber-500/40 p-3.5 rounded-2xl flex items-center justify-between cursor-pointer transition"
+                    className="bg-black/30 hover:bg-black/50 border border-zinc-800/80 hover:border-amber-500/40 p-4 rounded-2xl flex items-center justify-between cursor-pointer transition shadow-sm"
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm ${
@@ -783,7 +793,7 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
-                    <div className="text-xs font-bold px-2.5 py-1 rounded-lg bg-zinc-800 text-zinc-300">
+                    <div className="text-xs font-bold px-3 py-1 rounded-xl bg-zinc-800 text-zinc-300 shadow-sm">
                       {player.region}
                     </div>
                   </div>
@@ -794,7 +804,7 @@ export default function Home() {
 
           <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-4`}>
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <div className="p-3.5 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
                 <Server className="w-6 h-6" />
               </div>
               <div>
@@ -808,7 +818,7 @@ export default function Home() {
             </div>
             <button 
               onClick={copyServerIp}
-              className="bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold px-5 py-3 rounded-xl transition cursor-pointer flex items-center gap-2"
+              className="bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold px-6 py-3.5 rounded-2xl transition cursor-pointer flex items-center gap-2 shadow-lg shadow-amber-500/20"
             >
               <span>{copiedIp ? t("copied") : t("copyIp")}</span>
               <Server className="w-4 h-4" />
@@ -825,9 +835,9 @@ export default function Home() {
                     setSelectedMode(mode.id)
                     setActiveTab("rankings")
                   }}
-                  className={`border ${themeStyles.border} hover:border-amber-500/50 p-5 rounded-2xl flex flex-col items-center justify-center gap-3 cursor-pointer transition group bg-black/20 hover:bg-black/40`}
+                  className={`border ${themeStyles.border} hover:border-amber-500/50 p-5 rounded-3xl flex flex-col items-center justify-center gap-3 cursor-pointer transition group bg-black/20 hover:bg-black/40 shadow-sm`}
                 >
-                  <img src={mode.icon} alt={mode.label} className="w-8 h-8 object-contain group-hover:scale-110 transition-transform" />
+                  <img src={mode.icon} alt={mode.label} className="w-9 h-9 object-contain group-hover:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-zinc-300 group-hover:text-amber-400 transition-colors">{mode.label}</span>
                 </div>
               ))}
@@ -848,8 +858,8 @@ export default function Home() {
                 { step: "4", title: "Private arena", desc: "When a tester is free, you're moved to a private arena." },
                 { step: "5", title: "Get ranked", desc: "Fight your tester and earn your profile tier." },
               ].map((s, idx) => (
-                <div key={idx} className="bg-black/30 border border-zinc-800/80 p-4 rounded-2xl flex flex-col justify-between">
-                  <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 font-bold text-xs flex items-center justify-center border border-amber-500/20 mb-3">
+                <div key={idx} className="bg-black/30 border border-zinc-800/80 p-5 rounded-2xl flex flex-col justify-between shadow-sm">
+                  <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 font-bold text-xs flex items-center justify-center border border-amber-500/20 mb-3">
                     {s.step}
                   </div>
                   <div>
@@ -874,11 +884,11 @@ export default function Home() {
                   { tier: "Tier 4", points: "HT4 · 4 pts", lt: "LT4 · 3 pts", bg: "bg-black/30 border-zinc-800" },
                   { tier: "Tier 5", points: "HT5 · 2 pts", lt: "LT5 · 1 pt", bg: "bg-black/30 border-zinc-800" },
                 ].map((tItem, idx) => (
-                  <div key={idx} className={`p-3.5 rounded-2xl border ${tItem.bg} flex items-center justify-between`}>
+                  <div key={idx} className={`p-4 rounded-2xl border ${tItem.bg} flex items-center justify-between shadow-sm`}>
                     <span className="font-bold text-white text-xs">{tItem.tier}</span>
                     <div className="flex gap-2">
-                      <span className="text-[10px] font-semibold bg-black/40 px-2 py-1 rounded-lg text-amber-400 border border-white/5">{tItem.points}</span>
-                      <span className="text-[10px] font-semibold bg-black/40 px-2 py-1 rounded-lg text-zinc-300 border border-white/5">{tItem.lt}</span>
+                      <span className="text-[10px] font-semibold bg-black/40 px-2.5 py-1 rounded-xl text-amber-400 border border-white/5">{tItem.points}</span>
+                      <span className="text-[10px] font-semibold bg-black/40 px-2.5 py-1 rounded-xl text-zinc-300 border border-white/5">{tItem.lt}</span>
                     </div>
                   </div>
                 ))}
@@ -898,7 +908,7 @@ export default function Home() {
                   { title: "Combat Cadet", req: "20+ points", color: "text-purple-300" },
                   { title: "Rookie", req: "Under 10 points", color: "text-zinc-400" },
                 ].map((ti, idx) => (
-                  <div key={idx} className="p-3.5 rounded-2xl border border-zinc-800/80 bg-black/30 flex items-center justify-between">
+                  <div key={idx} className="p-4 rounded-2xl border border-zinc-800/80 bg-black/30 flex items-center justify-between shadow-sm">
                     <span className={`font-bold text-xs ${ti.color}`}>{ti.title}</span>
                     <span className="text-xs text-zinc-400 font-medium">{ti.req}</span>
                   </div>
@@ -921,7 +931,7 @@ export default function Home() {
                 { date: "NOV 1", title: "Mace Halloween Bash", desc: "A Halloween-themed Mace bracket on a spooky arena. Double elimination, so everyone..." },
                 { date: "NOV 7", title: "UHC Duos Showdown", desc: "Grab a partner for 2v2 UHC. 32 teams, best-of-3 matches, single elimination." },
               ].map((ev, idx) => (
-                <div key={idx} className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl flex flex-col justify-between gap-6`}>
+                <div key={idx} className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl flex flex-col justify-between gap-6 shadow-sm`}>
                   <div>
                     <div className="text-xs font-black text-amber-500 mb-2">{ev.date}</div>
                     <div className="text-base font-bold text-white mb-2">{ev.title}</div>
@@ -948,7 +958,7 @@ export default function Home() {
                 { q: "What is the AvernyeTiers server IP?", a: "The server IP is mctiers.network for Java version 1.21 - 26.3 and Bedrock port 19132." },
                 { q: "Does AvernyeTiers run events?", a: "Yes! We regularly host community-wide tournaments, FFA nights, and special seasonal brackets." }
               ].map((faq, idx) => (
-                <div key={idx} className="border border-zinc-800 rounded-2xl overflow-hidden bg-black/20">
+                <div key={idx} className="border border-zinc-800 rounded-2xl overflow-hidden bg-black/20 shadow-sm">
                   <button 
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                     className="w-full p-4 text-left flex items-center justify-between font-bold text-xs text-white hover:bg-zinc-800/40 transition cursor-pointer"
@@ -971,7 +981,7 @@ export default function Home() {
 
       {/* ВКЛАДКА: RANKINGS */}
       {activeTab === "rankings" && (
-        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-xl overflow-hidden mb-3`}>
+        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} rounded-3xl shadow-xl overflow-hidden mb-3`}>
           <div className="p-3 pb-2 border-b border-zinc-800/50">
             <div className="flex items-end gap-1.5 overflow-x-auto scrollbar-none pt-2">
               {modes.map((mode) => {
@@ -982,9 +992,9 @@ export default function Home() {
                     key={mode.id}
                     onClick={() => setSelectedMode(mode.id)}
                     title={mode.label}
-                    className={`flex-1 flex flex-col items-center justify-center gap-1.5 py-3 px-3 transition-all duration-150 cursor-pointer shrink-0 border-x border-t ${
+                    className={`flex-1 flex flex-col items-center justify-center gap-1.5 py-3.5 px-3 transition-all duration-150 cursor-pointer shrink-0 border-x border-t ${
                       isActive
-                        ? "bg-[#161f30] border-amber-500/80 text-white shadow-sm ring-1 ring-amber-500/30 rounded-t-2xl -mt-2 pt-5"
+                        ? "bg-[#161f30] border-amber-500/80 text-white shadow-sm ring-1 ring-amber-500/30 rounded-t-2xl -mt-2 pt-6"
                         : "border-transparent hover:bg-zinc-800/40 text-zinc-400 hover:text-zinc-200 rounded-t-xl"
                     }`}
                   >
@@ -1002,7 +1012,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="p-3 pt-4">
+          <div className="p-4 pt-4">
             {selectedMode === "overall" ? (
               <RankingTable players={rankedPlayers} selectedMode={selectedMode} />
             ) : (
@@ -1026,7 +1036,7 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <button 
               onClick={copyServerIp}
-              className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-3.5 rounded-xl transition text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
+              className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-3.5 rounded-2xl transition text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
             >
               <span>{copiedIp ? t("copied") : "mctiers.network"}</span>
               <Server className="w-4 h-4" />
@@ -1034,15 +1044,15 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
-            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
+            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl shadow-sm">
               <div className="text-xs text-zinc-500 font-semibold mb-1">{t("serverAddress")}</div>
               <div className="text-white font-bold text-base">mctiers.network</div>
             </div>
-            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
+            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl shadow-sm">
               <div className="text-xs text-zinc-500 font-semibold mb-1">{t("javaEdition")}</div>
               <div className="text-white font-bold text-base">1.21 - 26.3</div>
             </div>
-            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
+            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl shadow-sm">
               <div className="text-xs text-zinc-500 font-semibold mb-1">{t("bedrockEdition")}</div>
               <div className="text-white font-bold text-base">Port 19132</div>
             </div>
@@ -1065,7 +1075,7 @@ export default function Home() {
               { date: "NOV 1", title: "Mace Halloween Bash", desc: "A Halloween-themed Mace bracket on a spooky arena. Double elimination." },
               { date: "NOV 7", title: "UHC Duos Showdown", desc: "Grab a partner for 2v2 UHC. 32 teams, best-of-3 matches." },
             ].map((ev, idx) => (
-              <div key={idx} className="bg-black/30 border border-zinc-800 hover:border-amber-500/40 p-6 rounded-2xl flex flex-col justify-between gap-6 transition">
+              <div key={idx} className="bg-black/30 border border-zinc-800 hover:border-amber-500/40 p-6 rounded-2xl flex flex-col justify-between gap-6 transition shadow-sm">
                 <div>
                   <div className="text-xs font-black text-amber-500 mb-2">{ev.date}</div>
                   <div className="text-lg font-bold text-white mb-2">{ev.title}</div>
@@ -1086,21 +1096,21 @@ export default function Home() {
       {/* Модальное окно Information */}
       {isInfoOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className={`${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl w-full max-w-lg p-6 relative shadow-2xl`}>
-            <button onClick={() => setIsInfoOpen(false)} className="absolute top-4 right-4 text-zinc-400 hover:text-white bg-zinc-900/80 p-1.5 rounded-lg border border-zinc-800 cursor-pointer">
+          <div className={`${themeStyles.cardBg} border ${themeStyles.border} rounded-3xl w-full max-w-lg p-6 relative shadow-2xl`}>
+            <button onClick={() => setIsInfoOpen(false)} className="absolute top-4 right-4 text-zinc-400 hover:text-white bg-zinc-900/80 p-2 rounded-xl border border-zinc-800 cursor-pointer">
               <X className="w-4 h-4" />
             </button>
 
-            <div className={`flex ${themeStyles.bg} p-1.5 rounded-xl border ${themeStyles.border} mb-4`}>
+            <div className={`flex ${themeStyles.bg} p-1.5 rounded-2xl border ${themeStyles.border} mb-4`}>
               <button 
                 onClick={() => setInfoTab("titles")} 
-                className={`flex-1 py-2 rounded-lg text-xs font-bold cursor-pointer transition-colors ${infoTab === "titles" ? "bg-zinc-800 text-white" : "text-zinc-400 hover:text-white"}`}
+                className={`flex-1 py-2.5 rounded-xl text-xs font-bold cursor-pointer transition-colors ${infoTab === "titles" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-400 hover:text-white"}`}
               >
                 Титулы
               </button>
               <button 
                 onClick={() => setInfoTab("points")} 
-                className={`flex-1 py-2 rounded-lg text-xs font-bold cursor-pointer transition-colors ${infoTab === "points" ? "bg-zinc-800 text-white" : "text-zinc-400 hover:text-white"}`}
+                className={`flex-1 py-2.5 rounded-xl text-xs font-bold cursor-pointer transition-colors ${infoTab === "points" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-400 hover:text-white"}`}
               >
                 Очки
               </button>
@@ -1113,7 +1123,7 @@ export default function Home() {
                 </div>
 
                 <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-1">
-                  <div className={`flex items-start gap-3 p-3 rounded-xl border ${themeStyles.border} bg-black/20`}>
+                  <div className={`flex items-start gap-3 p-3.5 rounded-2xl border ${themeStyles.border} bg-black/20`}>
                     <img src="/combat_grandmaster.webp" alt="Combat Grandmaster" className="w-8 h-8 object-contain shrink-0 mt-0.5" />
                     <div>
                       <div className="font-bold text-amber-400 text-sm">Combat Grandmaster</div>
@@ -1121,7 +1131,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className={`flex items-start gap-3 p-3 rounded-xl border ${themeStyles.border} bg-black/20`}>
+                  <div className={`flex items-start gap-3 p-3.5 rounded-2xl border ${themeStyles.border} bg-black/20`}>
                     <img src="/combat_grandmaster.webp" alt="Combat Master" className="w-8 h-8 object-contain shrink-0 mt-0.5" />
                     <div>
                       <div className="font-bold text-amber-400 text-sm">Combat Master</div>
@@ -1129,7 +1139,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className={`flex items-start gap-3 p-3 rounded-xl border ${themeStyles.border} bg-black/20`}>
+                  <div className={`flex items-start gap-3 p-3.5 rounded-2xl border ${themeStyles.border} bg-black/20`}>
                     <img src="/combat_ace.webp" alt="Combat Ace" className="w-8 h-8 object-contain shrink-0 mt-0.5" />
                     <div>
                       <div className="font-bold text-rose-400 text-sm">Combat Ace</div>
@@ -1137,7 +1147,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className={`flex items-start gap-3 p-3 rounded-xl border ${themeStyles.border} bg-black/20`}>
+                  <div className={`flex items-start gap-3 p-3.5 rounded-2xl border ${themeStyles.border} bg-black/20`}>
                     <img src="/combat_specialist.svg" alt="Combat Specialist" className="w-8 h-8 object-contain shrink-0 mt-0.5" />
                     <div>
                       <div className="font-bold text-purple-300 text-sm">Combat Specialist</div>
@@ -1145,7 +1155,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className={`flex items-start gap-3 p-3 rounded-xl border ${themeStyles.border} bg-black/20`}>
+                  <div className={`flex items-start gap-3 p-3.5 rounded-2xl border ${themeStyles.border} bg-black/20`}>
                     <img src="/combat_cadet.svg" alt="Combat Cadet" className="w-8 h-8 object-contain shrink-0 mt-0.5" />
                     <div>
                       <div className="font-bold text-purple-300 text-sm">Combat Cadet</div>
@@ -1153,7 +1163,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className={`flex items-start gap-3 p-3 rounded-xl border ${themeStyles.border} bg-black/20`}>
+                  <div className={`flex items-start gap-3 p-3.5 rounded-2xl border ${themeStyles.border} bg-black/20`}>
                     <img src="/combat_novice.svg" alt="Combat Novice" className="w-8 h-8 object-contain shrink-0 mt-0.5" />
                     <div>
                       <div className="font-bold text-purple-300 text-sm">Combat Novice</div>
@@ -1161,7 +1171,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className={`flex items-start gap-3 p-3 rounded-xl border ${themeStyles.border} bg-black/20`}>
+                  <div className={`flex items-start gap-3 p-3.5 rounded-2xl border ${themeStyles.border} bg-black/20`}>
                     <img src="/rookie.svg" alt="Rookie" className="w-8 h-8 object-contain shrink-0 mt-0.5" />
                     <div>
                       <div className="font-bold text-zinc-300 text-sm">Rookie</div>
@@ -1183,10 +1193,10 @@ export default function Home() {
                       <span>Tier 1</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-2xl p-3 flex items-center gap-2">
                         <span className="text-amber-500">▲</span> <strong className="text-amber-400">60 Points</strong>
                       </div>
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-2xl p-3 flex items-center gap-2">
                         <span className="text-amber-500">▲</span> <strong className="text-amber-400">45 Points</strong>
                       </div>
                     </div>
@@ -1198,10 +1208,10 @@ export default function Home() {
                       <span>Tier 2</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-2xl p-3 flex items-center gap-2">
                         <span className="text-zinc-400">▲</span> <strong className="text-zinc-300">30 Points</strong>
                       </div>
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-2xl p-3 flex items-center gap-2">
                         <span className="text-zinc-400">▲</span> <strong className="text-zinc-300">20 Points</strong>
                       </div>
                     </div>
@@ -1213,10 +1223,10 @@ export default function Home() {
                       <span>Tier 3</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-2xl p-3 flex items-center gap-2">
                         <span className="text-amber-600">▲</span> <strong className="text-amber-600">10 Points</strong>
                       </div>
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-2xl p-3 flex items-center gap-2">
                         <span className="text-amber-600">▲</span> <strong className="text-amber-600">6 Points</strong>
                       </div>
                     </div>
@@ -1225,10 +1235,10 @@ export default function Home() {
                   <div>
                     <div className="font-bold text-zinc-300 mb-2">Tier 4</div>
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-2xl p-3 flex items-center gap-2">
                         <span className="text-zinc-400">▲</span> <strong className="text-zinc-300">4 Points</strong>
                       </div>
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-2xl p-3 flex items-center gap-2">
                         <span className="text-zinc-400">▲</span> <strong className="text-zinc-300">3 Points</strong>
                       </div>
                     </div>
@@ -1237,10 +1247,10 @@ export default function Home() {
                   <div>
                     <div className="font-bold text-zinc-300 mb-2">Tier 5</div>
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-2xl p-3 flex items-center gap-2">
                         <span className="text-zinc-400">▲</span> <strong className="text-zinc-300">2 Points</strong>
                       </div>
-                      <div className="bg-black/30 border border-zinc-800 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="bg-black/30 border border-zinc-800 rounded-2xl p-3 flex items-center gap-2">
                         <span className="text-zinc-400">▲</span> <strong className="text-zinc-300">1 Point</strong>
                       </div>
                     </div>
