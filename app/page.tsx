@@ -34,8 +34,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Each gamemode ranks players in five tiers, split into High and Low.",
     titles: "Titles",
     titlesDesc: "Your title follows your total points across every gamemode.",
-    faqTitle: "Frequently asked questions",
-    faqDesc: "Quick answers about tiers, tier tests, points and the AvernyeTiers server.",
     upcomingEvents: "Upcoming events",
     allEvents: "All events",
     serverAddress: "SERVER ADDRESS",
@@ -66,8 +64,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "В каждом режиме пять тиров, и каждый делится на High (высокий) и Low (низкий). Тиры приносят очки, а очки определяют твое место в рейтинге.",
     titles: "Титулы",
     titlesDesc: "Твой титул зависит от суммы очков во всех режимах.",
-    faqTitle: "Часто задаваемые вопросы",
-    faqDesc: "Быстрые ответы о тирах, тестах, очках и сервере AvernyeTiers.",
     upcomingEvents: "Ближайшие ивенты",
     allEvents: "Все ивенты",
     serverAddress: "АДРЕС СЕРВЕРА",
@@ -98,8 +94,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Cada modo clasifica a los jugadores en cinco niveles.",
     titles: "Títulos",
     titlesDesc: "Tu título sigue tus puntos totales.",
-    faqTitle: "Preguntas frecuentes",
-    faqDesc: "Respuestas rápidas sobre niveles y pruebas en AvernyeTiers.",
     upcomingEvents: "Próximos eventos",
     allEvents: "Todos los eventos",
     serverAddress: "DIRECCIÓN DEL SERVIDOR",
@@ -130,8 +124,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Cada modo classifica em cinco tiers.",
     titles: "Títulos",
     titlesDesc: "Seu título acompanha seus pontos totais.",
-    faqTitle: "Perguntas frequentes",
-    faqDesc: "Respostas rápidas sobre tiers e testes.",
     upcomingEvents: "Próximos eventos",
     allEvents: "Todos os eventos",
     serverAddress: "ENDEREÇO DO SERVIDOR",
@@ -162,8 +154,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Chaque mode classe les joueurs en cinq tiers.",
     titles: "Titres",
     titlesDesc: "Votre titre dépend de vos points totaux.",
-    faqTitle: "Foire aux questions",
-    faqDesc: "Réponses rapides sur les tiers.",
     upcomingEvents: "Événements à venir",
     allEvents: "Tous les événements",
     serverAddress: "ADRESSE DU SERVEUR",
@@ -194,8 +184,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Jeder Modus ordnet Spieler in fünf Tiers ein.",
     titles: "Titel",
     titlesDesc: "Dein Titel basiert auf deinen Gesamtpunkten.",
-    faqTitle: "Häufig gestellte Fragen",
-    faqDesc: "Schnelle Antworten zu Tiers.",
     upcomingEvents: "Kommende Events",
     allEvents: "Alle Events",
     serverAddress: "SERVER-ADRESSE",
@@ -226,8 +214,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Każdy tryb dzieli graczy na pięć poziomów.",
     titles: "Tytuły",
     titlesDesc: "Twój tytuł zależy od łącznej liczby punktów.",
-    faqTitle: "Często zadawane pytania",
-    faqDesc: "Szybkie odpowiedzi dotyczące poziomów.",
     upcomingEvents: "Nadchodzące wydarzenia",
     allEvents: "Wszystkie wydarzenia",
     serverAddress: "ADRES SERWERA",
@@ -258,8 +244,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Ogni modalità classifica in cinque tier.",
     titles: "Titoli",
     titlesDesc: "Il tuo titolo dipende dai punti totali.",
-    faqTitle: "Domande frequenti",
-    faqDesc: "Risposte rapide sui tier.",
     upcomingEvents: "Prossimi eventi",
     allEvents: "Tutti gli eventi",
     serverAddress: "INDIRIZZO SERVER",
@@ -290,8 +274,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Elke modus rangschikt in vijf tiers.",
     titles: "Titels",
     titlesDesc: "Je titel volgt je totale punten.",
-    faqTitle: "Veelgestelde vragen",
-    faqDesc: "Snelle antwoorden over tiers.",
     upcomingEvents: "Aankomende evenementen",
     allEvents: "Alle evenementen",
     serverAddress: "SERVERADRES",
@@ -322,8 +304,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Her mod oyuncuları beş seviyeye ayırır.",
     titles: "Unvanlar",
     titlesDesc: "Unvanınız toplam puanınıza göre belirlenir.",
-    faqTitle: "Sıkça Sorulan Sorular",
-    faqDesc: "Seviyeler hakkında hızlı yanıtlar.",
     upcomingEvents: "Yaklaşan etkinlikler",
     allEvents: "Tüm etkinlikler",
     serverAddress: "SUNUCU ADRESİ",
@@ -354,8 +334,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Každý mód řadí hráče do pěti tierů.",
     titles: "Tituly",
     titlesDesc: "Tvůj titul závisí na celkových bodech.",
-    faqTitle: "Často kladené otázky",
-    faqDesc: "Rychlé odpovědi o tierech.",
     upcomingEvents: "Nadcházející události",
     allEvents: "Všechny události",
     serverAddress: "ADRESA SERVERU",
@@ -386,8 +364,6 @@ const translations: Record<string, Record<string, string>> = {
     tiersAndPointsDesc: "Varje läge rankar spelare i fem tiers.",
     titles: "Titlar",
     titlesDesc: "Din titel beror på dina totala poäng.",
-    faqTitle: "Vanliga frågor",
-    faqDesc: "Snabba svar om tiers.",
     upcomingEvents: "Kommende evenemang",
     allEvents: "Alla evenemang",
     serverAddress: "SERVERADRESS",
@@ -453,7 +429,7 @@ export default function Home() {
     setIsLangMenuOpen(false)
   }
 
-  // Точный расчет очков и динамическое обновление позиций в реальном времени
+  // Динамический пересчет очков и сортировка мест в реальном времени
   const sortedRawPlayers = [...INITIAL_PLAYERS].map((player) => ({
     ...player,
     points: calculatePlayerPoints(player.tiers),
@@ -734,7 +710,7 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Топ игроков с правильной структурой скинов в полурост по очкам */}
+              {/* Топ игроков с корректным рендером объемного 3D-тела (Minotar armor/body) */}
               <div className="flex flex-col gap-3">
                 {rankedPlayers.slice(0, 3).map((player) => {
                   const rankBg = player.rank === 1 
@@ -753,16 +729,16 @@ export default function Home() {
                       className="bg-black/30 hover:bg-black/50 border border-zinc-800/80 hover:border-amber-500/40 p-3.5 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
                     >
                       <div className="flex items-center gap-4">
-                        {/* Наклонный блок места со структурой скина игрока в полурост */}
-                        <div className={`w-32 h-14 rounded-xl flex items-center justify-between px-3.5 font-black text-lg italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shadow-inner`}>
+                        {/* Наклонный блок места с точным 3D рендером кожи */}
+                        <div className={`w-36 h-14 rounded-xl flex items-center justify-between px-3.5 font-black text-lg italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shadow-inner`}>
                           <span className="skew-x-[12deg] z-10">{player.rank}.</span>
-                          <div className="absolute right-1 bottom-0 h-16 w-14 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
+                          <div className="absolute right-2 -bottom-2 h-18 w-16 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
                             <img 
-                              src={`https://minotar.net/skin/${skinName}`} 
+                              src={`https://minotar.net/armor/body/${skinName}/100.png`} 
                               alt={player.username} 
-                              className="h-16 w-auto object-contain transform translate-y-1"
-                              onError={(e)=>{
-                                (e.target as HTMLElement).style.display = 'none';
+                              className="h-20 w-auto object-contain transform translate-y-1 scale-125"
+                              onError={(e) => {
+                                (e.currentTarget as HTMLImageElement).src = `https://minotar.net/avatar/${skinName}/100.png`
                               }}
                             />
                           </div>
@@ -771,7 +747,7 @@ export default function Home() {
                         <div>
                           <div className="font-bold text-white text-sm">{player.username}</div>
                           <div className={`text-[11px] font-medium ${playerTitleInfo.color}`}>
-                            {player.staffRole || playerTitleInfo.title} ({player.points} очк.)
+                            {player.staffRole || playerTitleInfo.title} ({player.points} очк.)[cite: 15]
                           </div>
                           <div className="flex items-center gap-1.5 mt-1.5">
                             {Object.entries(player.tiers).slice(0, 7).map(([kitName, tierVal], idx) => (
