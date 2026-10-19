@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useEffect, KeyboardEvent } from "react"
-import { INITIAL_PLAYERS, calculatePlayerPoints, RankedPlayer, Player } from "@/lib/tiers-data"
+import { INITIAL_PLAYERS, calculatePlayerPoints, getPlayerTitle, RankedPlayer, Player } from "@/lib/tiers-data"
 import { RankingTable } from "@/components/ranking-table"
 import KitTier from "@/components/kit-tier"
 import { PlayerModal } from "@/components/player-modal"
 import { 
   Info, X, Palette, Search, 
-  Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Plus, Minus, Check
+  Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Check
 } from "lucide-react"
 
 // Полные переводы для всех 12 языков
@@ -429,7 +429,6 @@ export default function Home() {
 
   const [theme, setTheme] = useState<"dark" | "midnight" | "sinus" | "light">("dark")
   const [isThemeOpen, setIsThemeOpen] = useState(false)
-  const [openFaq, setOpenFaq] = useState<number | null>(0)
 
   const t = (key: string) => {
     return translations[currentLang]?.[key] || translations["English"][key] || key
@@ -454,6 +453,7 @@ export default function Home() {
     setIsLangMenuOpen(false)
   }
 
+  // Точный расчет очков и динамическое обновление позиций в реальном времени
   const sortedRawPlayers = [...INITIAL_PLAYERS].map((player) => ({
     ...player,
     points: calculatePlayerPoints(player.tiers),
@@ -734,7 +734,7 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Исправленное отображение скинов игроков в полурост в наклонных плашках мест */}
+              {/* Топ игроков с правильной структурой скинов в полурост по очкам */}
               <div className="flex flex-col gap-3">
                 {rankedPlayers.slice(0, 3).map((player) => {
                   const rankBg = player.rank === 1 
@@ -743,6 +743,9 @@ export default function Home() {
                     ? "bg-gradient-to-r from-zinc-200 to-zinc-300 text-black" 
                     : "bg-gradient-to-r from-amber-700 to-amber-800 text-white"
 
+                  const skinName = player.skinUsername || player.username
+                  const playerTitleInfo = getPlayerTitle(player.points, player.tiers)
+
                   return (
                     <div 
                       key={player.id}
@@ -750,12 +753,12 @@ export default function Home() {
                       className="bg-black/30 hover:bg-black/50 border border-zinc-800/80 hover:border-amber-500/40 p-3.5 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
                     >
                       <div className="flex items-center gap-4">
-                        {/* Наклонный блок места с аккуратно вписанным скином */}
+                        {/* Наклонный блок места со структурой скина игрока в полурост */}
                         <div className={`w-32 h-14 rounded-xl flex items-center justify-between px-3.5 font-black text-lg italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shadow-inner`}>
                           <span className="skew-x-[12deg] z-10">{player.rank}.</span>
                           <div className="absolute right-1 bottom-0 h-16 w-14 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
                             <img 
-                              src={`https://minotar.net/skin/${player.username}`} 
+                              src={`https://minotar.net/skin/${skinName}`} 
                               alt={player.username} 
                               className="h-16 w-auto object-contain transform translate-y-1"
                               onError={(e)=>{
@@ -767,14 +770,13 @@ export default function Home() {
 
                         <div>
                           <div className="font-bold text-white text-sm">{player.username}</div>
-                          <div className="text-[11px] text-amber-400/90 font-medium">
-                            {player.staffRole || "Combat Master"} ({player.points} очк.)
+                          <div className={`text-[11px] font-medium ${playerTitleInfo.color}`}>
+                            {player.staffRole || playerTitleInfo.title} ({player.points} очк.)
                           </div>
                           <div className="flex items-center gap-1.5 mt-1.5">
-                            {modes.filter(m => m.id !== "overall").slice(0, 7).map((m, idx) => (
+                            {Object.entries(player.tiers).slice(0, 7).map(([kitName, tierVal], idx) => (
                               <span key={idx} className="flex items-center gap-0.5 bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-[9px] text-amber-400 font-bold">
-                                <img src={m.icon} alt={m.label} className="w-2.5 h-2.5 object-contain" />
-                                <span>HT1</span>
+                                <span>{kitName}: {tierVal}</span>
                               </span>
                             ))}
                           </div>
@@ -1074,7 +1076,7 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="text-sm font-bold text-zinc-200 mb-3">Как рассчитываются очки рейтинга</div>
                 <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-1 text-xs text-zinc-400">
-                  <p>Каждый тир в режимах дает определенное количество очков, которые суммируются в общий рейтинг игрока на AvernyeTiers.</p>
+                  <p>Каждый тир в режимах дает определенное количество очков, которые суммируются в общий рейтинг игрока на AvernyeTiers[cite: 15].</p>
                 </div>
               </div>
             )}
