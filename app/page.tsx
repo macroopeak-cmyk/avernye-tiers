@@ -10,7 +10,7 @@ import {
   Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Plus, Minus, Check
 } from "lucide-react"
 
-// Полные переводы для интерфейса
+// Полные переводы для всех 12 языков
 const translations: Record<string, Record<string, string>> = {
   English: {
     home: "Home",
@@ -53,7 +53,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Поиск игрока...",
     information: "Информация",
     heroTitle: "Тир-лист Minecraft PvP",
-    heroDesc: "AvernyeTiers ведёт тир-лист по Minecraft PvP. Игроков тестируют в восьми режимах, распределяют по тирам от 1 до 5 и выстраивают в одном общем рейтинге.",
+    heroDesc: "AvernyeTiers ведёт тир-лист по Minecraft PvP. Игроков тестируют в режимах, распределяют по тирам от 1 до 5 и выстраивают в одном общем рейтинге.",
     viewRankings: "Смотреть рейтинги",
     getTierTested: "Пройди тир-тест",
     topPlayers: "ТОП ИГРОКОВ",
@@ -61,9 +61,9 @@ const translations: Record<string, Record<string, string>> = {
     online: "Онлайн",
     gamemodes: "Режимы",
     getTierTestedTitle: "Пройди тир-тест",
-    getTierTestedDesc: "Тир-тесты проходят прямо в игре на avernye.wellduck.org. Встань в очередь на режим, сразись с одним из наших тестеров и получи свой тир.",
+    getTierTestedDesc: "Тир-тесты проходят прямо в игре на avernye.wellduck.org. Встань в очередь на режим, сразись с одним из тестеров и получи свой тир.",
     tiersAndPoints: "Тиры и очки",
-    tiersAndPointsDesc: "В каждом режиме пять тиров, и каждый делится на High (высокий) и Low (низкий). Тиры приносят очки, а очки определяют твое место в общем рейтинге.",
+    tiersAndPointsDesc: "В каждом режиме пять тиров, и каждый делится на High (высокий) и Low (низкий). Тиры приносят очки, а очки определяют твое место в рейтинге.",
     titles: "Титулы",
     titlesDesc: "Твой титул зависит от суммы очков во всех режимах.",
     faqTitle: "Часто задаваемые вопросы",
@@ -75,6 +75,326 @@ const translations: Record<string, Record<string, string>> = {
     bedrockEdition: "BEDROCK ИЗДАНИЕ",
     copied: "Скопировано!",
     copyIp: "IP сервера",
+  },
+  Español: {
+    home: "Inicio",
+    rankings: "Clasificación",
+    discords: "Discords",
+    serverIp: "IP del Servidor",
+    events: "Eventos",
+    searchPlaceholder: "Buscar jugador...",
+    information: "Información",
+    heroTitle: "La lista de niveles de PvP de Minecraft",
+    heroDesc: "AvernyeTiers es una lista de niveles de PvP en Minecraft. Los jugadores son evaluados en ocho modos de juego, colocados en niveles del 1 al 5.",
+    viewRankings: "Ver clasificación",
+    getTierTested: "Obtener nivel",
+    topPlayers: "MEJORES JUGADORES",
+    fullLeaderboard: "Tabla completa",
+    online: "En línea",
+    gamemodes: "Modos de juego",
+    getTierTestedTitle: "Obtener prueba de nivel",
+    getTierTestedDesc: "Las pruebas ocurren en avernye.wellduck.org.",
+    tiersAndPoints: "Niveles y puntos",
+    tiersAndPointsDesc: "Cada modo clasifica a los jugadores en cinco niveles.",
+    titles: "Títulos",
+    titlesDesc: "Tu título sigue tus puntos totales.",
+    faqTitle: "Preguntas frecuentes",
+    faqDesc: "Respuestas rápidas sobre niveles y pruebas en AvernyeTiers.",
+    upcomingEvents: "Próximos eventos",
+    allEvents: "Todos los eventos",
+    serverAddress: "DIRECCIÓN DEL SERVIDOR",
+    javaEdition: "EDICIÓN JAVA",
+    bedrockEdition: "EDICIÓN BEDROCK",
+    copied: "¡Copiado!",
+    copyIp: "Copiar IP",
+  },
+  Português: {
+    home: "Início",
+    rankings: "Classificação",
+    discords: "Discords",
+    serverIp: "IP do Servidor",
+    events: "Eventos",
+    searchPlaceholder: "Pesquisar jogador...",
+    information: "Informações",
+    heroTitle: "A Tier List de PvP do Minecraft",
+    heroDesc: "AvernyeTiers é uma tier list de PvP do Minecraft. Jogadores são testados em oito modos.",
+    viewRankings: "Ver rankings",
+    getTierTested: "Ser testado",
+    topPlayers: "MELHORES JOGADORES",
+    fullLeaderboard: "Leaderboard completa",
+    online: "Online",
+    gamemodes: "Modos de jogo",
+    getTierTestedTitle: "Fazer teste de tier",
+    getTierTestedDesc: "Testes acontecem em avernye.wellduck.org.",
+    tiersAndPoints: "Tiers e pontos",
+    tiersAndPointsDesc: "Cada modo classifica em cinco tiers.",
+    titles: "Títulos",
+    titlesDesc: "Seu título acompanha seus pontos totais.",
+    faqTitle: "Perguntas frequentes",
+    faqDesc: "Respostas rápidas sobre tiers e testes.",
+    upcomingEvents: "Próximos eventos",
+    allEvents: "Todos os eventos",
+    serverAddress: "ENDEREÇO DO SERVIDOR",
+    javaEdition: "EDIÇÃO JAVA",
+    bedrockEdition: "EDIÇÃO BEDROCK",
+    copied: "Copiado!",
+    copyIp: "Copiar IP",
+  },
+  Français: {
+    home: "Accueil",
+    rankings: "Classements",
+    discords: "Discords",
+    serverIp: "IP du serveur",
+    events: "Événements",
+    searchPlaceholder: "Rechercher un joueur...",
+    information: "Information",
+    heroTitle: "La Tier List PvP Minecraft",
+    heroDesc: "AvernyeTiers est une tier list PvP Minecraft. Les joueurs sont testés dans huit modes.",
+    viewRankings: "Voir les classements",
+    getTierTested: "Passer un test",
+    topPlayers: "MEILLEURS JOUEURS",
+    fullLeaderboard: "Classement complet",
+    online: "En ligne",
+    gamemodes: "Modes de jeu",
+    getTierTestedTitle: "Passer un test de tier",
+    getTierTestedDesc: "Les tests ont lieu sur avernye.wellduck.org.",
+    tiersAndPoints: "Tiers et points",
+    tiersAndPointsDesc: "Chaque mode classe les joueurs en cinq tiers.",
+    titles: "Titres",
+    titlesDesc: "Votre titre dépend de vos points totaux.",
+    faqTitle: "Foire aux questions",
+    faqDesc: "Réponses rapides sur les tiers.",
+    upcomingEvents: "Événements à venir",
+    allEvents: "Tous les événements",
+    serverAddress: "ADRESSE DU SERVEUR",
+    javaEdition: "ÉDITION JAVA",
+    bedrockEdition: "ÉDITION BEDROCK",
+    copied: "Copié !",
+    copyIp: "Copier l'IP",
+  },
+  Deutsch: {
+    home: "Startseite",
+    rankings: "Rangliste",
+    discords: "Discords",
+    serverIp: "Server-IP",
+    events: "Events",
+    searchPlaceholder: "Spieler suchen...",
+    information: "Informationen",
+    heroTitle: "Die Minecraft PvP Tier List",
+    heroDesc: "AvernyeTiers ist eine Minecraft PvP Tier List.",
+    viewRankings: "Rangliste ansehen",
+    getTierTested: "Testen lassen",
+    topPlayers: "TOP-SPIELER",
+    fullLeaderboard: "Komplette Bestenliste",
+    online: "Online",
+    gamemodes: "Spielmodi",
+    getTierTestedTitle: "Tier-Test machen",
+    getTierTestedDesc: "Tests finden auf avernye.wellduck.org statt.",
+    tiersAndPoints: "Tiers und Punkte",
+    tiersAndPointsDesc: "Jeder Modus ordnet Spieler in fünf Tiers ein.",
+    titles: "Titel",
+    titlesDesc: "Dein Titel basiert auf deinen Gesamtpunkten.",
+    faqTitle: "Häufig gestellte Fragen",
+    faqDesc: "Schnelle Antworten zu Tiers.",
+    upcomingEvents: "Kommende Events",
+    allEvents: "Alle Events",
+    serverAddress: "SERVER-ADRESSE",
+    javaEdition: "JAVA EDITION",
+    bedrockEdition: "BEDROCK EDITION",
+    copied: "Kopiert!",
+    copyIp: "Server-IP kopieren",
+  },
+  Polski: {
+    home: "Strona główna",
+    rankings: "Rankingi",
+    discords: "Discords",
+    serverIp: "IP serwera",
+    events: "Wydarzenia",
+    searchPlaceholder: "Szukaj gracza...",
+    information: "Informacje",
+    heroTitle: "Lista poziomów PvP w Minecraft",
+    heroDesc: "AvernyeTiers to lista poziomów PvP w Minecraft.",
+    viewRankings: "Zobacz rankingi",
+    getTierTested: "Zdobądź poziom",
+    topPlayers: "NAJLEPSI GRACZE",
+    fullLeaderboard: "Pełny ranking",
+    online: "Online",
+    gamemodes: "Tryby gry",
+    getTierTestedTitle: "Przetestuj swój poziom",
+    getTierTestedDesc: "Testy odbywają się na avernye.wellduck.org.",
+    tiersAndPoints: "Poziomy i punkty",
+    tiersAndPointsDesc: "Każdy tryb dzieli graczy na pięć poziomów.",
+    titles: "Tytuły",
+    titlesDesc: "Twój tytuł zależy od łącznej liczby punktów.",
+    faqTitle: "Często zadawane pytania",
+    faqDesc: "Szybkie odpowiedzi dotyczące poziomów.",
+    upcomingEvents: "Nadchodzące wydarzenia",
+    allEvents: "Wszystkie wydarzenia",
+    serverAddress: "ADRES SERWERA",
+    javaEdition: "WERSJA JAVA",
+    bedrockEdition: "WERSJA BEDROCK",
+    copied: "Skopiowano!",
+    copyIp: "Kopiuj IP",
+  },
+  Italiano: {
+    home: "Home",
+    rankings: "Classifiche",
+    discords: "Discords",
+    serverIp: "IP Server",
+    events: "Eventi",
+    searchPlaceholder: "Cerca giocatore...",
+    information: "Informazioni",
+    heroTitle: "La Tier List PvP di Minecraft",
+    heroDesc: "AvernyeTiers è una tier list PvP di Minecraft.",
+    viewRankings: "Vedi classifiche",
+    getTierTested: "Ottieni tier",
+    topPlayers: "MIGLIORI GIOCATORI",
+    fullLeaderboard: "Classifica completa",
+    online: "Online",
+    gamemodes: "Modalità di gioco",
+    getTierTestedTitle: "Ottieni un test",
+    getTierTestedDesc: "I test avvengono su avernye.wellduck.org.",
+    tiersAndPoints: "Tier e punti",
+    tiersAndPointsDesc: "Ogni modalità classifica in cinque tier.",
+    titles: "Titoli",
+    titlesDesc: "Il tuo titolo dipende dai punti totali.",
+    faqTitle: "Domande frequenti",
+    faqDesc: "Risposte rapide sui tier.",
+    upcomingEvents: "Prossimi eventi",
+    allEvents: "Tutti gli eventi",
+    serverAddress: "INDIRIZZO SERVER",
+    javaEdition: "EDIZIONE JAVA",
+    bedrockEdition: "EDIZIONE BEDROCK",
+    copied: "Copiato!",
+    copyIp: "Copia IP",
+  },
+  Nederlands: {
+    home: "Home",
+    rankings: "Ranglijst",
+    discords: "Discords",
+    serverIp: "Server IP",
+    events: "Evenementen",
+    searchPlaceholder: "Zoek speler...",
+    information: "Informatie",
+    heroTitle: "De Minecraft PvP Tierlijst",
+    heroDesc: "AvernyeTiers is een Minecraft PvP tierlijst.",
+    viewRankings: "Bekijk ranglijst",
+    getTierTested: "Test aanvragen",
+    topPlayers: "TOPSPELERS",
+    fullLeaderboard: "Volledige leaderboard",
+    online: "Online",
+    gamemodes: "Spelmodi",
+    getTierTestedTitle: "Word getest",
+    getTierTestedDesc: "Tests vinden plaats op avernye.wellduck.org.",
+    tiersAndPoints: "Tiers en punten",
+    tiersAndPointsDesc: "Elke modus rangschikt in vijf tiers.",
+    titles: "Titels",
+    titlesDesc: "Je titel volgt je totale punten.",
+    faqTitle: "Veelgestelde vragen",
+    faqDesc: "Snelle antwoorden over tiers.",
+    upcomingEvents: "Aankomende evenementen",
+    allEvents: "Alle evenementen",
+    serverAddress: "SERVERADRES",
+    javaEdition: "JAVA EDITIE",
+    bedrockEdition: "BEDROCK EDITIE",
+    copied: "Gekopieerd!",
+    copyIp: "Kopieer IP",
+  },
+  Türkçe: {
+    home: "Ana Sayfa",
+    rankings: "Sıralama",
+    discords: "Discordlar",
+    serverIp: "Sunucu IP",
+    events: "Etkinlikler",
+    searchPlaceholder: "Oyuncu ara...",
+    information: "Bilgi",
+    heroTitle: "Minecraft PvP Seviye Listesi",
+    heroDesc: "AvernyeTiers bir Minecraft PvP tier listesidir.",
+    viewRankings: "Sıralamaları gör",
+    getTierTested: "Test ol",
+    topPlayers: "EN İYİ OYUNCULAR",
+    fullLeaderboard: "Tam sıralama",
+    online: "Çevrimiçi",
+    gamemodes: "Oyun Modları",
+    getTierTestedTitle: "Seviye testi ol",
+    getTierTestedDesc: "Testler avernye.wellduck.org üzerinde yapılır.",
+    tiersAndPoints: "Seviyeler ve Puanlar",
+    tiersAndPointsDesc: "Her mod oyuncuları beş seviyeye ayırır.",
+    titles: "Unvanlar",
+    titlesDesc: "Unvanınız toplam puanınıza göre belirlenir.",
+    faqTitle: "Sıkça Sorulan Sorular",
+    faqDesc: "Seviyeler hakkında hızlı yanıtlar.",
+    upcomingEvents: "Yaklaşan etkinlikler",
+    allEvents: "Tüm etkinlikler",
+    serverAddress: "SUNUCU ADRESİ",
+    javaEdition: "JAVA SÜRÜMÜ",
+    bedrockEdition: "BEDROCK SÜRÜMÜ",
+    copied: "Kopyalandı!",
+    copyIp: "IP'yi Kopyala",
+  },
+  Čeština: {
+    home: "Domů",
+    rankings: "Žebříček",
+    discords: "Discords",
+    serverIp: "IP serveru",
+    events: "Události",
+    searchPlaceholder: "Hledat hráče...",
+    information: "Informace",
+    heroTitle: "Minecraft PvP Tier List",
+    heroDesc: "AvernyeTiers je Minecraft PvP tier list.",
+    viewRankings: "Zobrazit žebříček",
+    getTierTested: "Získat tier",
+    topPlayers: "NEJLEPŠÍ HRÁČI",
+    fullLeaderboard: "Celý žebříček",
+    online: "Online",
+    gamemodes: "Herní módy",
+    getTierTestedTitle: "Získat tier test",
+    getTierTestedDesc: "Testy probíhají na avernye.wellduck.org.",
+    tiersAndPoints: "Tiers a body",
+    tiersAndPointsDesc: "Každý mód řadí hráče do pěti tierů.",
+    titles: "Tituly",
+    titlesDesc: "Tvůj titul závisí na celkových bodech.",
+    faqTitle: "Často kladené otázky",
+    faqDesc: "Rychlé odpovědi o tierech.",
+    upcomingEvents: "Nadcházející události",
+    allEvents: "Všechny události",
+    serverAddress: "ADRESA SERVERU",
+    javaEdition: "JAVA EDICE",
+    bedrockEdition: "BEDROCK EDICE",
+    copied: "Zkopírováno!",
+    copyIp: "Kopírovat IP",
+  },
+  Svenska: {
+    home: "Hem",
+    rankings: "Ranking",
+    discords: "Discords",
+    serverIp: "Server-IP",
+    events: "Evenemang",
+    searchPlaceholder: "Sök spelare...",
+    information: "Information",
+    heroTitle: "Minecraft PvP Tier List",
+    heroDesc: "AvernyeTiers är en Minecraft PvP tier list.",
+    viewRankings: "Visa ranking",
+    getTierTested: "Testa tier",
+    topPlayers: "TOPPSPELARE",
+    fullLeaderboard: "Fullständig ranking",
+    online: "Online",
+    gamemodes: "Spellägen",
+    getTierTestedTitle: "Få tier-test",
+    getTierTestedDesc: "Tester sker på avernye.wellduck.org.",
+    tiersAndPoints: "Tiers och poäng",
+    tiersAndPointsDesc: "Varje läge rankar spelare i fem tiers.",
+    titles: "Titlar",
+    titlesDesc: "Din titel beror på dina totala poäng.",
+    faqTitle: "Vanliga frågor",
+    faqDesc: "Snabba svar om tiers.",
+    upcomingEvents: "Kommande evenemang",
+    allEvents: "Alla evenemang",
+    serverAddress: "SERVERADRESS",
+    javaEdition: "JAVA-UTGÅVA",
+    bedrockEdition: "BEDROCK-UTGÅVA",
+    copied: "Kopierad!",
+    copyIp: "Kopiera IP",
   }
 }
 
@@ -169,7 +489,6 @@ export default function Home() {
     setTimeout(() => setCopiedIp(false), 2000)
   }
 
-  // Режимы с правильными иконками из доступных файлов
   const modes = [
     { id: "overall", label: "Overall", icon: "/overall.svg" },
     { id: "Vanilla", label: "Vanilla", icon: "/vanilla.svg" },
@@ -218,7 +537,7 @@ export default function Home() {
   return (
     <main className={`min-h-screen ${themeStyles.bg} ${themeStyles.textColor} flex flex-col items-center py-6 px-6 relative transition-colors duration-300 w-full`}>
       
-      {/* Верхняя панель точь-в-точь как на скриншоте 2 */}
+      {/* Верхняя панель */}
       <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-4 rounded-2xl shadow-xl mb-8 relative`}>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("home")}>
@@ -285,7 +604,7 @@ export default function Home() {
 
         <div className="flex items-center gap-4">
           
-          {/* Выбор языка слева от поиска */}
+          {/* Выбор языка */}
           <div className="relative">
             <button
               onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
@@ -372,11 +691,10 @@ export default function Home() {
       {activeTab === "home" && (
         <div className="w-full max-w-[1720px] flex flex-col gap-8">
           
-          {/* Скриншоты 3, 4: Герой и топ игроков с китами */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className={`lg:col-span-5 ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden`}>
               <div>
-                <img src="/logo.png" alt="Logo" className="h-14 w-auto object-contain mb-6" />
+                <img src="/logo.png" alt="AvernyeTiers Logo" className="h-14 w-auto object-contain mb-6" />
                 <h1 className="text-3xl lg:text-4xl font-black tracking-tight mb-4 text-white">
                   {t("heroTitle")}
                 </h1>
@@ -438,7 +756,6 @@ export default function Home() {
                         <div className="text-[11px] text-amber-400/90 font-medium">
                           {player.staffRole || "Combat Master"} ({player.points} очк.)
                         </div>
-                        {/* Маленькие иконки китов под именем как на скриншоте 3 */}
                         <div className="flex items-center gap-1.5 mt-1.5">
                           {modes.filter(m => m.id !== "overall").slice(0, 7).map((m, idx) => (
                             <span key={idx} className="flex items-center gap-0.5 bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-[9px] text-amber-400 font-bold">
@@ -458,7 +775,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Статус сервера (Скриншот 5) */}
           <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-4`}>
             <div className="flex items-center gap-4">
               <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -482,7 +798,6 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Режимы (Скриншот 5) */}
           <div>
             <div className="text-lg font-bold text-white mb-4">{t("gamemodes")}</div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
@@ -502,7 +817,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 5 Шагов тир-теста (Скриншот 5, 6) */}
           <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`}>
             <div className="text-2xl font-black text-white mb-2">{t("getTierTestedTitle")}</div>
             <p className="text-xs text-zinc-400 mb-8">{t("getTierTestedDesc")}</p>
@@ -512,7 +826,7 @@ export default function Home() {
                 { step: "1", title: "Заходи на avernye.wellduck.org", desc: "с Java (1.21 - 26.3) или Bedrock." },
                 { step: "2", title: "Введи /tiertest", desc: "и выбери режим, в котором хочешь пройти тест." },
                 { step: "3", title: "Выбери свой регион", desc: "чтобы встать в очередь на тест по этому режиму." },
-                { step: "4", title: "Приватная арена", desc: "Когда тестер из твоего региона освободится, тебя перенесёт на приватную арену с официальным китом." },
+                { step: "4", title: "Приватная арена", desc: "Когда тестер из твоего региона освободится, тебя перенесёт на приватную арену." },
                 { step: "5", title: "Сразись с тестером", desc: "После теста новый тир появится в твоём профиле AvernyeTiers." },
               ].map((s, idx) => (
                 <div key={idx} className="bg-black/30 border border-zinc-800/80 p-4 rounded-2xl flex flex-col justify-between">
@@ -528,7 +842,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Тиры и очки / Титулы (Скриншот 6) */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl`}>
               <div className="text-lg font-bold text-white mb-1">{t("tiersAndPoints")}</div>
@@ -575,7 +888,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Ближайшие ивенты */}
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="text-lg font-bold text-white">{t("upcomingEvents")}</div>
@@ -643,7 +955,7 @@ export default function Home() {
         <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-8`}>
           <div>
             <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Minecraft Server</div>
-            <h1 className="text-4xl font-black text-white mb-4">avernye.wellduck.org Server IP</h1>
+            <h1 className="text-4xl font-black text-white mb-4">AvernyeTiers Server IP</h1>
             <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed">
               IP-адрес сервера AvernyeTiers — <span className="text-white font-bold">avernye.wellduck.org</span>. Игроки Java могут зайти с версий 1.21 - 26.3, а Bedrock игроки через порт 19132.
             </p>
@@ -746,7 +1058,7 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="text-sm font-bold text-zinc-200 mb-3">Как рассчитываются очки рейтинга</div>
                 <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-1 text-xs text-zinc-400">
-                  <p>Каждый тир в режимах дает определенное количество очков, которые суммируются в общий рейтинг игрока.</p>
+                  <p>Каждый тир в режимах дает определенное количество очков, которые суммируются в общий рейтинг игрока на AvernyeTiers.</p>
                 </div>
               </div>
             )}
