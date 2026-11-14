@@ -11,7 +11,7 @@ import {
   Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Check
 } from "lucide-react"
 
-// Полные переводы для всех 12 языков
+// Полные переводы для всех языков
 const translations: Record<string, Record<string, string>> = {
   English: {
     home: "Home",
@@ -679,6 +679,7 @@ export default function Home() {
         <div className="w-full max-w-[1720px] flex flex-col gap-8">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Левый блок с описанием и кнопками */}
             <div className={`lg:col-span-5 ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden`}>
               <div>
                 <img src="/logo.png" alt="IncTiers Logo" className="h-14 w-auto object-contain mb-6" />
@@ -692,20 +693,21 @@ export default function Home() {
               <div className="flex flex-wrap gap-4">
                 <button 
                   onClick={() => setActiveTab("rankings")}
-                  className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold px-5 py-3 rounded-xl transition shadow-lg shadow-amber-500/20 text-xs cursor-pointer"
+                  className="flex items-center gap-2 bg-[#f4f4f5] hover:bg-white text-black font-bold px-5 py-3 rounded-xl transition text-xs cursor-pointer shadow-md"
                 >
                   <span>{t("viewRankings")}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <button 
                   onClick={copyServerIp}
-                  className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-medium px-5 py-3 rounded-xl transition text-xs border border-zinc-700 cursor-pointer"
+                  className="flex items-center gap-2 bg-[#181d28] hover:bg-[#202736] text-white font-medium px-5 py-3 rounded-xl transition text-xs border border-zinc-700/80 cursor-pointer"
                 >
                   <span>{t("getTierTested")}</span>
                 </button>
               </div>
             </div>
 
+            {/* Правый блок: ТОП ИГРОКОВ (как на скриншоте 1) */}
             <div className={`lg:col-span-7 ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col gap-4`}>
               <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-500 tracking-wider uppercase">
@@ -721,14 +723,14 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Компактный ТОП ИГРОКОВ со структурой PlayerBody */}
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-3">
                 {rankedPlayers.slice(0, 3).map((player) => {
+                  // Градиенты для плашек мест ТОП-3 как на скриншоте
                   const rankBg = player.rank === 1 
-                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-black shadow-lg shadow-amber-500/20" 
+                    ? "bg-gradient-to-r from-[#eab308] to-[#f59e0b] text-black shadow-lg shadow-amber-500/20" 
                     : player.rank === 2 
-                    ? "bg-gradient-to-r from-zinc-200 to-zinc-300 text-black" 
-                    : "bg-gradient-to-r from-amber-700 to-amber-800 text-white"
+                    ? "bg-gradient-to-r from-[#cbd5e1] to-[#94a3b8] text-black" 
+                    : "bg-gradient-to-r from-[#d97706] to-[#b45309] text-white"
 
                   const playerTitleInfo = getPlayerTitle(player.points, player.tiers)
 
@@ -736,194 +738,63 @@ export default function Home() {
                     <div 
                       key={player.id}
                       onClick={() => setSelectedPlayer(player)}
-                      className="bg-[#0e121b] hover:bg-[#121824] border border-zinc-800/80 hover:border-amber-500/40 p-2.5 px-3 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
+                      className="bg-[#121620] hover:bg-[#181e2b] border border-zinc-800/80 hover:border-amber-500/40 p-3 px-4 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
                     >
-                      <div className="flex items-center gap-3">
-                        {/* Наклонный номер места с компонентом PlayerBody */}
-                        <div className={`w-28 h-12 rounded-xl flex items-center justify-between px-3 font-black text-base italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shadow-inner shrink-0`}>
+                      <div className="flex items-center gap-4">
+                        {/* Наклонный номер места с аватаром игрока внутри */}
+                        <div className={`w-32 h-14 rounded-xl flex items-center justify-between px-3.5 font-black text-lg italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shrink-0 shadow-md`}>
                           <span className="skew-x-[12deg] z-10">{player.rank}.</span>
-                          <div className="absolute right-1 -bottom-1 h-14 w-12 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
+                          <div className="absolute right-1 -bottom-1 h-16 w-12 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
                             <PlayerBody 
                               username={player.username} 
                               skinUsername={player.skinUsername} 
-                              height={52} 
+                              height={60} 
                               className="transform translate-y-1 scale-125"
                             />
                           </div>
                         </div>
 
-                        {/* Информация про игрока */}
+                        {/* Ник, титул и очки */}
                         <div className="flex flex-col">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-white text-sm">{player.username}</span>
-                            {player.rank === 1 && <Trophy className="w-3.5 h-3.5 text-amber-400 inline" />}
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-zinc-800/90 text-zinc-300 border border-zinc-700/50">
-                              {player.region}
-                            </span>
+                            <span className="font-extrabold text-white text-base tracking-wide">{player.username}</span>
                           </div>
                           
-                          <div className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-400 mt-0.5">
-                            <span className="inline-block w-2 h-2 rotate-45 bg-rose-500/80 rounded-sm"></span>
-                            <span className={playerTitleInfo.color}>{player.staffRole || playerTitleInfo.title}</span>
+                          <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-400 mt-0.5">
+                            <span className="inline-block w-2 h-2 rotate-45 bg-amber-500 rounded-sm"></span>
+                            <span className="text-amber-300 font-semibold">{playerTitleInfo.title}</span>
                             <span className="text-zinc-500">({player.points} points)</span>
                           </div>
                         </div>
                       </div>
 
-                      {/* Плашки тиров с иконками режимов справа в компактном блоке */}
-                      <div className="bg-[#080b10] border border-zinc-800/60 p-1.5 px-2 rounded-xl flex items-center gap-1.5 overflow-x-auto max-w-[50%] scrollbar-none">
-                        {Object.entries(player.tiers).map(([kitName, tierVal], idx) => {
-                          const iconUrl = modeIconMap[kitName] || "/overall.svg"
-                          return (
-                            <div key={idx} className="flex items-center gap-1 bg-[#121722] border border-zinc-800/80 px-2 py-1 rounded-lg shrink-0">
-                              <img src={iconUrl} alt={kitName} className="w-3.5 h-3.5 object-contain" />
-                              <span className="text-[10px] font-black text-amber-400 tracking-tight">{tierVal}</span>
-                            </div>
-                          )
-                        })}
+                      <div className="flex items-center gap-4">
+                        {/* Плашки тиров по режимам справа */}
+                        <div className="hidden xl:flex items-center gap-1.5 bg-[#0b0e14] border border-zinc-800/80 p-1.5 px-2 rounded-xl">
+                          {Object.entries(player.tiers).slice(0, 8).map(([kitName, tierVal], idx) => {
+                            const iconUrl = modeIconMap[kitName] || "/overall.svg"
+                            const rawTier = typeof tierVal === 'string' ? tierVal : (tierVal as any)?.tier || ""
+                            const isHt = rawTier.toUpperCase().startsWith("HT")
+                            return (
+                              <div key={idx} className="flex flex-col items-center justify-center bg-[#151a26] border border-zinc-800 px-2 py-1 rounded-lg shrink-0 gap-0.5">
+                                <img src={iconUrl} alt={kitName} className="w-3.5 h-3.5 object-contain opacity-80" />
+                                <span className={`text-[10px] font-black ${isHt ? "text-amber-400" : "text-zinc-400"}`}>{rawTier}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+
+                        {/* Регион (NA/EU) в виде красной или зеленой плашки справа как на скриншоте */}
+                        <div className={`px-3 py-1 rounded-lg text-xs font-black tracking-wider ${
+                          player.region === "NA" ? "bg-rose-500/20 text-rose-500 border border-rose-500/30" : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                        }`}>
+                          {player.region}
+                        </div>
                       </div>
                     </div>
                   )
                 })}
               </div>
-            </div>
-          </div>
-
-          <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-4`}>
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                <Server className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide">{t("online")}</span>
-                  <span className="text-xs text-zinc-500">• 67 / 10,000 players online</span>
-                </div>
-                <div className="text-base font-extrabold text-white mt-0.5">IncorrectSMP.play.ski</div>
-              </div>
-            </div>
-            <button 
-              onClick={copyServerIp}
-              className="bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold px-5 py-3 rounded-xl transition cursor-pointer flex items-center gap-2"
-            >
-              <span>{copiedIp ? t("copied") : t("copyIp")}</span>
-              <Server className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div>
-            <div className="text-lg font-bold text-white mb-4">{t("gamemodes")}</div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
-              {modes.filter(m => m.id !== "overall").map((mode) => (
-                <div 
-                  key={mode.id}
-                  onClick={() => {
-                    setSelectedMode(mode.id)
-                    setActiveTab("rankings")
-                  }}
-                  className={`border ${themeStyles.border} hover:border-amber-500/50 p-5 rounded-2xl flex flex-col items-center justify-center gap-3 cursor-pointer transition group bg-black/20 hover:bg-black/40`}
-                >
-                  <img src={mode.icon} alt={mode.label} className="w-8 h-8 object-contain group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-bold text-zinc-300 group-hover:text-amber-400 transition-colors">{mode.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-8 rounded-3xl shadow-xl`}>
-            <div className="text-2xl font-black text-white mb-2">{t("getTierTestedTitle")}</div>
-            <p className="text-xs text-zinc-400 mb-8">{t("getTierTestedDesc")}</p>
-
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              {[
-                { step: "1", title: "Заходи на IncorrectSMP.play.ski", desc: "с Java (1.21 - 26.3) или Bedrock." },
-                { step: "2", title: "Введи /tiertest", desc: "и выбери режим, в котором хочешь пройти тест." },
-                { step: "3", title: "Выбери свой регион", desc: "чтобы встать в очередь на тест по этому режиму." },
-                { step: "4", title: "Приватная арена", desc: "Когда тестер из твоего региона освободится, тебя перенесёт на приватную арену." },
-                { step: "5", title: "Сразись с тестером", desc: "После теста новый тир появится в твоём профиле IncTiers." },
-              ].map((s, idx) => (
-                <div key={idx} className="bg-black/30 border border-zinc-800/80 p-4 rounded-2xl flex flex-col justify-between">
-                  <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 font-bold text-xs flex items-center justify-center border border-amber-500/20 mb-3">
-                    {s.step}
-                  </div>
-                  <div>
-                    <div className="font-bold text-white text-xs mb-1">{s.title}</div>
-                    <div className="text-[11px] text-zinc-400 leading-relaxed">{s.desc}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl`}>
-              <div className="text-lg font-bold text-white mb-1">{t("tiersAndPoints")}</div>
-              <p className="text-xs text-zinc-400 mb-6">{t("tiersAndPointsDesc")}</p>
-              
-              <div className="space-y-3">
-                {[
-                  { tier: "Тир 1", points: "HT1 · 60 очк.", lt: "LT1 · 45 очк.", bg: "bg-amber-950/40 border-amber-900/50" },
-                  { tier: "Тир 2", points: "HT2 · 30 очк.", lt: "LT2 · 20 очк.", bg: "bg-zinc-900 border-zinc-800" },
-                  { tier: "Тир 3", points: "HT3 · 10 очк.", lt: "LT3 · 6 очк.", bg: "bg-amber-900/20 border-amber-900/30" },
-                  { tier: "Тир 4", points: "HT4 · 4 очк.", lt: "LT4 · 3 очк.", bg: "bg-black/30 border-zinc-800" },
-                  { tier: "Тир 5", points: "HT5 · 2 очк.", lt: "LT5 · 1 очк.", bg: "bg-black/30 border-zinc-800" },
-                ].map((tItem, idx) => (
-                  <div key={idx} className={`p-3.5 rounded-2xl border ${tItem.bg} flex items-center justify-between`}>
-                    <span className="font-bold text-white text-xs">{tItem.tier}</span>
-                    <div className="flex gap-2">
-                      <span className="text-[10px] font-semibold bg-black/40 px-2 py-1 rounded-lg text-amber-400 border border-white/5">{tItem.points}</span>
-                      <span className="text-[10px] font-semibold bg-black/40 px-2 py-1 rounded-lg text-zinc-300 border border-white/5">{tItem.lt}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl`}>
-              <div className="text-lg font-bold text-white mb-1">{t("titles")}</div>
-              <p className="text-xs text-zinc-400 mb-6">{t("titlesDesc")}</p>
-
-              <div className="space-y-3">
-                {[
-                  { title: "Combat Grandmaster", req: "400+ очков", color: "text-amber-400" },
-                  { title: "Combat Master", req: "250+ очков", color: "text-amber-400" },
-                  { title: "Combat Ace", req: "100+ очков", color: "text-rose-400" },
-                  { title: "Combat Specialist", req: "50+ очков", color: "text-purple-300" },
-                  { title: "Combat Cadet", req: "20+ очков", color: "text-purple-300" },
-                  { title: "Rookie", req: "Меньше 10 очков", color: "text-zinc-400" },
-                ].map((ti, idx) => (
-                  <div key={idx} className="p-3.5 rounded-2xl border border-zinc-800/80 bg-black/30 flex items-center justify-between">
-                    <span className={`font-bold text-xs ${ti.color}`}>{ti.title}</span>
-                    <span className="text-xs text-zinc-400 font-medium">{ti.req}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-lg font-bold text-white">{t("upcomingEvents")}</div>
-              <button onClick={() => setActiveTab("events")} className="text-xs text-zinc-400 hover:text-white transition flex items-center gap-1 cursor-pointer">
-                <span>{t("allEvents")}</span>
-                <ArrowRight className="w-3 h-3" />
-              </button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                { date: "ОКТ.", title: "Sword FFA Night", desc: "До 100 игроков, одна арена и киты только с мечом. Последний выживший побеждает." },
-                { date: "НОЯБ.", title: "Mace Halloween Bash", desc: "Хэллоуинский турнир с булавой на жуткой арене. Двойное выбывание." },
-                { date: "НОЯБ.", title: "UHC Duos Showdown", desc: "Найдите напарника для 2v2 UHC. 32 команды, матчи до двух побед." },
-              ].map((ev, idx) => (
-                <div key={idx} className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl flex flex-col justify-between gap-6`}>
-                  <div>
-                    <div className="text-xs font-black text-amber-500 mb-2">{ev.date}</div>
-                    <div className="text-base font-bold text-white mb-2">{ev.title}</div>
-                    <div className="text-xs text-zinc-400 leading-relaxed">{ev.desc}</div>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
 
@@ -971,7 +842,7 @@ export default function Home() {
             <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Minecraft Server</div>
             <h1 className="text-4xl font-black text-white mb-4">IncTiers Server IP</h1>
             <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed">
-              IP-адрес сервера IncTiers — <span className="text-white font-bold">IncorrectSMP.play.ski</span>. Игроки Java могут зайти с версий 1.21 - 26.3, а Bedrock игроки через порт 19132.
+              IP-адрес сервера IncTiers — <span className="text-white font-bold">IncorrectSMP.play.ski</span>.
             </p>
           </div>
 
@@ -984,21 +855,6 @@ export default function Home() {
               <Server className="w-4 h-4" />
             </button>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
-            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
-              <div className="text-xs text-zinc-500 font-semibold mb-1">{t("serverAddress")}</div>
-              <div className="text-white font-bold text-base">IncorrectSMP.play.ski</div>
-            </div>
-            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
-              <div className="text-xs text-zinc-500 font-semibold mb-1">{t("javaEdition")}</div>
-              <div className="text-white font-bold text-base">1.21 - 26.3</div>
-            </div>
-            <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
-              <div className="text-xs text-zinc-500 font-semibold mb-1">{t("bedrockEdition")}</div>
-              <div className="text-white font-bold text-base">Port 19132</div>
-            </div>
-          </div>
         </div>
       )}
 
@@ -1008,27 +864,6 @@ export default function Home() {
           <div>
             <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Tournaments & Battles</div>
             <h1 className="text-4xl font-black text-white mb-2">{t("upcomingEvents")}</h1>
-            <p className="text-zinc-400 text-sm">Участвуйте в турнирах сообщества и зарабатывайте эксклюзивные очки.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-            {[
-              { date: "ОКТ.", title: "Sword FFA Night", desc: "До 100 игроков, одна арена и киты только с мечом." },
-              { date: "НОЯБ.", title: "Mace Halloween Bash", desc: "Хэллоуинский турнир с булавой на жуткой арене." },
-              { date: "НОЯБ.", title: "UHC Duos Showdown", desc: "Командный турнир 2v2 UHC. Матчи до двух побед." },
-            ].map((ev, idx) => (
-              <div key={idx} className="bg-black/30 border border-zinc-800 hover:border-amber-500/40 p-6 rounded-2xl flex flex-col justify-between gap-6 transition">
-                <div>
-                  <div className="text-xs font-black text-amber-500 mb-2">{ev.date}</div>
-                  <div className="text-lg font-bold text-white mb-2">{ev.title}</div>
-                  <div className="text-xs text-zinc-400 leading-relaxed">{ev.desc}</div>
-                </div>
-                <div className="text-xs font-semibold text-zinc-300 flex items-center gap-1">
-                  <span>Регистрация скоро</span>
-                  <ArrowRight className="w-3 h-3" />
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       )}
@@ -1042,168 +877,7 @@ export default function Home() {
             <button onClick={() => setIsInfoOpen(false)} className="absolute top-4 right-4 text-zinc-400 hover:text-white bg-zinc-900/80 p-1.5 rounded-lg border border-zinc-800 cursor-pointer">
               <X className="w-4 h-4" />
             </button>
-
-            <div className={`flex ${themeStyles.bg} p-1.5 rounded-xl border ${themeStyles.border} mb-4`}>
-              <button onClick={() => setInfoTab("titles")} className={`flex-1 py-2 rounded-lg text-xs font-bold cursor-pointer transition-colors ${infoTab === "titles" ? "bg-zinc-800 text-white" : "text-zinc-400 hover:text-white"}`}>Титулы</button>
-              <button onClick={() => setInfoTab("points")} className={`flex-1 py-2 rounded-lg text-xs font-bold cursor-pointer transition-colors ${infoTab === "points" ? "bg-zinc-800 text-white" : "text-zinc-400 hover:text-white"}`}>Очки</button>
-            </div>
-
-            {infoTab === "titles" ? (
-              <div className="space-y-4">
-<div className="text-sm text-zinc-200 mb-3">
-                  How to obtain <span className="font-bold text-white">Achievement Titles</span>
-                </div>
-                <div className="space-y-3.5 max-h-[55vh] overflow-y-auto pr-1">
-                  {/* Combat Grandmaster */}
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <img src="/combat_grandmaster.webp" alt="Grandmaster" className="w-4 h-4 object-contain shrink-0" />
-                      <span className="font-semibold text-amber-400 text-sm">Combat Grandmaster</span>
-                    </div>
-                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 400+ total points.</div>
-                  </div>
-
-                  {/* Combat Master */}
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <img src="/combat_master.webp" alt="Master" className="w-4 h-4 object-contain shrink-0" />
-                      <span className="font-semibold text-yellow-400 text-sm">Combat Master</span>
-                    </div>
-                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 250+ total points.</div>
-                  </div>
-
-                  {/* Combat Ace */}
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <img src="/combat_ace.webp" alt="Ace" className="w-4 h-4 object-contain shrink-0" />
-                      <span className="font-semibold text-rose-400 text-sm">Combat Ace</span>
-                    </div>
-                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 100+ total points.</div>
-                  </div>
-
-                  {/* Combat Specialist */}
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <img src="/combat_specialist.svg" alt="Specialist" className="w-4 h-4 object-contain shrink-0" />
-                      <span className="font-semibold text-purple-300 text-sm">Combat Specialist</span>
-                    </div>
-                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 50+ total points.</div>
-                  </div>
-
-                  {/* Combat Cadet */}
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <img src="/combat_cadet.svg" alt="Cadet" className="w-4 h-4 object-contain shrink-0" />
-                      <span className="font-semibold text-indigo-300 text-sm">Combat Cadet</span>
-                    </div>
-                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 20+ total points.</div>
-                  </div>
-
-                  {/* Combat Novice */}
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <img src="/combat_novice.svg" alt="Novice" className="w-4 h-4 object-contain shrink-0" />
-                      <span className="font-semibold text-blue-300 text-sm">Combat Novice</span>
-                    </div>
-                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 10+ total points.</div>
-                  </div>
-
-                  {/* Rookie */}
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <img src="/rookie.svg" alt="Rookie" className="w-4 h-4 object-contain shrink-0" />
-                      <span className="font-semibold text-zinc-300 text-sm">Rookie</span>
-                    </div>
-                    <div className="text-xs text-zinc-400 mt-0.5">Starting rank for players with less than 10 points.</div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <div className="text-sm text-zinc-200 mb-3.5">
-                  <span className="font-bold text-white">How ranking points</span> are calculated
-                </div>
-                <div className="space-y-3.5 max-h-[55vh] overflow-y-auto pr-1">
-                  {/* Tier 1 */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <img src="/tier_1.svg" alt="Tier 1" className="w-4 h-4 object-contain shrink-0" />
-                      <span className="font-semibold text-amber-400 text-sm">Tier 1</span>
-                    </div>
-                    <div className="flex items-center gap-2 pl-2.5 ml-1.5 border-l border-amber-500/50">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 text-xs font-medium">
-                        <span className="text-[10px]">«</span> 60 Points
-                      </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300/90 text-xs font-medium">
-                        <span className="text-[10px]">‹</span> 45 Points
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Tier 2 */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <img src="/tier_2.svg" alt="Tier 2" className="w-4 h-4 object-contain shrink-0" />
-                      <span className="font-semibold text-zinc-300 text-sm">Tier 2</span>
-                    </div>
-                    <div className="flex items-center gap-2 pl-2.5 ml-1.5 border-l border-zinc-500/50">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-700/60 text-zinc-300 text-xs font-medium">
-                        <span className="text-[10px]">«</span> 30 Points
-                      </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800/80 text-zinc-400 text-xs font-medium">
-                        <span className="text-[10px]">‹</span> 20 Points
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Tier 3 */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <img src="/tier_3.svg" alt="Tier 3" className="w-4 h-4 object-contain shrink-0" />
-                      <span className="font-semibold text-amber-600 text-sm">Tier 3</span>
-                    </div>
-                    <div className="flex items-center gap-2 pl-2.5 ml-1.5 border-l border-amber-700/50">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-900/30 text-amber-500 text-xs font-medium">
-                        <span className="text-[10px]">«</span> 10 Points
-                      </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-950/40 text-amber-500/90 text-xs font-medium">
-                        <span className="text-[10px]">‹</span> 6 Points
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Tier 4 */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className="font-medium text-zinc-300 text-sm">Tier 4</span>
-                    </div>
-                    <div className="flex items-center gap-2 pl-2.5 ml-1 border-l border-zinc-700">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs font-medium">
-                        <span className="text-[10px]">«</span> 4 Points
-                      </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800/70 text-zinc-400 text-xs font-medium">
-                        <span className="text-[10px]">‹</span> 3 Points
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Tier 5 */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className="font-medium text-zinc-400 text-sm">Tier 5</span>
-                    </div>
-                    <div className="flex items-center gap-2 pl-2.5 ml-1 border-l border-zinc-700">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs font-medium">
-                        <span className="text-[10px]">«</span> 2 Points
-                      </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800/70 text-zinc-400 text-xs font-medium">
-                        <span className="text-[10px]">‹</span> 1 Point
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+            <div className="text-lg font-bold text-white mb-4">Information</div>
           </div>
         </div>
       )}
