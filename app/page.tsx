@@ -1050,29 +1050,157 @@ export default function Home() {
 
             {infoTab === "titles" ? (
               <div className="space-y-4">
-                <div className="text-sm font-bold text-zinc-200 mb-2">Как получить наградные титулы</div>
-                <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-1">
-                  <div className={`flex items-start gap-3 p-3 rounded-xl border ${themeStyles.border} bg-black/20`}>
-                    <img src="/combat_grandmaster.webp" alt="Grandmaster" className="w-8 h-8 object-contain shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-bold text-amber-400 text-sm">Combat Grandmaster</div>
-                      <div className="text-xs text-zinc-400 mt-0.5">400+ общих очков.</div>
+<div className="text-sm text-zinc-200 mb-3">
+                  How to obtain <span className="font-bold text-white">Achievement Titles</span>
+                </div>
+                <div className="space-y-3.5 max-h-[55vh] overflow-y-auto pr-1">
+                  {/* Combat Grandmaster */}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <img src="/combat_grandmaster.webp" alt="Grandmaster" className="w-4 h-4 object-contain shrink-0" />
+                      <span className="font-semibold text-amber-400 text-sm">Combat Grandmaster</span>
                     </div>
+                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 400+ total points.</div>
                   </div>
-                  <div className={`flex items-start gap-3 p-3 rounded-xl border ${themeStyles.border} bg-black/20`}>
-                    <img src="/combat_ace.webp" alt="Ace" className="w-8 h-8 object-contain shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-bold text-rose-400 text-sm">Combat Ace</div>
-                      <div className="text-xs text-zinc-400 mt-0.5">100+ общих очков.</div>
+
+                  {/* Combat Master */}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <img src="/combat_master.webp" alt="Master" className="w-4 h-4 object-contain shrink-0" />
+                      <span className="font-semibold text-yellow-400 text-sm">Combat Master</span>
                     </div>
+                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 250+ total points.</div>
+                  </div>
+
+                  {/* Combat Ace */}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <img src="/combat_ace.webp" alt="Ace" className="w-4 h-4 object-contain shrink-0" />
+                      <span className="font-semibold text-rose-400 text-sm">Combat Ace</span>
+                    </div>
+                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 100+ total points.</div>
+                  </div>
+
+                  {/* Combat Specialist */}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <img src="/combat_specialist.svg" alt="Specialist" className="w-4 h-4 object-contain shrink-0" />
+                      <span className="font-semibold text-purple-300 text-sm">Combat Specialist</span>
+                    </div>
+                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 50+ total points.</div>
+                  </div>
+
+                  {/* Combat Cadet */}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <img src="/combat_cadet.svg" alt="Cadet" className="w-4 h-4 object-contain shrink-0" />
+                      <span className="font-semibold text-indigo-300 text-sm">Combat Cadet</span>
+                    </div>
+                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 20+ total points.</div>
+                  </div>
+
+                  {/* Combat Novice */}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <img src="/combat_novice.svg" alt="Novice" className="w-4 h-4 object-contain shrink-0" />
+                      <span className="font-semibold text-blue-300 text-sm">Combat Novice</span>
+                    </div>
+                    <div className="text-xs text-zinc-400 mt-0.5">Obtained 10+ total points.</div>
+                  </div>
+
+                  {/* Rookie */}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <img src="/rookie.svg" alt="Rookie" className="w-4 h-4 object-contain shrink-0" />
+                      <span className="font-semibold text-zinc-300 text-sm">Rookie</span>
+                    </div>
+                    <div className="text-xs text-zinc-400 mt-0.5">Starting rank for players with less than 10 points.</div>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="space-y-4">
-                <div className="text-sm font-bold text-zinc-200 mb-3">Как рассчитываются очки рейтинга</div>
-                <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-1 text-xs text-zinc-400">
-                  <p>Каждый тир в режимах дает определенное количество очков, которые суммируются в общий рейтинг игрока на IncTiers.</p>
+              <div>
+                <div className="text-sm text-zinc-200 mb-3.5">
+                  <span className="font-bold text-white">How ranking points</span> are calculated
+                </div>
+                <div className="space-y-3.5 max-h-[55vh] overflow-y-auto pr-1">
+                  {/* Tier 1 */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <img src="/tier_1.svg" alt="Tier 1" className="w-4 h-4 object-contain shrink-0" />
+                      <span className="font-semibold text-amber-400 text-sm">Tier 1</span>
+                    </div>
+                    <div className="flex items-center gap-2 pl-2.5 ml-1.5 border-l border-amber-500/50">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 text-xs font-medium">
+                        <span className="text-[10px]">«</span> 60 Points
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300/90 text-xs font-medium">
+                        <span className="text-[10px]">‹</span> 45 Points
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Tier 2 */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <img src="/tier_2.svg" alt="Tier 2" className="w-4 h-4 object-contain shrink-0" />
+                      <span className="font-semibold text-zinc-300 text-sm">Tier 2</span>
+                    </div>
+                    <div className="flex items-center gap-2 pl-2.5 ml-1.5 border-l border-zinc-500/50">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-700/60 text-zinc-300 text-xs font-medium">
+                        <span className="text-[10px]">«</span> 30 Points
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800/80 text-zinc-400 text-xs font-medium">
+                        <span className="text-[10px]">‹</span> 20 Points
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Tier 3 */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <img src="/tier_3.svg" alt="Tier 3" className="w-4 h-4 object-contain shrink-0" />
+                      <span className="font-semibold text-amber-600 text-sm">Tier 3</span>
+                    </div>
+                    <div className="flex items-center gap-2 pl-2.5 ml-1.5 border-l border-amber-700/50">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-900/30 text-amber-500 text-xs font-medium">
+                        <span className="text-[10px]">«</span> 10 Points
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-950/40 text-amber-500/90 text-xs font-medium">
+                        <span className="text-[10px]">‹</span> 6 Points
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Tier 4 */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="font-medium text-zinc-300 text-sm">Tier 4</span>
+                    </div>
+                    <div className="flex items-center gap-2 pl-2.5 ml-1 border-l border-zinc-700">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs font-medium">
+                        <span className="text-[10px]">«</span> 4 Points
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800/70 text-zinc-400 text-xs font-medium">
+                        <span className="text-[10px]">‹</span> 3 Points
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Tier 5 */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="font-medium text-zinc-400 text-sm">Tier 5</span>
+                    </div>
+                    <div className="flex items-center gap-2 pl-2.5 ml-1 border-l border-zinc-700">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs font-medium">
+                        <span className="text-[10px]">«</span> 2 Points
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800/70 text-zinc-400 text-xs font-medium">
+                        <span className="text-[10px]">‹</span> 1 Point
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
