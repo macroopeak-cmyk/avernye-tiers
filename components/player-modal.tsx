@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Player, calculatePlayerPoints, getPlayerTitle, INITIAL_PLAYERS, getStaffRoleBadge } from "@/lib/tiers-data"
+import { Player, calculatePlayerPoints, getPlayerTitle, INITIAL_PLAYERS, getStaffRoleBadge, TierEntry, TierDetails } from "@/lib/tiers-data"
 import { X, Trophy, ExternalLink } from "lucide-react"
 
 interface PlayerModalProps {
@@ -33,7 +33,7 @@ const CUSTOM_NAME_GRADIENTS: Record<string, string> = {
   "Ekho017": "bg-gradient-to-r from-purple-500 via-fuchsia-400 to-pink-400 bg-[length:200%_auto] animate-gradient text-transparent bg-clip-text",
 }
 
-// Функция для подсчета очков за конкретный тир (можешь настроить под свою логику)
+// Функция для подсчета очков за конкретный тир
 const getTierPoints = (tier: string) => {
   switch (tier) {
     case "HT1": return 60
@@ -45,6 +45,18 @@ const getTierPoints = (tier: string) => {
     case "HT4": return 10
     case "LT4": return 5
     default: return 0
+  }
+}
+
+// Нормализатор записи тира (поддерживает и старый формат строк, и новый объект)
+const normalizeTierEntry = (entry: TierEntry): TierDetails => {
+  if (typeof entry === "string") {
+    return { tier: entry, status: "Active" }
+  }
+  return {
+    tier: entry.tier,
+    status: entry.status || "Active",
+    peak: entry.peak,
   }
 }
 
@@ -65,7 +77,7 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
   const getRankBadgeInfo = (totalPoints: number) => {
     if (totalPoints >= 400) return { icon: "/combat_grandmaster.webp", name: titleInfo.title, color: "text-amber-400" }
     if (totalPoints >= 250) return { icon: "/combat_grandmaster.webp", name: titleInfo.title, color: "text-amber-400" }
-    if (totalPoints >= 100) return { icon: "/combat_ace.webp", name: titleInfo.title, color: "text-rose-400"  }
+    if (totalPoints >= 100) return { icon: "/combat_ace.webp", name: titleInfo.title, color: "text-rose-400" }
     if (totalPoints >= 50) return { icon: "/combat_specialist.svg", name: titleInfo.title, color: "text-purple-300" }
     if (totalPoints >= 20) return { icon: "/combat_cadet.svg", name: titleInfo.title, color: "text-purple-300" }
     if (totalPoints >= 10) return { icon: "/combat_novice.svg", name: titleInfo.title, color: "text-purple-300" }
@@ -93,7 +105,7 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
         className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
       />
 
-      <div className="relative w-full max-w-[420px] bg-[#0b0e14] border border-zinc-800/80 rounded-2xl p-6 shadow-2xl text-white z-10 animate-in fade-in zoom-in-95 duration-200 flex flex-col items-center">
+      <div className="relative w-full max-w-[420px] bg-[#0b0e14] border border-zinc-800/80 rounded-2xl p-6 shadow-2xl text-white z-10 animate-in fade-in zoom-in-95 duration-200 flex flex-col items-center max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-white transition cursor-pointer border border-zinc-800"
@@ -134,7 +146,7 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
 
         {/* Регион */}
         <div className="text-xs text-zinc-500 font-semibold tracking-wide mb-2.5">
-          {player.region === "EU" ? "Europe" : "North America"}
+          {player.region === "EU" ? "Europe" : player.region === "NA" ? "North America" : player.region === "CIS" ? "CIS" : "Asia"}
         </div>
 
         {/* Кнопка NameMC */}
@@ -171,8 +183,9 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
         <div className="w-full">
           <div className="text-[11px] font-bold text-zinc-400 tracking-wider mb-1.5">TIERS</div>
           <div className="bg-[#12161f] border border-zinc-800/80 rounded-2xl p-3 grid grid-cols-5 gap-2">
-            {Object.entries(player.tiers).map(([mode, tier]) => {
-              const isHt = tier.startsWith("HT")
+            {Object.entries(player.tiers).map(([mode, entry]) => {
+              const { tier, status, peak } = normalizeTierEntry(entry)
+              const isHt = tier.toUpperCase().startsWith("HT")
               const iconPath = MODE_ICONS[mode] || MODE_ICONS[mode.toLowerCase()] || MODE_ICONS[Object.keys(MODE_ICONS).find(k => k.toLowerCase() === mode.toLowerCase()) || ""]
               const tierPoints = getTierPoints(tier)
 
@@ -181,9 +194,15 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
                   {/* Всплывающее меню (Tooltip) при наведении */}
                   <div className="absolute bottom-full mb-2 hidden group-hover/tier:flex flex-col items-center z-30 pointer-events-none animate-in fade-in zoom-in-95 duration-150">
                     <div className="bg-[#0b0e14] border border-zinc-700/80 text-white px-3 py-1.5 rounded-xl shadow-2xl text-center whitespace-nowrap">
-                      <div className="text-xs font-bold tracking-wide">
-                        Retired <span className={isHt ? "text-amber-400" : "text-purple-400"}>{tier}</span>
+                      <div className="text-xs font-bold tracking-wide flex items-center gap-1.5 justify-center">
+                        {status !== "Active" && <span className="text-sky-400">[{status}]</span>}
+                        <span className={isHt ? "text-amber-400" : "text-purple-400"}>{tier}</span>
                       </div>
+                      {peak && (
+                        <div className="text-[10px] text-zinc-400 font-medium">
+                          Peak: <span className="text-amber-300">{peak}</span>
+                        </div>
+                      )}
                       <div className="text-[10px] text-zinc-400 font-medium">
                         {tierPoints} points
                       </div>
