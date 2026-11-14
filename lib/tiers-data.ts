@@ -63,19 +63,39 @@ const RAW_PLAYERS: Player[] = [
     region: "NA",
     tiers: { Sword: "HT4", Vanilla: "HT4", UHC: "HT4", SMP: "HT5" },
   },
-  {
+{
     id: 5,
     username: "Novawww",
     skinUsername: "Marlowww",
     region: "EU",
-    tiers: { Sword: "HT4", Vanilla: "HT3", UHC: "LT3", Axe: "HT4", NethOP: "HT1", Pot: "HT4", SMP: "HT4", NethPot: "LT3", Mace: "HT4" },
+    tiers: { 
+      Sword: { tier: "HT4", status: "Active", peak: "HT1" },
+      Vanilla: { tier: "HT3", status: "Active", peak: "HT1" },
+      UHC: { tier: "LT3", status: "Active", peak: "LT1" },
+      Axe: { tier: "HT4", status: "Active", peak: "LT1" },
+      NethOP: { tier: "HT1", status: "Active", peak: "HT1" },
+      Pot: { tier: "HT4", status: "Active", peak: "HT1" },
+      SMP: { tier: "HT4", status: "Active", peak: "HT1" },
+      NethPot: { tier: "LT3", status: "Active", peak: "HT1" },
+      Mace: { tier: "HT4", status: "Active", peak: "HT1" }
+    },
   },
-  {
+{
     id: 6,
     username: "FrostByte",
     skinUsername: "Swight",
     region: "NA",
-    tiers: { Sword: "HT4", Vanilla: "HT3", UHC: "HT3", Axe: "HT4", NethOP: "HT4", Pot: "HT4", SMP: "HT3", NethPot: "LT4", Mace: "HT4" },
+    tiers: { 
+      Sword: { tier: "HT4", status: "Active", peak: "LT1" },
+      Vanilla: "HT3",
+      UHC: { tier: "HT3", status: "Active", peak: "HT1" },
+      Axe: "HT4",
+      NethOP: "HT4",
+      Pot: "HT4",
+      SMP: { tier: "HT3", status: "Active", peak: "LT1" },
+      NethPot: "LT4",
+      Mace: "HT4"
+    },
   },
   {
     id: 7,
@@ -119,19 +139,34 @@ const RAW_PLAYERS: Player[] = [
     region: "EU",
     tiers: { Mace: "HT5", Vanilla: "LT3" },
   },
-  {
+{
     id: 71,
     username: "Kylaz",
     region: "EU",
     staffRole: "Tester",
-    tiers: { Sword: "HT4", NethPot: "LT3", Vanilla: "LT3" },
+    tiers: { 
+      Sword: { tier: "HT4", status: "Active", peak: "HT1" }, 
+      NethPot: { tier: "LT3", status: "Active", peak: "HT1" }, 
+      NethOP: { tier: "HT4", status: "Active", peak: "HT1" },
+      Pot: { tier: "HT4", status: "Active", peak: "HT1" },
+      Vanilla: "LT3" 
+    },
   },
-  {
+{
     id: 72,
     username: "Rivise",
     region: "EU",
     staffRole: "Owner",
-    tiers: { Vanilla: "LT4", Pot: "LT4", Axe: "LT4", NethOP: "LT3", UHC: "HT4", Sword: "LT3" },
+    tiers: { 
+      Vanilla: { tier: "LT4", status: "Active", peak: "LT1" },
+      Pot: "LT4",
+      Axe: { tier: "LT4", status: "Active", peak: "HT1" },
+      NethOP: { tier: "LT3", status: "Active", peak: "LT2" },
+      UHC: { tier: "HT4", status: "Active", peak: "HT1" },
+      Sword: { tier: "LT3", status: "Active", peak: "LT2" },
+      NethPot: { tier: "LT4", status: "Active", peak: "LT2" },
+      Mace: { tier: "LT4", status: "Active", peak: "LT3" }
+    },
   },
   {
     id: 73,
@@ -140,12 +175,20 @@ const RAW_PLAYERS: Player[] = [
     staffRole: "Moder",
     tiers: { Sword: "HT4" },
   },
-  {
+{
     id: 105,
     username: "MrD3f4ult",
     region: "EU",
     staffRole: "Tester",
-    tiers: { NethPot: "LT3", Mace: "LT3", Sword: "HT4", Vanilla: "HT3", Pot: "HT5", Axe: "HT4", NethOP: "LT3" },
+    tiers: { 
+      NethPot: "LT3", 
+      Mace: "LT3", 
+      Sword: "HT4", 
+      Vanilla: { tier: "HT3", status: "Active", peak: "LT1" }, 
+      Pot: "LT5", 
+      Axe: "HT4", 
+      NethOP: "LT3" 
+    },
   },
   {
     id: 106,
@@ -758,7 +801,6 @@ const RAW_PLAYERS: Player[] = [
     id: 341,
     username: "riss",
     region: "EU",
-    staffRole: "Tester",
     tiers: { Sword: "HT4", Pot: "LT4" }
   },
   {
@@ -766,7 +808,6 @@ const RAW_PLAYERS: Player[] = [
     username: "Ekho017",
     region: "EU",
     skinUsername: "strafikk",
-    staffRole: "Co-Owner",
     tiers: { Sword: "HT4", Pot: "LT3", Vanilla: "HT4", NethPot: "LT4", Mace: "LT4", UHC: "LT4", NethOP: "HT3", SMP: "LT3" },
   },
   {
