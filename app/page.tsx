@@ -301,7 +301,7 @@ const translations: Record<string, Record<string, string>> = {
     gamemodes: "Oyun Modları",
     getTierTestedTitle: "Seviye testi ol",
     getTierTestedDesc: "Testler IncorrectSMP.play.ski üzerinde yapılır.",
-    tiersAndPoints: "Seviyeler ve Puanlar",
+    tiersAndPoints: "Seviyeler и Puanlar",
     tiersAndPointsDesc: "Her mod oyuncuları beş seviyeye ayırır.",
     titles: "Unvanlar",
     titlesDesc: "Unvanınız toplam puanınıza göre belirlenir.",
@@ -707,7 +707,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Правый блок: ТОП ИГРОКОВ (как на скриншоте 1) */}
+            {/* Правый блок: ТОП ИГРОКОВ */}
             <div className={`lg:col-span-7 ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col gap-4`}>
               <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-500 tracking-wider uppercase">
@@ -725,7 +725,6 @@ export default function Home() {
 
               <div className="flex flex-col gap-3">
                 {rankedPlayers.slice(0, 3).map((player) => {
-                  // Градиенты для плашек мест ТОП-3 как на скриншоте
                   const rankBg = player.rank === 1 
                     ? "bg-gradient-to-r from-[#eab308] to-[#f59e0b] text-black shadow-lg shadow-amber-500/20" 
                     : player.rank === 2 
@@ -741,7 +740,6 @@ export default function Home() {
                       className="bg-[#121620] hover:bg-[#181e2b] border border-zinc-800/80 hover:border-amber-500/40 p-3 px-4 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
                     >
                       <div className="flex items-center gap-4">
-                        {/* Наклонный номер места с аватаром игрока внутри */}
                         <div className={`w-32 h-14 rounded-xl flex items-center justify-between px-3.5 font-black text-lg italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shrink-0 shadow-md`}>
                           <span className="skew-x-[12deg] z-10">{player.rank}.</span>
                           <div className="absolute right-1 -bottom-1 h-16 w-12 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
@@ -754,7 +752,6 @@ export default function Home() {
                           </div>
                         </div>
 
-                        {/* Ник, титул и очки */}
                         <div className="flex flex-col">
                           <div className="flex items-center gap-2">
                             <span className="font-extrabold text-white text-base tracking-wide">{player.username}</span>
@@ -769,7 +766,6 @@ export default function Home() {
                       </div>
 
                       <div className="flex items-center gap-4">
-                        {/* Плашки тиров по режимам справа */}
                         <div className="hidden xl:flex items-center gap-1.5 bg-[#0b0e14] border border-zinc-800/80 p-1.5 px-2 rounded-xl">
                           {Object.entries(player.tiers).slice(0, 8).map(([kitName, tierVal], idx) => {
                             const iconUrl = modeIconMap[kitName] || "/overall.svg"
@@ -784,7 +780,6 @@ export default function Home() {
                           })}
                         </div>
 
-                        {/* Регион (NA/EU) в виде красной или зеленой плашки справа как на скриншоте */}
                         <div className={`px-3 py-1 rounded-lg text-xs font-black tracking-wider ${
                           player.region === "NA" ? "bg-rose-500/20 text-rose-500 border border-rose-500/30" : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                         }`}>
@@ -794,6 +789,69 @@ export default function Home() {
                     </div>
                   )
                 })}
+              </div>
+            </div>
+          </div>
+
+          {/* Информационные карточки: Тиры/Очки и Титулы с иконками */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Карточка: Тиры и очки */}
+            <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col justify-between`}>
+              <div>
+                <div className="text-lg font-bold text-white mb-1">{t("tiersAndPoints")}</div>
+                <p className="text-xs text-zinc-400 mb-6">{t("tiersAndPointsDesc")}</p>
+              </div>
+
+              <div className="space-y-3">
+                {[
+                  { tier: "Тир 1", icon: "/tier_1.svg", points: "HT1 · 60 очк.", lt: "LT1 · 45 очк.", bg: "bg-amber-950/40 border-amber-900/50" },
+                  { tier: "Тир 2", icon: "/tier_2.svg", points: "HT2 · 30 очк.", lt: "LT2 · 20 очк.", bg: "bg-black/30 border-zinc-800" },
+                  { tier: "Тир 3", icon: "/tier_3.svg", points: "HT3 · 10 очк.", lt: "LT3 · 8 очк.", bg: "bg-amber-900/20 border-amber-900/30" },
+                  { tier: "Тир 4", icon: "", points: "HT4 · 4 очк.", lt: "LT4 · 3 очк.", bg: "bg-black/30 border-zinc-800" },
+                  { tier: "Тир 5", icon: "", points: "HT5 · 2 очк.", lt: "LT5 · 1 очк.", bg: "bg-black/30 border-zinc-800" },
+                ].map((item, idx) => (
+                  <div key={idx} className={`p-3.5 rounded-2xl border ${item.bg} flex items-center justify-between`}>
+                    <div className="flex items-center gap-2.5">
+                      {item.icon ? (
+                        <img src={item.icon} alt={item.tier} className="w-5 h-5 object-contain" />
+                      ) : (
+                        <div className="w-5 h-5 flex items-center justify-center font-bold text-xs text-zinc-400">#</div>
+                      )}
+                      <span className="font-bold text-white text-xs">{item.tier}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-[10px] font-semibold bg-black/40 px-2.5 py-1 rounded-lg text-amber-400 border border-white/5">{item.points}</span>
+                      <span className="text-[10px] font-semibold bg-black/40 px-2.5 py-1 rounded-lg text-zinc-300 border border-white/5">{item.lt}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Карточка: Титулы */}
+            <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col justify-between`}>
+              <div>
+                <div className="text-lg font-bold text-white mb-1">{t("titles")}</div>
+                <p className="text-xs text-zinc-400 mb-6">{t("titlesDesc")}</p>
+              </div>
+
+              <div className="space-y-3">
+                {[
+                  { title: "Combat Grandmaster", icon: "/combat_grandmaster.webp", req: "400+ очков", color: "text-amber-400" },
+                  { title: "Combat Master", icon: "/combat_master.webp", req: "250+ очков", color: "text-amber-400" },
+                  { title: "Combat Ace", icon: "/combat_ace.webp", req: "100+ очков", color: "text-rose-400" },
+                  { title: "Combat Specialist", icon: "/combat_specialist.svg", req: "50+ очков", color: "text-purple-300" },
+                  { title: "Combat Cadet", icon: "/combat_cadet.svg", req: "20+ очков", color: "text-purple-300" },
+                  { title: "Rookie", icon: "/rookie.svg", req: "Меньше 10 очков", color: "text-zinc-400" },
+                ].map((item, idx) => (
+                  <div key={idx} className="p-3.5 rounded-2xl border border-zinc-800/80 bg-black/30 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <img src={item.icon} alt={item.title} className="w-5 h-5 object-contain" />
+                      <span className={`font-bold text-xs ${item.color}`}>{item.title}</span>
+                    </div>
+                    <span className="text-xs text-zinc-400 font-medium">{item.req}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
