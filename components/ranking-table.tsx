@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { RankedPlayer, Mode, Player, formatTierDisplay } from "@/lib/tiers-data"
 import { PlayerModal } from "./player-modal"
-import { Trophy, Info, Server, Copy, Check } from "lucide-react"
+import { Trophy, Info, Server, Copy, Check, Disc } from "lucide-react"
 
 interface RankingTableProps {
   players: RankedPlayer[]
@@ -46,6 +46,7 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
   const [skinErrors, setSkinErrors] = useState<Record<string, boolean>>({})
   const [copied, setCopied] = useState(false)
+  const [isInfoOpen, setIsInfoOpen] = useState(false)
 
   const copyIp = () => {
     navigator.clipboard.writeText("IncorrectSMP.play.ski")
@@ -82,7 +83,7 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
         }
       default:
         return {
-          bg: "bg-[#1d2331] text-zinc-300 border-zinc-700",
+          bg: "bg-[#181d28] text-zinc-300 border-zinc-700/50",
           numberText: "text-zinc-200",
         }
     }
@@ -99,7 +100,7 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
   }
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-5">
       <style jsx global>{`
         @keyframes shine-sweep {
           0% {
@@ -114,8 +115,8 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
         }
       `}</style>
 
-      {/* Верхняя панель со статистикой и быстрым IP (как на скриншоте 1) */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 px-2 mb-1">
+      {/* Шапка таблицы Rankings как на скриншоте */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 px-2">
         <div>
           <h1 className="text-2xl font-black text-white">Overall Minecraft PvP Rankings</h1>
           <p className="text-xs text-zinc-400 mt-1">
@@ -124,21 +125,29 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-[#121620] border border-zinc-800/80 px-4 py-2 rounded-xl text-xs font-semibold text-zinc-300 shadow-sm cursor-pointer hover:bg-[#181e2b] transition">
+          <button 
+            onClick={() => setIsInfoOpen(true)}
+            className="flex items-center gap-2 bg-[#10141d] hover:bg-[#181e2b] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-300 shadow-sm transition cursor-pointer"
+          >
             <Info className="w-4 h-4 text-cyan-400" />
             <span>Information</span>
-          </div>
+          </button>
 
-          <div className="flex items-center gap-2 bg-[#121620] border border-zinc-800/80 px-4 py-2 rounded-xl text-xs shadow-sm">
-            <span className="text-zinc-500 font-bold uppercase text-[10px]">Server IP</span>
-            <span className="text-white font-bold">IncorrectSMP.play.ski</span>
+          <div className="flex items-center gap-3 bg-[#10141d] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs shadow-sm">
+            <div className="flex items-center gap-1.5">
+              <span className="text-zinc-500 font-bold uppercase text-[10px]">Server IP</span>
+              <span className="text-white font-bold">IncorrectSMP.play.ski</span>
+            </div>
             <button 
               onClick={copyIp}
-              className="text-zinc-400 hover:text-white transition cursor-pointer ml-1"
+              className="text-zinc-400 hover:text-white transition cursor-pointer p-1"
               title="Копировать IP"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             </button>
+            <a href="https://discord.gg/Y8e2REfz3A" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-indigo-400 transition ml-1">
+              <Disc className="w-4 h-4" />
+            </a>
           </div>
         </div>
       </div>
@@ -148,7 +157,8 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
           <span className="min-w-[40px] text-left">#</span>
           <span className="ml-[110px]">Player</span>
         </div>
-        <div>
+        <div className="flex items-center gap-16">
+          <span>Region</span>
           <span className="mr-8">Tiers</span>
         </div>
       </div>
@@ -167,7 +177,7 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
           <div
             key={player.id}
             onClick={() => setSelectedPlayer(player)}
-            className="relative rounded-2xl border border-zinc-500/60 bg-gradient-to-r from-[#212838] via-[#1a2130] to-[#141a26] shadow-xl transition-all duration-200 hover:scale-[1.01] hover:border-zinc-400 cursor-pointer flex items-center justify-between px-5 py-4 overflow-hidden"
+            className="relative rounded-2xl border border-zinc-700/60 bg-gradient-to-r from-[#1b2230] via-[#141a26] to-[#0e131d] shadow-xl transition-all duration-200 hover:scale-[1.01] hover:border-zinc-500 cursor-pointer flex items-center justify-between px-5 py-3.5 overflow-hidden"
           >
             <div className="flex items-center gap-5 z-10">
               <div 
@@ -212,8 +222,8 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 z-10">
-              <div className={`px-3 py-1 rounded-lg text-xs font-black tracking-wider ${getRegionBadgeStyle(player.region)}`}>
+            <div className="flex items-center gap-6 z-10">
+              <div className={`px-3.5 py-1 rounded-lg text-xs font-black tracking-wider ${getRegionBadgeStyle(player.region)}`}>
                 {player.region || "EU"}
               </div>
 
