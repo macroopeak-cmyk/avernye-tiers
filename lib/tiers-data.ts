@@ -2,24 +2,30 @@ export type Mode = string
 
 export type StaffRole = "Owner" | "Co-Owner" | "Admin" | "Moder" | "Tester"
 
+export type TierStatus = "Active" | "Retired" | "Inactive" | "Untested" | "Sub-Tier"
+
+export interface TierDetails {
+  tier: string
+  status?: TierStatus // По умолчанию "Active"
+  peak?: string       // Например, "HT1"
+}
+
+// Можно писать как просто "HT4", так и объект { tier: "HT1", status: "Retired", peak: "HT1" }
+export type TierEntry = string | TierDetails
+
 export interface Player {
   id: number
   username: string
   skinUsername?: string
   region: "EU" | "NA" | "CIS" | "AS"
-  tiers: Record<string, string>
+  tiers: Record<string, TierEntry>
   staffRole?: StaffRole
+  banned?: boolean // true — игрок в черном списке, полностью скрывается из таблиц
 }
 
-export interface RankedPlayer {
-  id: number
-  username: string
-  skinUsername?: string
-  region: "EU" | "NA" | "CIS" | "AS"
-  tiers: Record<string, string>
+export interface RankedPlayer extends Player {
   points: number
   rank: number
-  staffRole?: StaffRole
 }
 
 const RAW_PLAYERS: Player[] = [
