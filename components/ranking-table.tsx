@@ -46,9 +46,9 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
   const [skinErrors, setSkinErrors] = useState<Record<string, boolean>>({})
 
-  const getPlayerTitleInfo = (points: number) => {
+const getPlayerTitleInfo = (points: number) => {
     if (points >= 400) return { name: "Combat Grandmaster", icon: "/combat_grandmaster.webp" }
-    if (points >= 250) return { name: "Combat Master", icon: "/combat_grandmaster.webp" }
+    if (points >= 250) return { name: "Combat Master", icon: "/combat_master.webp" }
     if (points >= 100) return { name: "Combat Ace", icon: "/combat_ace.webp" }
     if (points >= 50) return { name: "Combat Specialist", icon: "/combat_specialist.svg" }
     if (points >= 20) return { name: "Combat Cadet", icon: "/combat_cadet.svg" }
