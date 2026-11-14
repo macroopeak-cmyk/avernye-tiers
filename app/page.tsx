@@ -22,7 +22,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Search player...",
     information: "Information",
     heroTitle: "The Minecraft PvP Tier List",
-    heroDesc: "AvernyeTiers is a Minecraft PvP tier list. Players are tested in eight gamemodes, placed in tiers from Tier 1 to Tier 5, and ranked on one overall leaderboard.",
+    heroDesc: "IncTiers is a Minecraft PvP tier list. Players are tested in eight gamemodes, placed in tiers from Tier 1 to Tier 5, and ranked on one overall leaderboard.",
     viewRankings: "View rankings",
     getTierTested: "Get tier tested",
     topPlayers: "TOP PLAYERS",
@@ -30,7 +30,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "Online",
     gamemodes: "Gamemodes",
     getTierTestedTitle: "Get tier tested",
-    getTierTestedDesc: "Tier tests happen in-game on avernye.wellduck.org. Queue for a gamemode, fight one of our testers and get your tier.",
+    getTierTestedDesc: "Tier tests happen in-game on IncorrectSMP.play.ski. Queue for a gamemode, fight one of our testers and get your tier.",
     tiersAndPoints: "Tiers and points",
     tiersAndPointsDesc: "Each gamemode ranks players in five tiers, split into High and Low.",
     titles: "Titles",
@@ -52,7 +52,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Поиск игрока...",
     information: "Информация",
     heroTitle: "Тир-лист Minecraft PvP",
-    heroDesc: "AvernyeTiers ведёт тир-лист по Minecraft PvP. Игроков тестируют в режимах, распределяют по тирам от 1 до 5 и выстраивают в одном общем рейтинге.",
+    heroDesc: "IncTiers ведёт тир-лист по Minecraft PvP. Игроков тестируют в режимах, распределяют по тирам от 1 до 5 и выстраивают в одном общем рейтинге.",
     viewRankings: "Смотреть рейтинги",
     getTierTested: "Пройди тир-тест",
     topPlayers: "ТОП ИГРОКОВ",
@@ -60,7 +60,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "Онлайн",
     gamemodes: "Режимы",
     getTierTestedTitle: "Пройди тир-тест",
-    getTierTestedDesc: "Тир-тесты проходят прямо в игре на avernye.wellduck.org. Встань в очередь на режим, сразись с одним из тестеров и получи свой тир.",
+    getTierTestedDesc: "Тир-тесты проходят прямо в игре на IncorrectSMP.play.ski. Встань в очередь на режим, сразись с одним из тестеров и получи свой тир.",
     tiersAndPoints: "Тиры и очки",
     tiersAndPointsDesc: "В каждом режиме пять тиров, и каждый делится на High (высокий) и Low (низкий). Тиры приносят очки, а очки определяют твое место в рейтинге.",
     titles: "Титулы",
@@ -82,7 +82,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Buscar jugador...",
     information: "Información",
     heroTitle: "La lista de niveles de PvP de Minecraft",
-    heroDesc: "AvernyeTiers es una lista de niveles de PvP en Minecraft. Los jugadores son evaluados en ocho modos de juego, colocados en niveles del 1 al 5.",
+    heroDesc: "IncTiers es una lista de niveles de PvP en Minecraft. Los jugadores son evaluados en ocho modos de juego, colocados en niveles del 1 al 5.",
     viewRankings: "Ver clasificación",
     getTierTested: "Obtener nivel",
     topPlayers: "MEJORES JUGADORES",
@@ -90,7 +90,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "En línea",
     gamemodes: "Modos de juego",
     getTierTestedTitle: "Obtener prueba de nivel",
-    getTierTestedDesc: "Las pruebas ocurren en avernye.wellduck.org.",
+    getTierTestedDesc: "Las pruebas ocurren en IncorrectSMP.play.ski.",
     tiersAndPoints: "Niveles y puntos",
     tiersAndPointsDesc: "Cada modo clasifica a los jugadores en cinco niveles.",
     titles: "Títulos",
@@ -112,7 +112,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Pesquisar jogador...",
     information: "Informações",
     heroTitle: "A Tier List de PvP do Minecraft",
-    heroDesc: "AvernyeTiers é uma tier list de PvP do Minecraft. Jogadores são testados em oito modos.",
+    heroDesc: "IncTiers é uma tier list de PvP do Minecraft. Jogadores são testados em oito modos.",
     viewRankings: "Ver rankings",
     getTierTested: "Ser testado",
     topPlayers: "MELHORES JOGADORES",
@@ -120,7 +120,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "Online",
     gamemodes: "Modos de jogo",
     getTierTestedTitle: "Fazer teste de tier",
-    getTierTestedDesc: "Testes acontecem em avernye.wellduck.org.",
+    getTierTestedDesc: "Testes acontecem em IncorrectSMP.play.ski.",
     tiersAndPoints: "Tiers e pontos",
     tiersAndPointsDesc: "Cada modo classifica em cinco tiers.",
     titles: "Títulos",
@@ -142,7 +142,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Rechercher un joueur...",
     information: "Information",
     heroTitle: "La Tier List PvP Minecraft",
-    heroDesc: "AvernyeTiers est une tier list PvP Minecraft. Les joueurs sont testés dans huit modes.",
+    heroDesc: "IncTiers est une tier list PvP Minecraft. Les joueurs sont testés dans huit modes.",
     viewRankings: "Voir les classements",
     getTierTested: "Passer un test",
     topPlayers: "MEILLEURS JOUEURS",
@@ -150,7 +150,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "En ligne",
     gamemodes: "Modes de jeu",
     getTierTestedTitle: "Passer un test de tier",
-    getTierTestedDesc: "Les tests ont lieu sur avernye.wellduck.org.",
+    getTierTestedDesc: "Les tests ont lieu sur IncorrectSMP.play.ski.",
     tiersAndPoints: "Tiers et points",
     tiersAndPointsDesc: "Chaque mode classe les joueurs en cinq tiers.",
     titles: "Titres",
@@ -172,7 +172,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Spieler suchen...",
     information: "Informationen",
     heroTitle: "Die Minecraft PvP Tier List",
-    heroDesc: "AvernyeTiers ist eine Minecraft PvP Tier List.",
+    heroDesc: "IncTiers ist eine Minecraft PvP Tier List.",
     viewRankings: "Rangliste ansehen",
     getTierTested: "Testen lassen",
     topPlayers: "TOP-SPIELER",
@@ -180,7 +180,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "Online",
     gamemodes: "Spielmodi",
     getTierTestedTitle: "Tier-Test machen",
-    getTierTestedDesc: "Tests finden auf avernye.wellduck.org statt.",
+    getTierTestedDesc: "Tests finden auf IncorrectSMP.play.ski statt.",
     tiersAndPoints: "Tiers und Punkte",
     tiersAndPointsDesc: "Jeder Modus ordnet Spieler in fünf Tiers ein.",
     titles: "Titel",
@@ -202,7 +202,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Szukaj gracza...",
     information: "Informacje",
     heroTitle: "Lista poziomów PvP w Minecraft",
-    heroDesc: "AvernyeTiers to lista poziomów PvP w Minecraft.",
+    heroDesc: "IncTiers to lista poziomów PvP w Minecraft.",
     viewRankings: "Zobacz rankingi",
     getTierTested: "Zdobądź poziom",
     topPlayers: "NAJLEPSI GRACZE",
@@ -210,7 +210,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "Online",
     gamemodes: "Tryby gry",
     getTierTestedTitle: "Przetestuj swój poziom",
-    getTierTestedDesc: "Testy odbywają się na avernye.wellduck.org.",
+    getTierTestedDesc: "Testy odbywają się na IncorrectSMP.play.ski.",
     tiersAndPoints: "Poziomy i punkty",
     tiersAndPointsDesc: "Każdy tryb dzieli graczy na pięć poziomów.",
     titles: "Tytuły",
@@ -232,7 +232,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Cerca giocatore...",
     information: "Informazioni",
     heroTitle: "La Tier List PvP di Minecraft",
-    heroDesc: "AvernyeTiers è una tier list PvP di Minecraft.",
+    heroDesc: "IncTiers è una tier list PvP di Minecraft.",
     viewRankings: "Vedi classifiche",
     getTierTested: "Ottieni tier",
     topPlayers: "MIGLIORI GIOCATORI",
@@ -240,7 +240,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "Online",
     gamemodes: "Modalità di gioco",
     getTierTestedTitle: "Ottieni un test",
-    getTierTestedDesc: "I test avvengono su avernye.wellduck.org.",
+    getTierTestedDesc: "I test avvengono su IncorrectSMP.play.ski.",
     tiersAndPoints: "Tier e punti",
     tiersAndPointsDesc: "Ogni modalità classifica in cinque tier.",
     titles: "Titoli",
@@ -262,7 +262,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Zoek speler...",
     information: "Informatie",
     heroTitle: "De Minecraft PvP Tierlijst",
-    heroDesc: "AvernyeTiers is een Minecraft PvP tierlijst.",
+    heroDesc: "IncTiers is een Minecraft PvP tierlijst.",
     viewRankings: "Bekijk ranglijst",
     getTierTested: "Test aanvragen",
     topPlayers: "TOPSPELERS",
@@ -270,7 +270,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "Online",
     gamemodes: "Spelmodi",
     getTierTestedTitle: "Word getest",
-    getTierTestedDesc: "Tests vinden plaats op avernye.wellduck.org.",
+    getTierTestedDesc: "Tests vinden plaats op IncorrectSMP.play.ski.",
     tiersAndPoints: "Tiers en punten",
     tiersAndPointsDesc: "Elke modus rangschikt in vijf tiers.",
     titles: "Titels",
@@ -292,7 +292,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Oyuncu ara...",
     information: "Bilgi",
     heroTitle: "Minecraft PvP Seviye Listesi",
-    heroDesc: "AvernyeTiers bir Minecraft PvP tier listesidir.",
+    heroDesc: "IncTiers bir Minecraft PvP tier listesidir.",
     viewRankings: "Sıralamaları gör",
     getTierTested: "Test ol",
     topPlayers: "EN İYİ OYUNCULAR",
@@ -300,7 +300,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "Çevrimiçi",
     gamemodes: "Oyun Modları",
     getTierTestedTitle: "Seviye testi ol",
-    getTierTestedDesc: "Testler avernye.wellduck.org üzerinde yapılır.",
+    getTierTestedDesc: "Testler IncorrectSMP.play.ski üzerinde yapılır.",
     tiersAndPoints: "Seviyeler ve Puanlar",
     tiersAndPointsDesc: "Her mod oyuncuları beş seviyeye ayırır.",
     titles: "Unvanlar",
@@ -322,7 +322,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Hledat hráče...",
     information: "Informace",
     heroTitle: "Minecraft PvP Tier List",
-    heroDesc: "AvernyeTiers je Minecraft PvP tier list.",
+    heroDesc: "IncTiers je Minecraft PvP tier list.",
     viewRankings: "Zobrazit žebříček",
     getTierTested: "Získat tier",
     topPlayers: "NEJLEPŠÍ HRÁČI",
@@ -330,7 +330,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "Online",
     gamemodes: "Herní módy",
     getTierTestedTitle: "Získat tier test",
-    getTierTestedDesc: "Testy probíhají na avernye.wellduck.org.",
+    getTierTestedDesc: "Testy probíhají na IncorrectSMP.play.ski.",
     tiersAndPoints: "Tiers a body",
     tiersAndPointsDesc: "Každý mód řadí hráče do pěti tierů.",
     titles: "Tituly",
@@ -352,7 +352,7 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: "Sök spelare...",
     information: "Information",
     heroTitle: "Minecraft PvP Tier List",
-    heroDesc: "AvernyeTiers är en Minecraft PvP tier list.",
+    heroDesc: "IncTiers är en Minecraft PvP tier list.",
     viewRankings: "Visa ranking",
     getTierTested: "Testa tier",
     topPlayers: "TOPPSPELARE",
@@ -360,7 +360,7 @@ const translations: Record<string, Record<string, string>> = {
     online: "Online",
     gamemodes: "Spellägen",
     getTierTestedTitle: "Få tier-test",
-    getTierTestedDesc: "Tester sker på avernye.wellduck.org.",
+    getTierTestedDesc: "Tester sker på IncorrectSMP.play.ski.",
     tiersAndPoints: "Tiers och poäng",
     tiersAndPointsDesc: "Varje läge rankar spelare i fem tiers.",
     titles: "Titlar",
@@ -414,7 +414,7 @@ export default function Home() {
   useEffect(() => {
     const savedTheme = localStorage.getItem("combat_tiers_theme") as "dark" | "midnight" | "sinus" | "light"
     if (savedTheme) setTheme(savedTheme)
-    const savedLang = localStorage.getItem("avernye_lang")
+    const savedLang = localStorage.getItem("Incorrect_lang")
     if (savedLang && translations[savedLang]) setCurrentLang(savedLang)
   }, [])
 
@@ -426,7 +426,7 @@ export default function Home() {
 
   const changeLanguage = (langName: string) => {
     setCurrentLang(langName)
-    localStorage.setItem("avernye_lang", langName)
+    localStorage.setItem("Incorrect_lang", langName)
     setIsLangMenuOpen(false)
   }
 
@@ -461,7 +461,7 @@ export default function Home() {
   }
 
   const copyServerIp = () => {
-    navigator.clipboard.writeText("avernye.wellduck.org")
+    navigator.clipboard.writeText("IncorrectSMP.play.ski")
     setCopiedIp(true)
     setTimeout(() => setCopiedIp(false), 2000)
   }
@@ -529,7 +529,7 @@ export default function Home() {
       <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-4 rounded-2xl shadow-xl mb-8 relative`}>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("home")}>
-            <img src="/logo.png" alt="AvernyeTiers Logo" className="h-10 w-auto object-contain scale-105" />
+            <img src="/logo.png" alt="IncTiers Logo" className="h-10 w-auto object-contain scale-105" />
           </div>
 
           <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-300 font-medium">
@@ -565,7 +565,7 @@ export default function Home() {
                     <ExternalLink className="w-3.5 h-3.5 text-zinc-500" />
                   </a>
                   <a href="https://discord.gg/YFXEmEC8y2" target="_blank" rel="noreferrer" className="w-full px-3 py-2 rounded-lg text-xs hover:bg-zinc-800/60 text-zinc-300 hover:text-white flex items-center justify-between transition-colors">
-                    <span className="font-medium">Avernye</span>
+                    <span className="font-medium"></span>
                     <ExternalLink className="w-3.5 h-3.5 text-zinc-500" />
                   </a>
                 </div>
@@ -681,7 +681,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className={`lg:col-span-5 ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden`}>
               <div>
-                <img src="/logo.png" alt="AvernyeTiers Logo" className="h-14 w-auto object-contain mb-6" />
+                <img src="/logo.png" alt="IncTiers Logo" className="h-14 w-auto object-contain mb-6" />
                 <h1 className="text-3xl lg:text-4xl font-black tracking-tight mb-4 text-white">
                   {t("heroTitle")}
                 </h1>
@@ -800,7 +800,7 @@ export default function Home() {
                   <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide">{t("online")}</span>
                   <span className="text-xs text-zinc-500">• 67 / 10,000 players online</span>
                 </div>
-                <div className="text-base font-extrabold text-white mt-0.5">avernye.wellduck.org</div>
+                <div className="text-base font-extrabold text-white mt-0.5">IncorrectSMP.play.ski</div>
               </div>
             </div>
             <button 
@@ -837,11 +837,11 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               {[
-                { step: "1", title: "Заходи на avernye.wellduck.org", desc: "с Java (1.21 - 26.3) или Bedrock." },
+                { step: "1", title: "Заходи на IncorrectSMP.play.ski", desc: "с Java (1.21 - 26.3) или Bedrock." },
                 { step: "2", title: "Введи /tiertest", desc: "и выбери режим, в котором хочешь пройти тест." },
                 { step: "3", title: "Выбери свой регион", desc: "чтобы встать в очередь на тест по этому режиму." },
                 { step: "4", title: "Приватная арена", desc: "Когда тестер из твоего региона освободится, тебя перенесёт на приватную арену." },
-                { step: "5", title: "Сразись с тестером", desc: "После теста новый тир появится в твоём профиле AvernyeTiers." },
+                { step: "5", title: "Сразись с тестером", desc: "После теста новый тир появится в твоём профиле IncTiers." },
               ].map((s, idx) => (
                 <div key={idx} className="bg-black/30 border border-zinc-800/80 p-4 rounded-2xl flex flex-col justify-between">
                   <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 font-bold text-xs flex items-center justify-center border border-amber-500/20 mb-3">
@@ -969,9 +969,9 @@ export default function Home() {
         <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-8`}>
           <div>
             <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Minecraft Server</div>
-            <h1 className="text-4xl font-black text-white mb-4">AvernyeTiers Server IP</h1>
+            <h1 className="text-4xl font-black text-white mb-4">IncTiers Server IP</h1>
             <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed">
-              IP-адрес сервера AvernyeTiers — <span className="text-white font-bold">avernye.wellduck.org</span>. Игроки Java могут зайти с версий 1.21 - 26.3, а Bedrock игроки через порт 19132.
+              IP-адрес сервера IncTiers — <span className="text-white font-bold">IncorrectSMP.play.ski</span>. Игроки Java могут зайти с версий 1.21 - 26.3, а Bedrock игроки через порт 19132.
             </p>
           </div>
 
@@ -980,7 +980,7 @@ export default function Home() {
               onClick={copyServerIp}
               className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-3.5 rounded-xl transition text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
             >
-              <span>{copiedIp ? t("copied") : "avernye.wellduck.org"}</span>
+              <span>{copiedIp ? t("copied") : "IncorrectSMP.play.ski"}</span>
               <Server className="w-4 h-4" />
             </button>
           </div>
@@ -988,7 +988,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
             <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
               <div className="text-xs text-zinc-500 font-semibold mb-1">{t("serverAddress")}</div>
-              <div className="text-white font-bold text-base">avernye.wellduck.org</div>
+              <div className="text-white font-bold text-base">IncorrectSMP.play.ski</div>
             </div>
             <div className="bg-black/30 border border-zinc-800 p-6 rounded-2xl">
               <div className="text-xs text-zinc-500 font-semibold mb-1">{t("javaEdition")}</div>
@@ -1072,7 +1072,7 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="text-sm font-bold text-zinc-200 mb-3">Как рассчитываются очки рейтинга</div>
                 <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-1 text-xs text-zinc-400">
-                  <p>Каждый тир в режимах дает определенное количество очков, которые суммируются в общий рейтинг игрока на AvernyeTiers.</p>
+                  <p>Каждый тир в режимах дает определенное количество очков, которые суммируются в общий рейтинг игрока на IncTiers.</p>
                 </div>
               </div>
             )}
