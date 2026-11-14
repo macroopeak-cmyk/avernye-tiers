@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { RankedPlayer, Mode, Player, formatTierDisplay } from "@/lib/tiers-data"
 import { PlayerModal } from "./player-modal"
-import { Trophy } from "lucide-react"
+import { Trophy, Info, Server, Copy, Check } from "lucide-react"
 
 interface RankingTableProps {
   players: RankedPlayer[]
@@ -45,8 +45,15 @@ const MODE_ICONS: Record<string, string> = {
 export function RankingTable({ players, selectedMode }: RankingTableProps) {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
   const [skinErrors, setSkinErrors] = useState<Record<string, boolean>>({})
+  const [copied, setCopied] = useState(false)
 
-const getPlayerTitleInfo = (points: number) => {
+  const copyIp = () => {
+    navigator.clipboard.writeText("IncorrectSMP.play.ski")
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const getPlayerTitleInfo = (points: number) => {
     if (points >= 400) return { name: "Combat Grandmaster", icon: "/combat_grandmaster.webp" }
     if (points >= 250) return { name: "Combat Master", icon: "/combat_master.webp" }
     if (points >= 100) return { name: "Combat Ace", icon: "/combat_ace.webp" }
@@ -81,8 +88,18 @@ const getPlayerTitleInfo = (points: number) => {
     }
   }
 
+  const getRegionBadgeStyle = (region: string) => {
+    switch (region?.toUpperCase()) {
+      case "NA": return "bg-rose-500/20 text-rose-500 border border-rose-500/30"
+      case "EU": return "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+      case "ME": return "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+      case "AS": return "bg-purple-500/20 text-purple-400 border border-purple-500/30"
+      default: return "bg-zinc-800 text-zinc-300 border border-zinc-700"
+    }
+  }
+
   return (
-    <div className="w-full flex flex-col gap-3">
+    <div className="w-full flex flex-col gap-4">
       <style jsx global>{`
         @keyframes shine-sweep {
           0% {
@@ -96,6 +113,35 @@ const getPlayerTitleInfo = (points: number) => {
           animation: shine-sweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
       `}</style>
+
+      {/* Верхняя панель со статистикой и быстрым IP (как на скриншоте 1) */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 px-2 mb-1">
+        <div>
+          <h1 className="text-2xl font-black text-white">Overall Minecraft PvP Rankings</h1>
+          <p className="text-xs text-zinc-400 mt-1">
+            {players.length} players ranked by points across 8 gamemodes
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 bg-[#121620] border border-zinc-800/80 px-4 py-2 rounded-xl text-xs font-semibold text-zinc-300 shadow-sm cursor-pointer hover:bg-[#181e2b] transition">
+            <Info className="w-4 h-4 text-cyan-400" />
+            <span>Information</span>
+          </div>
+
+          <div className="flex items-center gap-2 bg-[#121620] border border-zinc-800/80 px-4 py-2 rounded-xl text-xs shadow-sm">
+            <span className="text-zinc-500 font-bold uppercase text-[10px]">Server IP</span>
+            <span className="text-white font-bold">IncorrectSMP.play.ski</span>
+            <button 
+              onClick={copyIp}
+              className="text-zinc-400 hover:text-white transition cursor-pointer ml-1"
+              title="Копировать IP"
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            </button>
+          </div>
+        </div>
+      </div>
 
       <div className="w-full hidden md:flex items-center justify-between px-6 py-1 text-xs font-bold tracking-wider text-zinc-500 uppercase select-none">
         <div className="flex items-center gap-4">
@@ -121,7 +167,6 @@ const getPlayerTitleInfo = (points: number) => {
           <div
             key={player.id}
             onClick={() => setSelectedPlayer(player)}
-            // Яркий, насыщенный сине-стальной градиент для фона всей строки карточки + отчетливая светлая рамка
             className="relative rounded-2xl border border-zinc-500/60 bg-gradient-to-r from-[#212838] via-[#1a2130] to-[#141a26] shadow-xl transition-all duration-200 hover:scale-[1.01] hover:border-zinc-400 cursor-pointer flex items-center justify-between px-5 py-4 overflow-hidden"
           >
             <div className="flex items-center gap-5 z-10">
@@ -168,7 +213,7 @@ const getPlayerTitleInfo = (points: number) => {
             </div>
 
             <div className="flex items-center gap-4 z-10">
-              <div className="px-3.5 py-2 rounded-xl bg-black/40 border border-white/15 text-xs font-black text-white tracking-wider shadow-sm">
+              <div className={`px-3 py-1 rounded-lg text-xs font-black tracking-wider ${getRegionBadgeStyle(player.region)}`}>
                 {player.region || "EU"}
               </div>
 
