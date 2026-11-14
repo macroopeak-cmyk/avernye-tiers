@@ -8,7 +8,7 @@ import { PlayerModal } from "@/components/player-modal"
 import { PlayerBody } from "@/components/player-body"
 import { 
   Info, X, Palette, Search, 
-  Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Check
+  Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Check, Copy
 } from "lucide-react"
 
 // Полные переводы для всех языков
@@ -398,7 +398,6 @@ export default function Home() {
   const [errorText, setErrorText] = useState<string>("")
   const [isInfoOpen, setIsInfoOpen] = useState<boolean>(false)
   const [isDiscordMenuOpen, setIsDiscordMenuOpen] = useState<boolean>(false)
-  const [infoTab, setInfoTab] = useState<"titles" | "points">("titles")
   const [copiedIp, setCopiedIp] = useState<boolean>(false)
   
   const [currentLang, setCurrentLang] = useState<string>("Русский")
@@ -478,17 +477,6 @@ export default function Home() {
     { id: "Mace", label: "Mace", icon: "/mace.svg" },
   ]
 
-  const modeIconMap: Record<string, string> = {
-    Vanilla: "/vanilla.svg",
-    UHC: "/uhc.svg",
-    Pot: "/pot.svg",
-    NethOP: "/nethop.svg",
-    SMP: "/smp.svg",
-    Sword: "/sword.svg",
-    Axe: "/axe.svg",
-    Mace: "/mace.svg",
-  }
-
   const themeStyles = {
     dark: {
       bg: "bg-[#0b0e14]",
@@ -564,10 +552,6 @@ export default function Home() {
                     <span className="font-medium">STiers</span>
                     <ExternalLink className="w-3.5 h-3.5 text-zinc-500" />
                   </a>
-                  <a href="https://discord.gg/YFXEmEC8y2" target="_blank" rel="noreferrer" className="w-full px-3 py-2 rounded-lg text-xs hover:bg-zinc-800/60 text-zinc-300 hover:text-white flex items-center justify-between transition-colors">
-                    <span className="font-medium"></span>
-                    <ExternalLink className="w-3.5 h-3.5 text-zinc-500" />
-                  </a>
                 </div>
               )}
             </div>
@@ -591,7 +575,6 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-4">
-          {/* Выбор языка */}
           <div className="relative">
             <button
               onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
@@ -677,9 +660,7 @@ export default function Home() {
       {/* ВКЛАДКА: HOME */}
       {activeTab === "home" && (
         <div className="w-full max-w-[1720px] flex flex-col gap-8">
-          
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Левый блок с описанием и кнопками */}
             <div className={`lg:col-span-5 ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden`}>
               <div>
                 <img src="/logo.png" alt="IncTiers Logo" className="h-14 w-auto object-contain mb-6" />
@@ -707,7 +688,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Правый блок: ТОП ИГРОКОВ */}
             <div className={`lg:col-span-7 ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col gap-4`}>
               <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-500 tracking-wider uppercase">
@@ -766,20 +746,6 @@ export default function Home() {
                       </div>
 
                       <div className="flex items-center gap-4">
-                        <div className="hidden xl:flex items-center gap-1.5 bg-[#0b0e14] border border-zinc-800/80 p-1.5 px-2 rounded-xl">
-                          {Object.entries(player.tiers).slice(0, 8).map(([kitName, tierVal], idx) => {
-                            const iconUrl = modeIconMap[kitName] || "/overall.svg"
-                            const rawTier = typeof tierVal === 'string' ? tierVal : (tierVal as any)?.tier || ""
-                            const isHt = rawTier.toUpperCase().startsWith("HT")
-                            return (
-                              <div key={idx} className="flex flex-col items-center justify-center bg-[#151a26] border border-zinc-800 px-2 py-1 rounded-lg shrink-0 gap-0.5">
-                                <img src={iconUrl} alt={kitName} className="w-3.5 h-3.5 object-contain opacity-80" />
-                                <span className={`text-[10px] font-black ${isHt ? "text-amber-400" : "text-zinc-400"}`}>{rawTier}</span>
-                              </div>
-                            )
-                          })}
-                        </div>
-
                         <div className={`px-3 py-1 rounded-lg text-xs font-black tracking-wider ${
                           player.region === "NA" ? "bg-rose-500/20 text-rose-500 border border-rose-500/30" : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                         }`}>
@@ -792,78 +758,53 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      )}
 
-          {/* Информационные карточки: Тиры/Очки и Титулы с иконками */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Карточка: Тиры и очки */}
-            <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col justify-between`}>
-              <div>
-                <div className="text-lg font-bold text-white mb-1">{t("tiersAndPoints")}</div>
-                <p className="text-xs text-zinc-400 mb-6">{t("tiersAndPointsDesc")}</p>
-              </div>
-
-              <div className="space-y-3">
-                {[
-                  { tier: "Тир 1", icon: "/tier_1.svg", points: "HT1 · 60 очк.", lt: "LT1 · 45 очк.", bg: "bg-amber-950/40 border-amber-900/50" },
-                  { tier: "Тир 2", icon: "/tier_2.svg", points: "HT2 · 30 очк.", lt: "LT2 · 20 очк.", bg: "bg-black/30 border-zinc-800" },
-                  { tier: "Тир 3", icon: "/tier_3.svg", points: "HT3 · 10 очк.", lt: "LT3 · 8 очк.", bg: "bg-amber-900/20 border-amber-900/30" },
-                  { tier: "Тир 4", icon: "", points: "HT4 · 4 очк.", lt: "LT4 · 3 очк.", bg: "bg-black/30 border-zinc-800" },
-                  { tier: "Тир 5", icon: "", points: "HT5 · 2 очк.", lt: "LT5 · 1 очк.", bg: "bg-black/30 border-zinc-800" },
-                ].map((item, idx) => (
-                  <div key={idx} className={`p-3.5 rounded-2xl border ${item.bg} flex items-center justify-between`}>
-                    <div className="flex items-center gap-2.5">
-                      {item.icon ? (
-                        <img src={item.icon} alt={item.tier} className="w-5 h-5 object-contain" />
-                      ) : (
-                        <div className="w-5 h-5 flex items-center justify-center font-bold text-xs text-zinc-400">#</div>
-                      )}
-                      <span className="font-bold text-white text-xs">{item.tier}</span>
-                    </div>
-                    <div className="flex gap-2">
-                      <span className="text-[10px] font-semibold bg-black/40 px-2.5 py-1 rounded-lg text-amber-400 border border-white/5">{item.points}</span>
-                      <span className="text-[10px] font-semibold bg-black/40 px-2.5 py-1 rounded-lg text-zinc-300 border border-white/5">{item.lt}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+      {/* ВКЛАДКА: RANKINGS (с шапкой и переключением режимов как на скриншоте) */}
+      {activeTab === "rankings" && (
+        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} rounded-3xl shadow-xl overflow-hidden mb-8 p-6 flex flex-col gap-6`}>
+          
+          {/* Верхняя шапка раздела Rankings со статистикой, кнопкой Information и IP сервера */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-black text-white">Overall Minecraft PvP Rankings</h1>
+              <p className="text-xs text-zinc-400 mt-1">
+                {rankedPlayers.length} players ranked by points across 8 gamemodes
+              </p>
             </div>
 
-            {/* Карточка: Титулы */}
-            <div className={`${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col justify-between`}>
-              <div>
-                <div className="text-lg font-bold text-white mb-1">{t("titles")}</div>
-                <p className="text-xs text-zinc-400 mb-6">{t("titlesDesc")}</p>
-              </div>
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setIsInfoOpen(true)}
+                className="flex items-center gap-2 bg-[#121620] hover:bg-[#181e2b] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-300 shadow-sm transition cursor-pointer"
+              >
+                <Info className="w-4 h-4 text-cyan-400" />
+                <span>Information</span>
+              </button>
 
-              <div className="space-y-3">
-                {[
-                  { title: "Combat Grandmaster", icon: "/combat_grandmaster.webp", req: "400+ очков", color: "text-amber-400" },
-                  { title: "Combat Master", icon: "/combat_master.webp", req: "250+ очков", color: "text-amber-400" },
-                  { title: "Combat Ace", icon: "/combat_ace.webp", req: "100+ очков", color: "text-rose-400" },
-                  { title: "Combat Specialist", icon: "/combat_specialist.svg", req: "50+ очков", color: "text-purple-300" },
-                  { title: "Combat Cadet", icon: "/combat_cadet.svg", req: "20+ очков", color: "text-purple-300" },
-                  { title: "Rookie", icon: "/rookie.svg", req: "Меньше 10 очков", color: "text-zinc-400" },
-                ].map((item, idx) => (
-                  <div key={idx} className="p-3.5 rounded-2xl border border-zinc-800/80 bg-black/30 flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <img src={item.icon} alt={item.title} className="w-5 h-5 object-contain" />
-                      <span className={`font-bold text-xs ${item.color}`}>{item.title}</span>
-                    </div>
-                    <span className="text-xs text-zinc-400 font-medium">{item.req}</span>
-                  </div>
-                ))}
+              <div className="flex items-center gap-3 bg-[#121620] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs shadow-sm">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-zinc-500 font-bold uppercase text-[10px]">Server IP</span>
+                  <span className="text-white font-bold">IncorrectSMP.play.ski</span>
+                </div>
+                <button 
+                  onClick={copyServerIp}
+                  className="text-zinc-400 hover:text-white transition cursor-pointer p-1"
+                  title="Копировать IP"
+                >
+                  {copiedIp ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                </button>
+                <a href="https://discord.gg/Y8e2REfz3A" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-indigo-400 transition ml-1">
+                  <Disc className="w-4 h-4" />
+                </a>
               </div>
             </div>
           </div>
 
-        </div>
-      )}
-
-      {/* ВКЛАДКА: RANKINGS */}
-      {activeTab === "rankings" && (
-        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-xl overflow-hidden mb-3`}>
-          <div className="p-3 pb-2 border-b border-zinc-800/50">
-            <div className="flex items-end gap-1.5 overflow-x-auto scrollbar-none pt-2">
+          {/* Панель вкладок режимов */}
+          <div className="border-b border-zinc-800/80 pb-2">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pt-2">
               {modes.map((mode) => {
                 const isActive = selectedMode === mode.id
                 return (
@@ -871,19 +812,22 @@ export default function Home() {
                     key={mode.id}
                     onClick={() => setSelectedMode(mode.id)}
                     title={mode.label}
-                    className={`flex-1 flex flex-col items-center justify-center gap-1.5 py-3 px-3 transition-all duration-150 cursor-pointer shrink-0 border-x border-t ${
-                      isActive ? "bg-[#161f30] border-amber-500/80 text-white shadow-sm ring-1 ring-amber-500/30 rounded-t-2xl -mt-2 pt-5" : "border-transparent hover:bg-zinc-800/40 text-zinc-400 hover:text-zinc-200 rounded-t-xl"
+                    className={`flex items-center gap-2.5 py-2.5 px-4 rounded-xl transition-all duration-150 cursor-pointer shrink-0 border ${
+                      isActive 
+                        ? "bg-[#182236] border-amber-500/80 text-white shadow-md ring-1 ring-amber-500/20" 
+                        : "bg-black/20 border-zinc-800/80 hover:bg-zinc-800/40 text-zinc-400 hover:text-zinc-200"
                     }`}
                   >
-                    <img src={mode.icon} alt={mode.label} className={`w-5 h-5 object-contain ${isActive ? "opacity-100 filter drop-shadow(0 0 5px rgba(245,158,11,0.5))" : "opacity-50"}`} />
-                    <span className={`text-[11px] font-medium tracking-wide ${isActive ? "text-amber-400 font-bold" : ""}`}>{mode.label}</span>
+                    <img src={mode.icon} alt={mode.label} className={`w-4 h-4 object-contain ${isActive ? "opacity-150 filter drop-shadow(0 0 5px rgba(245,158,11,0.5))" : "opacity-60"}`} />
+                    <span className={`text-xs font-semibold tracking-wide ${isActive ? "text-amber-400 font-bold" : ""}`}>{mode.label}</span>
                   </button>
                 )
               })}
             </div>
           </div>
 
-          <div className="p-3 pt-4">
+          {/* Таблица или кастомный тир */}
+          <div>
             {selectedMode === "overall" ? (
               <RankingTable players={rankedPlayers} selectedMode={selectedMode} />
             ) : (
@@ -893,38 +837,51 @@ export default function Home() {
         </div>
       )}
 
-      {/* ВКЛАДКА: SERVER IP */}
-      {activeTab === "server-ip" && (
-        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-8`}>
-          <div>
-            <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Minecraft Server</div>
-            <h1 className="text-4xl font-black text-white mb-4">IncTiers Server IP</h1>
-            <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed">
-              IP-адрес сервера IncTiers — <span className="text-white font-bold">IncorrectSMP.play.ski</span>.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={copyServerIp}
-              className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-3.5 rounded-xl transition text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
-            >
-              <span>{copiedIp ? t("copied") : "IncorrectSMP.play.ski"}</span>
-              <Server className="w-4 h-4" />
+      {/* Фирменный футер */}
+      <footer className="w-full max-w-[1720px] mt-16 pt-12 pb-8 border-t border-zinc-800/60 text-zinc-400 text-xs flex flex-col md:flex-row justify-between gap-10">
+        <div className="flex flex-col gap-4 max-w-sm">
+          <img src="/logo.png" alt="IncTiers Logo" className="h-8 w-auto object-contain" />
+          <p className="text-zinc-500 leading-relaxed text-[11px]">
+            The Minecraft PvP tier list. Rankings, tier tests and events for Java and Bedrock players.
+          </p>
+          <div className="flex items-center gap-3 bg-[#10141d] border border-zinc-800 p-2.5 px-3 rounded-xl w-fit">
+            <span className="text-white font-bold">IncorrectSMP.play.ski</span>
+            <button onClick={copyServerIp} className="text-zinc-400 hover:text-white cursor-pointer">
+              <Server className="w-3.5 h-3.5" />
             </button>
           </div>
+          <div className="text-[10px] text-zinc-600">Java 1.21 - 26.3 • Bedrock</div>
         </div>
-      )}
 
-      {/* ВКЛАДКА: EVENTS */}
-      {activeTab === "events" && (
-        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-6`}>
+        <div className="grid grid-cols-2 gap-12">
           <div>
-            <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Tournaments & Battles</div>
-            <h1 className="text-4xl font-black text-white mb-2">{t("upcomingEvents")}</h1>
+            <div className="font-bold text-white text-[11px] uppercase tracking-wider mb-3">Rankings</div>
+            <div className="flex flex-col gap-2">
+              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("overall"); }} className="hover:text-white text-left transition cursor-pointer">Overall</button>
+              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("Vanilla"); }} className="hover:text-white text-left transition cursor-pointer">Vanilla</button>
+              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("UHC"); }} className="hover:text-white text-left transition cursor-pointer">UHC</button>
+              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("Pot"); }} className="hover:text-white text-left transition cursor-pointer">Pot</button>
+              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("NethOP"); }} className="hover:text-white text-left transition cursor-pointer">NethOP</button>
+              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("Sword"); }} className="hover:text-white text-left transition cursor-pointer">Sword</button>
+            </div>
+          </div>
+
+          <div>
+            <div className="font-bold text-white text-[11px] uppercase tracking-wider mb-3">Explore</div>
+            <div className="flex flex-col gap-2">
+              <button onClick={() => setActiveTab("server-ip")} className="hover:text-white text-left transition cursor-pointer">Server IP</button>
+              <button onClick={() => setActiveTab("events")} className="hover:text-white text-left transition cursor-pointer">Events</button>
+              <button onClick={() => setIsInfoOpen(true)} className="hover:text-white text-left transition cursor-pointer">Guides</button>
+              <button onClick={() => setIsInfoOpen(true)} className="hover:text-white text-left transition cursor-pointer">FAQ</button>
+            </div>
           </div>
         </div>
-      )}
+      </footer>
+
+      <div className="w-full max-w-[1720px] pb-6 text-[10px] text-zinc-600 flex flex-col sm:flex-row justify-between gap-2 border-t border-zinc-900 pt-4">
+        <div>© 2026 IncTiers. All rights reserved.</div>
+        <div>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</div>
+      </div>
 
       <PlayerModal player={selectedPlayer} isOpen={!!selectedPlayer} onClose={() => setSelectedPlayer(null)} />
 
