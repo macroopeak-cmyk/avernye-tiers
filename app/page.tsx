@@ -8,7 +8,7 @@ import { PlayerModal } from "@/components/player-modal"
 import { PlayerBody } from "@/components/player-body"
 import { 
   Info, X, Palette, Search, 
-  Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Check, Copy
+  Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Check
 } from "lucide-react"
 
 // Полные переводы для всех языков
@@ -391,7 +391,7 @@ const languages = [
 ]
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"home" | "rankings" | "server-ip" | "events">("home")
+  const [activeTab, setActiveTab] = useState<"home" | "rankings" | "server-ip" | "events">("rankings")
   const [selectedMode, setSelectedMode] = useState<string>("overall")
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
@@ -465,8 +465,10 @@ export default function Home() {
     setTimeout(() => setCopiedIp(false), 2000)
   }
 
+  // Список режимов для вкладок со скриншота 1 (включая LTMs)
   const modes = [
     { id: "overall", label: "Overall", icon: "/overall.svg" },
+    { id: "LTMs", label: "LTMs", icon: "/ltm's.svg" },
     { id: "Vanilla", label: "Vanilla", icon: "/vanilla.svg" },
     { id: "UHC", label: "UHC", icon: "/uhc.svg" },
     { id: "Pot", label: "Pot", icon: "/pot.svg" },
@@ -513,10 +515,10 @@ export default function Home() {
   return (
     <main className={`min-h-screen ${themeStyles.bg} ${themeStyles.textColor} flex flex-col items-center py-6 px-6 relative transition-colors duration-300 w-full`}>
       
-      {/* Верхняя панель */}
+      {/* Верхняя панель навигации */}
       <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-4 rounded-2xl shadow-xl mb-8 relative`}>
         <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("home")}>
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("rankings")}>
             <img src="/logo.png" alt="IncTiers Logo" className="h-10 w-auto object-contain scale-105" />
           </div>
 
@@ -575,6 +577,7 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Выбор языка */}
           <div className="relative">
             <button
               onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
@@ -687,147 +690,39 @@ export default function Home() {
                 </button>
               </div>
             </div>
-
-            <div className={`lg:col-span-7 ${themeStyles.cardBg} border ${themeStyles.border} p-6 rounded-3xl shadow-xl flex flex-col gap-4`}>
-              <div className="flex items-center justify-between px-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-amber-500 tracking-wider uppercase">
-                  <Trophy className="w-4 h-4" />
-                  <span>{t("topPlayers")}</span>
-                </div>
-                <button 
-                  onClick={() => setActiveTab("rankings")}
-                  className="text-xs text-zinc-400 hover:text-white transition flex items-center gap-1 cursor-pointer font-medium"
-                >
-                  <span>{t("fullLeaderboard")}</span>
-                  <ArrowRight className="w-3 h-3" />
-                </button>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                {rankedPlayers.slice(0, 3).map((player) => {
-                  const rankBg = player.rank === 1 
-                    ? "bg-gradient-to-r from-[#eab308] to-[#f59e0b] text-black shadow-lg shadow-amber-500/20" 
-                    : player.rank === 2 
-                    ? "bg-gradient-to-r from-[#cbd5e1] to-[#94a3b8] text-black" 
-                    : "bg-gradient-to-r from-[#d97706] to-[#b45309] text-white"
-
-                  const playerTitleInfo = getPlayerTitle(player.points, player.tiers)
-
-                  return (
-                    <div 
-                      key={player.id}
-                      onClick={() => setSelectedPlayer(player)}
-                      className="bg-[#121620] hover:bg-[#181e2b] border border-zinc-800/80 hover:border-amber-500/40 p-3 px-4 rounded-2xl flex items-center justify-between cursor-pointer transition relative overflow-hidden"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-32 h-14 rounded-xl flex items-center justify-between px-3.5 font-black text-lg italic skew-x-[-12deg] ${rankBg} relative overflow-hidden shrink-0 shadow-md`}>
-                          <span className="skew-x-[12deg] z-10">{player.rank}.</span>
-                          <div className="absolute right-1 -bottom-1 h-16 w-12 skew-x-[12deg] flex items-end justify-center overflow-hidden pointer-events-none">
-                            <PlayerBody 
-                              username={player.username} 
-                              skinUsername={player.skinUsername} 
-                              height={60} 
-                              className="transform translate-y-1 scale-125"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col">
-                          <div className="flex items-center gap-2">
-                            <span className="font-extrabold text-white text-base tracking-wide">{player.username}</span>
-                          </div>
-                          
-                          <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-400 mt-0.5">
-                            <span className="inline-block w-2 h-2 rotate-45 bg-amber-500 rounded-sm"></span>
-                            <span className="text-amber-300 font-semibold">{playerTitleInfo.title}</span>
-                            <span className="text-zinc-500">({player.points} points)</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-4">
-                        <div className={`px-3 py-1 rounded-lg text-xs font-black tracking-wider ${
-                          player.region === "NA" ? "bg-rose-500/20 text-rose-500 border border-rose-500/30" : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                        }`}>
-                          {player.region}
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
           </div>
         </div>
       )}
 
-      {/* ВКЛАДКА: RANKINGS (с шапкой и переключением режимов как на скриншоте) */}
+      {/* ВКЛАДКА: RANKINGS (Идентично скриншотам 1, 2 и 3) */}
       {activeTab === "rankings" && (
-        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} rounded-3xl shadow-xl overflow-hidden mb-8 p-6 flex flex-col gap-6`}>
+        <div className="w-full max-w-[1720px] flex flex-col gap-6 mb-8">
           
-          {/* Верхняя шапка раздела Rankings со статистикой, кнопкой Information и IP сервера */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-black text-white">Overall Minecraft PvP Rankings</h1>
-              <p className="text-xs text-zinc-400 mt-1">
-                {rankedPlayers.length} players ranked by points across 8 gamemodes
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button 
-                onClick={() => setIsInfoOpen(true)}
-                className="flex items-center gap-2 bg-[#121620] hover:bg-[#181e2b] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-300 shadow-sm transition cursor-pointer"
-              >
-                <Info className="w-4 h-4 text-cyan-400" />
-                <span>Information</span>
-              </button>
-
-              <div className="flex items-center gap-3 bg-[#121620] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs shadow-sm">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-zinc-500 font-bold uppercase text-[10px]">Server IP</span>
-                  <span className="text-white font-bold">IncorrectSMP.play.ski</span>
-                </div>
-                <button 
-                  onClick={copyServerIp}
-                  className="text-zinc-400 hover:text-white transition cursor-pointer p-1"
-                  title="Копировать IP"
-                >
-                  {copiedIp ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                </button>
-                <a href="https://discord.gg/Y8e2REfz3A" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-indigo-400 transition ml-1">
-                  <Disc className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Панель вкладок режимов */}
-          <div className="border-b border-zinc-800/80 pb-2">
-            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pt-2">
+          {/* Панель выбора режимов со иконками (как на скриншоте 1) */}
+          <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} p-3 rounded-2xl shadow-xl overflow-x-auto scrollbar-none`}>
+            <div className="flex items-center gap-2 min-w-max">
               {modes.map((mode) => {
                 const isActive = selectedMode === mode.id
                 return (
                   <button
                     key={mode.id}
                     onClick={() => setSelectedMode(mode.id)}
-                    title={mode.label}
-                    className={`flex items-center gap-2.5 py-2.5 px-4 rounded-xl transition-all duration-150 cursor-pointer shrink-0 border ${
+                    className={`flex items-center gap-2.5 px-5 py-3 rounded-xl transition-all cursor-pointer border ${
                       isActive 
-                        ? "bg-[#182236] border-amber-500/80 text-white shadow-md ring-1 ring-amber-500/20" 
+                        ? "bg-[#182236] border-amber-500/80 text-white shadow-md ring-1 ring-amber-500/20 font-bold" 
                         : "bg-black/20 border-zinc-800/80 hover:bg-zinc-800/40 text-zinc-400 hover:text-zinc-200"
                     }`}
                   >
-                    <img src={mode.icon} alt={mode.label} className={`w-4 h-4 object-contain ${isActive ? "opacity-150 filter drop-shadow(0 0 5px rgba(245,158,11,0.5))" : "opacity-60"}`} />
-                    <span className={`text-xs font-semibold tracking-wide ${isActive ? "text-amber-400 font-bold" : ""}`}>{mode.label}</span>
+                    <img src={mode.icon} alt={mode.label} className={`w-4 h-4 object-contain ${isActive ? "opacity-100 filter drop-shadow(0 0 5px rgba(245,158,11,0.5))" : "opacity-60"}`} />
+                    <span className={`text-xs tracking-wide ${isActive ? "text-amber-400" : ""}`}>{mode.label}</span>
                   </button>
                 )
               })}
             </div>
           </div>
 
-          {/* Таблица или кастомный тир */}
-          <div>
+          {/* Таблица рейтингов или конкретный режим */}
+          <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} rounded-3xl shadow-xl overflow-hidden p-6 flex flex-col gap-6`}>
             {selectedMode === "overall" ? (
               <RankingTable players={rankedPlayers} selectedMode={selectedMode} />
             ) : (
@@ -837,7 +732,40 @@ export default function Home() {
         </div>
       )}
 
-      {/* Фирменный футер */}
+      {/* ВКЛАДКА: SERVER IP */}
+      {activeTab === "server-ip" && (
+        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-8`}>
+          <div>
+            <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Minecraft Server</div>
+            <h1 className="text-4xl font-black text-white mb-4">IncTiers Server IP</h1>
+            <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed">
+              IP-адрес сервера IncTiers — <span className="text-white font-bold">IncorrectSMP.play.ski</span>.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={copyServerIp}
+              className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-3.5 rounded-xl transition text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
+            >
+              <span>{copiedIp ? t("copied") : "IncorrectSMP.play.ski"}</span>
+              <Server className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ВКЛАДКА: EVENTS */}
+      {activeTab === "events" && (
+        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-6`}>
+          <div>
+            <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Tournaments & Battles</div>
+            <h1 className="text-4xl font-black text-white mb-2">{t("upcomingEvents")}</h1>
+          </div>
+        </div>
+      )}
+
+      {/* Фирменный футер (как на скриншоте 3) */}
       <footer className="w-full max-w-[1720px] mt-16 pt-12 pb-8 border-t border-zinc-800/60 text-zinc-400 text-xs flex flex-col md:flex-row justify-between gap-10">
         <div className="flex flex-col gap-4 max-w-sm">
           <img src="/logo.png" alt="IncTiers Logo" className="h-8 w-auto object-contain" />
