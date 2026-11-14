@@ -49,7 +49,7 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
   const [isInfoOpen, setIsInfoOpen] = useState(false)
 
   const copyIp = () => {
-    navigator.clipboard.writeText("IncorrectSMP.play.ski")
+    navigator.clipboard.writeText("playmctiers.com")
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -115,7 +115,7 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
         }
       `}</style>
 
-      {/* Шапка таблицы Rankings как на скриншоте */}
+      {/* Верхняя шапка таблицы Rankings как на скриншоте 1 */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 px-2">
         <div>
           <h1 className="text-2xl font-black text-white">Overall Minecraft PvP Rankings</h1>
@@ -127,16 +127,16 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
         <div className="flex items-center gap-3">
           <button 
             onClick={() => setIsInfoOpen(true)}
-            className="flex items-center gap-2 bg-[#10141d] hover:bg-[#181e2b] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-300 shadow-sm transition cursor-pointer"
+            className="flex items-center gap-2 bg-[#121620] hover:bg-[#181e2b] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-300 shadow-sm transition cursor-pointer"
           >
             <Info className="w-4 h-4 text-cyan-400" />
             <span>Information</span>
           </button>
 
-          <div className="flex items-center gap-3 bg-[#10141d] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs shadow-sm">
+          <div className="flex items-center gap-3 bg-[#121620] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs shadow-sm">
             <div className="flex items-center gap-1.5">
-              <span className="text-zinc-500 font-bold uppercase text-[10px]">Server IP</span>
-              <span className="text-white font-bold">IncorrectSMP.play.ski</span>
+              <span className="text-zinc-500 font-bold uppercase text-[10px]">SERVER IP</span>
+              <span className="text-white font-bold">playmctiers.com</span>
             </div>
             <button 
               onClick={copyIp}
@@ -158,8 +158,8 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
           <span className="ml-[110px]">Player</span>
         </div>
         <div className="flex items-center gap-16">
-          <span>Region</span>
-          <span className="mr-8">Tiers</span>
+          <span>REGION</span>
+          <span className="mr-8">TIERS</span>
         </div>
       </div>
 
