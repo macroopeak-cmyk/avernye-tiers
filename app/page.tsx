@@ -1,14 +1,14 @@
 "use client"
 
-import { useState, useEffect, KeyboardEvent } from "react"
+import { useState, useEffect, KeyboardEvent, ReactNode } from "react"
 import { INITIAL_PLAYERS, calculatePlayerPoints, getPlayerTitle, RankedPlayer, Player } from "@/lib/tiers-data"
 import { RankingTable } from "@/components/ranking-table"
 import KitTier from "@/components/kit-tier"
 import { PlayerModal } from "@/components/player-modal"
 import { PlayerBody } from "@/components/player-body"
-import { 
-  Info, X, Palette, Search, 
-  Home as HomeIcon, Trophy, Disc, ChevronDown, ExternalLink, Server, Calendar, ArrowRight, Check
+import {
+  Info, X, Search, Home as HomeIcon, Trophy, Gamepad2, ChevronDown, ExternalLink,
+  Server, Calendar, ArrowRight, Check, Copy, Plus, ChevronsUp, ChevronUp, Gem
 } from "lucide-react"
 
 // Полные переводы для всех языков
@@ -32,7 +32,7 @@ const translations: Record<string, Record<string, string>> = {
     getTierTestedTitle: "Get tier tested",
     getTierTestedDesc: "Tier tests happen in-game on IncorrectSMP.play.ski. Queue for a gamemode, fight one of our testers and get your tier.",
     tiersAndPoints: "Tiers and points",
-    tiersAndPointsDesc: "Each gamemode ranks players in five tiers, split into High and Low.",
+    tiersAndPointsDesc: "Each gamemode ranks players in five tiers, split into High and Low. Your tiers earn points, and points decide your place on the overall leaderboard.",
     titles: "Titles",
     titlesDesc: "Your title follows your total points across every gamemode.",
     upcomingEvents: "Upcoming events",
@@ -42,6 +42,49 @@ const translations: Record<string, Record<string, string>> = {
     bedrockEdition: "BEDROCK EDITION",
     copied: "Copied!",
     copyIp: "Copy Server IP",
+    overallTitle: "Overall Minecraft PvP Rankings",
+    playersRanked: "players ranked by points across 8 gamemodes",
+    tierRange: "Ranked players, from HT1 to LT5",
+    serverIpLabel: "SERVER IP",
+    playersOnline: "players online",
+    offline: "Offline",
+    ltmTitle: "Limited-Time Modes",
+    ltmComing: "Limited-Time Modes are coming!",
+    ltmDesc: "We're working on implementing LTMs, which will include team-based leaderboards for various kit events - however, a few other things will take priority :)",
+    learnMore: "Learn more",
+    pts: "pts",
+    pointsWord: "points",
+    under: "Under",
+    explore: "Explore",
+    guides: "Guides",
+    footerDesc: "The Minecraft PvP tier list. Rankings, tier tests and events for Java and Bedrock players.",
+    step1Pre: "Join",
+    step1Post: "on Java (1.21 - 26.3) or Bedrock.",
+    step2Pre: "Type",
+    step2Post: "and choose the gamemode you want to be tested in.",
+    step3: "Pick your region to join that gamemode's testing queue.",
+    step4: "When a tester in your region is free, you're moved to a private arena with the official kit.",
+    step5: "Fight your tester. Your new tier is added to your profile after the test.",
+    faqTitle: "Frequently asked questions",
+    faqDesc: "Quick answers about tiers, tier tests, points and the server.",
+    faq1q: "What is IncTiers?",
+    faq1a: "IncTiers is a Minecraft PvP tier list. It ranks players in eight gamemodes (Vanilla/Crystal PvP, UHC, Pot, NethOP, SMP, Sword, Axe and Mace) from High Tier 1 to Low Tier 5, and combines those tiers into one overall leaderboard.",
+    faq2q: "What do HT1, LT1 and the other tiers mean?",
+    faq2a: "Each gamemode has five tiers, and Tier 1 is the best. Every tier is split into High (HT) and Low (LT), so HT1 is the highest rank a player can hold and LT5 the lowest. The full order is HT1, LT1, HT2, LT2 and so on down to LT5.",
+    faq3q: "How do I get tier tested?",
+    faq3a: "Join the server, type /tiertest, choose a gamemode and your region, then fight a tester in a private arena. Your new tier is added to your profile after the test.",
+    faq4q: "How is the overall leaderboard calculated?",
+    faq4a: "Every tier is worth points (HT1 = 60, LT1 = 45, HT2 = 30 ... LT5 = 1). Points from all gamemodes are added up and decide your place on the overall leaderboard.",
+    faq5q: "What are titles like Combat Master?",
+    faq5a: "Titles follow your total points across every gamemode, from Rookie (under 10 points) up to Combat Grandmaster (400+ points).",
+    faq6q: "What does a retired tier mean?",
+    faq6a: "A retired tier means the player no longer competes in that gamemode. The tier stays on their profile but is marked as retired.",
+    faq7q: "How do I look up a player's tiers?",
+    faq7a: "Type the exact username into the search box at the top of the page and press Enter to open the player's profile.",
+    faq8q: "What is the IncTiers server IP?",
+    faq8a: "The server IP is IncorrectSMP.play.ski. It works on Java (1.21 - 26.3) and Bedrock.",
+    faq9q: "Does IncTiers run events?",
+    faq9a: "Yes. Check the Events page for upcoming tournaments, ladder nights and team clashes.",
   },
   Русский: {
     home: "Главная",
@@ -72,6 +115,49 @@ const translations: Record<string, Record<string, string>> = {
     bedrockEdition: "BEDROCK ИЗДАНИЕ",
     copied: "Скопировано!",
     copyIp: "IP сервера",
+    overallTitle: "Общий рейтинг Minecraft PvP",
+    playersRanked: "игроков в рейтинге по очкам в 8 режимах",
+    tierRange: "Игроки в рейтинге: от HT1 до LT5",
+    serverIpLabel: "IP СЕРВЕРА",
+    playersOnline: "игроков онлайн",
+    offline: "Оффлайн",
+    ltmTitle: "Ограниченные режимы",
+    ltmComing: "Ограниченные режимы скоро появятся!",
+    ltmDesc: "Мы работаем над LTM — командными рейтингами для разных кит-ивентов, но сначала займёмся другими задачами :)",
+    learnMore: "Подробнее",
+    pts: "оч.",
+    pointsWord: "очков",
+    under: "Меньше",
+    explore: "Разделы",
+    guides: "Гайды",
+    footerDesc: "Тир-лист Minecraft PvP. Рейтинги, тир-тесты и ивенты для игроков на Java и Bedrock.",
+    step1Pre: "Зайди на",
+    step1Post: "через Java (1.21 - 26.3) или Bedrock.",
+    step2Pre: "Введи",
+    step2Post: "и выбери режим, в котором хочешь пройти тест.",
+    step3: "Выбери свой регион, чтобы встать в очередь на тест в этом режиме.",
+    step4: "Когда тестер из твоего региона освободится, тебя переместят на приватную арену с официальным китом.",
+    step5: "Сразись с тестером. Новый тир появится в твоём профиле после теста.",
+    faqTitle: "Частые вопросы",
+    faqDesc: "Короткие ответы про тиры, тир-тесты, очки и сервер.",
+    faq1q: "Что такое IncTiers?",
+    faq1a: "IncTiers — тир-лист по Minecraft PvP. Он ранжирует игроков в восьми режимах (Vanilla/Crystal PvP, UHC, Pot, NethOP, SMP, Sword, Axe и Mace) от High Tier 1 до Low Tier 5 и объединяет тиры в один общий рейтинг.",
+    faq2q: "Что значат HT1, LT1 и другие тиры?",
+    faq2a: "В каждом режиме пять тиров, Tier 1 — лучший. Каждый тир делится на High (HT) и Low (LT): HT1 — высший ранг, LT5 — низший. Полный порядок: HT1, LT1, HT2, LT2 и так далее до LT5.",
+    faq3q: "Как пройти тир-тест?",
+    faq3a: "Зайди на сервер, введи /tiertest, выбери режим и регион, затем сразись с тестером на приватной арене. Новый тир появится в профиле после теста.",
+    faq4q: "Как считается общий рейтинг?",
+    faq4a: "Каждый тир даёт очки (HT1 = 60, LT1 = 45, HT2 = 30 ... LT5 = 1). Очки со всех режимов суммируются и определяют место в общем рейтинге.",
+    faq5q: "Что за титулы вроде Combat Master?",
+    faq5a: "Титул зависит от суммы очков во всех режимах: от Rookie (меньше 10 очков) до Combat Grandmaster (400+ очков).",
+    faq6q: "Что значит retired-тир?",
+    faq6a: "Retired-тир означает, что игрок больше не соревнуется в этом режиме. Тир остаётся в профиле, но помечается как retired.",
+    faq7q: "Как найти тиры игрока?",
+    faq7a: "Введи точный ник в поиск вверху страницы и нажми Enter — откроется профиль игрока.",
+    faq8q: "Какой IP у сервера IncTiers?",
+    faq8a: "IP сервера — IncorrectSMP.play.ski. Подходит для Java (1.21 - 26.3) и Bedrock.",
+    faq9q: "Проводит ли IncTiers ивенты?",
+    faq9a: "Да. Загляни на страницу Ивентов: там турниры, ladder-ночи и командные бои.",
   },
   Español: {
     home: "Inicio",
@@ -301,7 +387,7 @@ const translations: Record<string, Record<string, string>> = {
     gamemodes: "Oyun Modları",
     getTierTestedTitle: "Seviye testi ol",
     getTierTestedDesc: "Testler IncorrectSMP.play.ski üzerinde yapılır.",
-    tiersAndPoints: "Seviyeler и Puanlar",
+    tiersAndPoints: "Seviyeler ve Puanlar",
     tiersAndPointsDesc: "Her mod oyuncuları beş seviyeye ayırır.",
     titles: "Unvanlar",
     titlesDesc: "Unvanınız toplam puanınıza göre belirlenir.",
@@ -390,8 +476,86 @@ const languages = [
   { name: "Svenska", flag: "🇸🇪" },
 ]
 
+const SERVER_IP = "IncorrectSMP.play.ski"
+const DISCORD_URL = "https://discord.gg/Y8e2REfz3A"
+const VERSIONS = "Java 1.21 - 26.3 · Bedrock"
+
+type TabId = "home" | "rankings" | "server-ip" | "events"
+
+// Режимы (вкладки рейтингов). title — заголовок как на скриншотах
+const MODES = [
+  { id: "overall", label: "Overall", icon: "/overall.svg", title: "" },
+  { id: "LTMs", label: "LTMs", icon: "/ltm's.svg", title: "" },
+  { id: "Vanilla", label: "Vanilla", icon: "/vanilla.svg", title: "Vanilla (Crystal PvP) Tier List" },
+  { id: "UHC", label: "UHC", icon: "/uhc.svg", title: "Minecraft UHC Tier List" },
+  { id: "Pot", label: "Pot", icon: "/pot.svg", title: "Minecraft Pot PvP Tier List" },
+  { id: "NethOP", label: "NethOP", icon: "/nethop.svg", title: "NethOP (Netherite OP) Tier List" },
+  { id: "SMP", label: "SMP", icon: "/smp.svg", title: "Minecraft SMP PvP Tier List" },
+  { id: "Sword", label: "Sword", icon: "/sword.svg", title: "Minecraft Sword PvP Tier List" },
+  { id: "Axe", label: "Axe", icon: "/axe.svg", title: "Minecraft Axe PvP Tier List" },
+  { id: "Mace", label: "Mace", icon: "/mace.svg", title: "Minecraft Mace PvP Tier List" },
+]
+
+const GAMEMODE_IDS = ["Vanilla", "UHC", "Pot", "NethOP", "SMP", "Sword", "Axe", "Mace"]
+const FOOTER_COL_1 = ["overall", "UHC", "NethOP", "Sword", "Mace"]
+const FOOTER_COL_2 = ["Vanilla", "Pot", "SMP", "Axe"]
+
+const TIER_ROWS = [
+  { name: "Tier 1", ht: 60, lt: 45, row: "bg-amber-900/25 text-amber-400", trophy: "text-amber-400" },
+  { name: "Tier 2", ht: 30, lt: 20, row: "bg-zinc-600/20 text-zinc-300", trophy: "text-zinc-300" },
+  { name: "Tier 3", ht: 10, lt: 6, row: "bg-orange-900/25 text-orange-400", trophy: "text-orange-400" },
+  { name: "Tier 4", ht: 4, lt: 3, row: "bg-[#121823] text-zinc-300", trophy: "" },
+  { name: "Tier 5", ht: 2, lt: 1, row: "bg-[#121823] text-zinc-300", trophy: "" },
+]
+
+const TITLE_ROWS = [
+  { name: "Combat Grandmaster", min: 400, color: "#fcd34d", width: 100 },
+  { name: "Combat Master", min: 250, color: "#fcd34d", width: 80 },
+  { name: "Combat Ace", min: 100, color: "#fb7185", width: 50 },
+  { name: "Combat Specialist", min: 50, color: "#c4b5fd", width: 33 },
+  { name: "Combat Cadet", min: 20, color: "#c4b5fd", width: 22 },
+  { name: "Combat Novice", min: 10, color: "#c4b5fd", width: 12 },
+  { name: "Rookie", min: 0, color: "#a1a1aa", width: 5 },
+]
+
+// Ивенты (меняй даты/текст здесь). Время старта — UTC.
+const EVENTS = [
+  {
+    month: "NOV", day: 14, weekday: "Sat", mode: "Every gamemode", icon: "/overall.svg", format: "1v1", region: "All regions",
+    title: "Open Testing Weekend",
+    desc: "Extra testers online all weekend in every gamemode, so tier test queues move much faster.",
+    time: "05:00 PM", startsAt: Date.UTC(2026, 10, 14, 17, 0), durationH: 48,
+  },
+  {
+    month: "NOV", day: 21, weekday: "Sat", mode: "Pot", icon: "/pot.svg", format: "1v1", region: "NA",
+    title: "Pot PvP Ladder Night",
+    desc: "Two hours of Pot PvP on a live ladder. Win to climb, lose to drop, and finish as high as you can.",
+    time: "06:00 AM", startsAt: Date.UTC(2026, 10, 21, 6, 0), durationH: 2,
+  },
+  {
+    month: "DEC", day: 5, weekday: "Sat", mode: "NethOP", icon: "/nethop.svg", format: "4v4", region: "EU",
+    title: "NethOP Team Clash",
+    desc: "16 teams of four in full Netherite OP gear. Best-of-5 team fights, single elimination.",
+    time: "11:00 PM", startsAt: Date.UTC(2026, 11, 5, 23, 0), durationH: 4,
+  },
+]
+
+const FAQ_KEYS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+// Общие классы (цвета со скриншотов)
+const CARD = "bg-[#0f151e] border border-[#171f2b]"
+const SOFT = "bg-[#121823] border border-[#1b2433]"
+
+function DiscordIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" />
+    </svg>
+  )
+}
+
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"home" | "rankings" | "server-ip" | "events">("rankings")
+  const [activeTab, setActiveTab] = useState<TabId>("rankings")
   const [selectedMode, setSelectedMode] = useState<string>("overall")
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
@@ -399,29 +563,41 @@ export default function Home() {
   const [isInfoOpen, setIsInfoOpen] = useState<boolean>(false)
   const [isDiscordMenuOpen, setIsDiscordMenuOpen] = useState<boolean>(false)
   const [copiedIp, setCopiedIp] = useState<boolean>(false)
-  
+  const [openFaq, setOpenFaq] = useState<number | null>(1)
+  const [now, setNow] = useState<number | null>(null)
+  const [status, setStatus] = useState<{ online: boolean; players?: number; max?: number } | null>(null)
+
   const [currentLang, setCurrentLang] = useState<string>("Русский")
   const [isLangMenuOpen, setIsLangMenuOpen] = useState<boolean>(false)
-
-  const [theme, setTheme] = useState<"dark" | "midnight" | "sinus" | "light">("dark")
-  const [isThemeOpen, setIsThemeOpen] = useState(false)
 
   const t = (key: string) => {
     return translations[currentLang]?.[key] || translations["English"][key] || key
   }
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("combat_tiers_theme") as "dark" | "midnight" | "sinus" | "light"
-    if (savedTheme) setTheme(savedTheme)
     const savedLang = localStorage.getItem("Incorrect_lang")
     if (savedLang && translations[savedLang]) setCurrentLang(savedLang)
   }, [])
 
-  const changeTheme = (newTheme: "dark" | "midnight" | "sinus" | "light") => {
-    setTheme(newTheme)
-    localStorage.setItem("combat_tiers_theme", newTheme)
-    setIsThemeOpen(false)
-  }
+  // Время для обратного отсчёта ивентов
+  useEffect(() => {
+    setNow(Date.now())
+    const id = setInterval(() => setNow(Date.now()), 60_000)
+    return () => clearInterval(id)
+  }, [])
+
+  // Онлайн сервера
+  useEffect(() => {
+    let cancelled = false
+    fetch(`https://api.mcsrvstat.us/3/${SERVER_IP}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (cancelled) return
+        setStatus({ online: !!d.online, players: d.players?.online, max: d.players?.max })
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
 
   const changeLanguage = (langName: string) => {
     setCurrentLang(langName)
@@ -460,97 +636,163 @@ export default function Home() {
   }
 
   const copyServerIp = () => {
-    navigator.clipboard.writeText("IncorrectSMP.play.ski")
+    navigator.clipboard.writeText(SERVER_IP)
     setCopiedIp(true)
     setTimeout(() => setCopiedIp(false), 2000)
   }
 
-  // Список режимов для вкладок со скриншота 1 (включая LTMs)
-  const modes = [
-    { id: "overall", label: "Overall", icon: "/overall.svg" },
-    { id: "LTMs", label: "LTMs", icon: "/ltm's.svg" },
-    { id: "Vanilla", label: "Vanilla", icon: "/vanilla.svg" },
-    { id: "UHC", label: "UHC", icon: "/uhc.svg" },
-    { id: "Pot", label: "Pot", icon: "/pot.svg" },
-    { id: "NethOP", label: "NethOP", icon: "/nethop.svg" },
-    { id: "SMP", label: "SMP", icon: "/smp.svg" },
-    { id: "Sword", label: "Sword", icon: "/sword.svg" },
-    { id: "Axe", label: "Axe", icon: "/axe.svg" },
-    { id: "Mace", label: "Mace", icon: "/mace.svg" },
-  ]
+  const goTo = (tab: TabId, mode?: string) => {
+    setActiveTab(tab)
+    if (mode) setSelectedMode(mode)
+    setIsDiscordMenuOpen(false)
+    setIsLangMenuOpen(false)
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
-  const themeStyles = {
-    dark: {
-      bg: "bg-[#0b0e14]",
-      textColor: "text-white",
-      cardBg: "bg-[#10141d]",
-      border: "border-zinc-800/80",
-      accentInput: "focus:border-amber-500",
-    },
-    midnight: {
-      bg: "bg-[#000000]",
-      textColor: "text-white",
-      cardBg: "bg-[#080808]",
-      border: "border-zinc-900",
-      accentInput: "focus:border-zinc-500",
-    },
-    sinus: {
-      bg: "bg-[#060f0b]",
-      textColor: "text-white",
-      cardBg: "bg-[#0d1a14]",
-      border: "border-emerald-950",
-      accentInput: "focus:border-emerald-500",
-    },
-    light: {
-      bg: "bg-[#f4f6f9]",
-      textColor: "text-zinc-900",
-      cardBg: "bg-white",
-      border: "border-zinc-200",
-      accentInput: "focus:border-blue-500",
-    },
-  }[theme]
+  const scrollToTierTest = () => {
+    document.getElementById("tier-test")?.scrollIntoView({ behavior: "smooth", block: "center" })
+  }
 
-  const activeLangFlag = languages.find(l => l.name === currentLang)?.flag || "🇷🇺"
+  const modeById = (id: string) => MODES.find((m) => m.id === id)
+  const activeLangFlag = languages.find((l) => l.name === currentLang)?.flag || "🇷🇺"
+
+  const eventStatus = (startsAt: number, durationH: number) => {
+    if (now === null) return null
+    const end = startsAt + durationH * 3600_000
+    if (now >= startsAt && now < end) return { live: true, text: "Live now" }
+    if (now >= end) return { live: false, text: "Ended" }
+    const diff = startsAt - now
+    const d = Math.floor(diff / 86_400_000)
+    const h = Math.floor((diff % 86_400_000) / 3_600_000)
+    return { live: false, text: d > 0 ? `Starts in ${d}d ${h}h` : `Starts in ${h}h ${Math.floor((diff % 3_600_000) / 60_000)}m` }
+  }
+
+  // ---------- Переиспользуемые куски ----------
+
+  const IpPill = ({ small = false }: { small?: boolean }) => (
+    <div className={`flex items-center gap-2 bg-[#161d2a] border border-[#1f293a] rounded-lg ${small ? "px-2 py-1 text-[11px]" : "px-3.5 py-2.5 text-sm"} font-bold text-white w-fit`}>
+      <span>{SERVER_IP}</span>
+      <button onClick={copyServerIp} className="text-zinc-400 hover:text-white cursor-pointer" aria-label="Copy IP">
+        {copiedIp ? <Check className={small ? "w-3 h-3" : "w-4 h-4"} /> : <Copy className={small ? "w-3 h-3" : "w-4 h-4"} />}
+      </button>
+    </div>
+  )
+
+  const ServerBadge = () => (
+    <div className="flex items-center gap-2.5">
+      <div className="w-10 h-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
+        <Trophy className="w-6 h-6 text-amber-400" />
+      </div>
+      <div className="flex flex-col gap-1">
+        <div className="text-[9px] tracking-wider text-zinc-400 uppercase leading-none">{t("serverIpLabel")}</div>
+        <div className="flex items-center gap-1.5">
+          <IpPill small />
+          <a href={DISCORD_URL} target="_blank" rel="noreferrer" className="w-6 h-6 rounded-md bg-[#2f5bff] hover:bg-[#4a70ff] flex items-center justify-center text-white transition">
+            <DiscordIcon className="w-3.5 h-3.5" />
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+
+  const CardHeader = ({ title, subtitle }: { title: string; subtitle?: string }) => (
+    <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+      <div>
+        <h1 className="text-xl font-extrabold text-white tracking-tight">{title}</h1>
+        {subtitle && <p className="text-[11px] text-zinc-400 mt-1">{subtitle}</p>}
+      </div>
+      <div className="flex items-center gap-5">
+        <button
+          onClick={() => setIsInfoOpen(true)}
+          className="flex items-center gap-2 bg-[#1a2230] hover:bg-[#222c3e] text-white text-xs font-medium px-3.5 py-2 rounded-lg transition cursor-pointer"
+        >
+          <Info className="w-3.5 h-3.5" />
+          <span>{t("information")}</span>
+        </button>
+        <ServerBadge />
+      </div>
+    </div>
+  )
+
+  const PageHeading = ({ children, action }: { children: ReactNode; action?: ReactNode }) => (
+    <div className="flex items-end justify-between">
+      <h2 className="text-xl font-extrabold text-white tracking-tight">{children}</h2>
+      {action}
+    </div>
+  )
+
+  const EventCard = ({ ev }: { ev: (typeof EVENTS)[number] }) => {
+    const st = eventStatus(ev.startsAt, ev.durationH)
+    return (
+      <button
+        onClick={() => goTo("events")}
+        className={`${CARD} rounded-2xl flex overflow-hidden text-left hover:border-[#243045] transition cursor-pointer`}
+      >
+        <div className="w-[86px] shrink-0 bg-[#0b1018] flex flex-col items-center justify-center py-4">
+          <span className="text-[10px] font-bold text-amber-400 tracking-wider">{ev.month}</span>
+          <span className="text-3xl font-extrabold text-white leading-tight">{ev.day}</span>
+          <span className="text-[10px] text-zinc-400">{ev.weekday}</span>
+        </div>
+        <div className="p-4 flex flex-col gap-1.5 min-w-0">
+          <div className="flex items-center gap-1.5 text-[10px] text-zinc-300">
+            <img src={ev.icon} alt="" className="w-3.5 h-3.5 object-contain" />
+            <span>{ev.mode}</span>
+            <span className="text-zinc-600">·</span>
+            <span className="text-zinc-400">{ev.format}</span>
+            <span className="text-zinc-600">·</span>
+            <span className="text-zinc-400">{ev.region}</span>
+          </div>
+          <div className="text-[15px] font-bold text-white">{ev.title}</div>
+          <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2">{ev.desc}</p>
+          <div className="flex items-center gap-2 text-[11px] mt-1">
+            <span className="font-bold text-white">{ev.time}</span>
+            {st && <span className={st.live ? "text-emerald-400 font-semibold" : "text-zinc-400"}>{st.text}</span>}
+          </div>
+        </div>
+      </button>
+    )
+  }
+
+  const MaxW = "mx-auto w-full max-w-[1280px] px-[30px]"
 
   return (
-    <main className={`min-h-screen ${themeStyles.bg} ${themeStyles.textColor} flex flex-col items-center py-6 px-6 relative transition-colors duration-300 w-full`}>
-      
-      {/* Верхняя панель навигации */}
-      <header className={`w-full max-w-[1720px] flex items-center justify-between ${themeStyles.cardBg} border ${themeStyles.border} px-8 py-4 rounded-2xl shadow-xl mb-8 relative`}>
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("rankings")}>
-            <img src="/logo.png" alt="IncTiers Logo" className="h-10 w-auto object-contain scale-105" />
-          </div>
+    <main className="min-h-screen bg-[#0d121a] text-white flex flex-col w-full">
+      <div className={`${MaxW} pt-6 flex flex-col gap-8`}>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-300 font-medium">
-            <button 
-              onClick={() => setActiveTab("home")}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all cursor-pointer ${activeTab === "home" ? "bg-zinc-800/80 text-white font-bold" : "hover:text-white"}`}
+        {/* ===== ШАПКА ===== */}
+        <header className="grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center gap-4 bg-[#0f141c] border border-[#171f2b] rounded-2xl px-4 py-3 relative z-40">
+          <button onClick={() => goTo("home")} className="flex items-center cursor-pointer w-fit">
+            <img src="/logo.png" alt="IncTiers Logo" className="h-9 w-auto object-contain" />
+          </button>
+
+          <nav className="hidden md:flex items-center gap-1 text-sm font-medium">
+            <button
+              onClick={() => goTo("home")}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl transition cursor-pointer ${activeTab === "home" ? "text-white" : "text-zinc-400 hover:text-white"}`}
             >
-              <HomeIcon className="w-4 h-4 text-zinc-400" />
+              <HomeIcon className="w-[18px] h-[18px]" />
               <span>{t("home")}</span>
             </button>
-
-            <button 
-              onClick={() => setActiveTab("rankings")}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all cursor-pointer ${activeTab === "rankings" ? "bg-zinc-800/80 text-white font-bold" : "hover:text-white"}`}
+            <button
+              onClick={() => goTo("rankings")}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl transition cursor-pointer ${activeTab === "rankings" ? "text-white" : "text-zinc-400 hover:text-white"}`}
             >
-              <Trophy className="w-4 h-4 text-amber-500" />
+              <Trophy className="w-[18px] h-[18px]" />
               <span>{t("rankings")}</span>
             </button>
-            
+
             <div className="relative">
-              <button 
+              <button
                 onClick={() => setIsDiscordMenuOpen(!isDiscordMenuOpen)}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl hover:text-white transition-all cursor-pointer"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-zinc-400 hover:text-white transition cursor-pointer"
               >
-                <Disc className="w-4 h-4 text-zinc-400" />
+                <Gamepad2 className="w-[18px] h-[18px]" />
                 <span>{t("discords")}</span>
-                <ChevronDown className="w-3 h-3 text-zinc-400" />
+                <ChevronDown className="w-3.5 h-3.5" />
               </button>
               {isDiscordMenuOpen && (
-                <div className={`absolute left-0 top-full mt-2 w-56 ${themeStyles.cardBg} border ${themeStyles.border} rounded-xl shadow-xl overflow-hidden z-50 p-1.5 flex flex-col gap-1 text-left`}>
-                  <a href="https://discord.gg/Y8e2REfz3A" target="_blank" rel="noreferrer" className="w-full px-3 py-2 rounded-lg text-xs hover:bg-zinc-800/60 text-zinc-300 hover:text-white flex items-center justify-between transition-colors">
+                <div className="absolute left-0 top-full mt-2 w-56 bg-[#0f141c] border border-[#171f2b] rounded-xl shadow-xl overflow-hidden z-50 p-1.5 flex flex-col gap-1 text-left">
+                  <a href={DISCORD_URL} target="_blank" rel="noreferrer" className="w-full px-3 py-2 rounded-lg text-xs hover:bg-zinc-800/60 text-zinc-300 hover:text-white flex items-center justify-between transition-colors">
                     <span className="font-medium">STiers</span>
                     <ExternalLink className="w-3.5 h-3.5 text-zinc-500" />
                   </a>
@@ -558,64 +800,60 @@ export default function Home() {
               )}
             </div>
 
-            <button 
-              onClick={() => setActiveTab("server-ip")}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all cursor-pointer ${activeTab === "server-ip" ? "bg-zinc-800/80 text-white font-bold" : "hover:text-white"}`}
+            <button
+              onClick={() => goTo("server-ip")}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl transition cursor-pointer ${activeTab === "server-ip" ? "text-white" : "text-zinc-400 hover:text-white"}`}
             >
-              <Server className="w-4 h-4 text-zinc-400" />
+              <Server className="w-[18px] h-[18px]" />
               <span>{t("serverIp")}</span>
             </button>
-
-            <button 
-              onClick={() => setActiveTab("events")}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all cursor-pointer ${activeTab === "events" ? "bg-zinc-800/80 text-white font-bold" : "hover:text-white"}`}
+            <button
+              onClick={() => goTo("events")}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl transition cursor-pointer ${activeTab === "events" ? "text-white" : "text-zinc-400 hover:text-white"}`}
             >
-              <Calendar className="w-4 h-4 text-zinc-400" />
+              <Calendar className="w-[18px] h-[18px]" />
               <span>{t("events")}</span>
             </button>
           </nav>
-        </div>
 
-        <div className="flex items-center gap-4">
-          {/* Выбор языка */}
-          <div className="relative">
-            <button
-              onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-              className="flex items-center gap-2 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 px-3 py-2 rounded-xl text-xs text-zinc-200 cursor-pointer transition"
-            >
-              <span className="text-base">{activeLangFlag}</span>
-            </button>
-
-            {isLangMenuOpen && (
-              <div className={`absolute right-0 top-full mt-2 w-72 ${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl shadow-2xl overflow-hidden z-50 p-3 grid grid-cols-2 gap-1.5`}>
-                <div className="col-span-2 text-[10px] font-bold text-zinc-500 uppercase px-2 pb-1 tracking-wider">
-                  Язык / Language
+          <div className="flex items-center justify-end gap-3">
+            <div className="relative">
+              <button
+                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                className="text-lg leading-none cursor-pointer hover:scale-110 transition"
+                aria-label="Language"
+              >
+                {activeLangFlag}
+              </button>
+              {isLangMenuOpen && (
+                <div className="absolute right-0 top-full mt-3 w-72 bg-[#0f141c] border border-[#171f2b] rounded-2xl shadow-2xl overflow-hidden z-50 p-3 grid grid-cols-2 gap-1.5">
+                  <div className="col-span-2 text-[10px] font-bold text-zinc-500 uppercase px-2 pb-1 tracking-wider">
+                    Язык / Language
+                  </div>
+                  {languages.map((lang) => {
+                    const isSelected = currentLang === lang.name
+                    return (
+                      <button
+                        key={lang.name}
+                        onClick={() => changeLanguage(lang.name)}
+                        className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium cursor-pointer transition ${
+                          isSelected ? "bg-zinc-800 text-white border border-zinc-700" : "hover:bg-zinc-800/50 text-zinc-400 hover:text-zinc-200 border border-transparent"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-base">{lang.flag}</span>
+                          <span>{lang.name}</span>
+                        </div>
+                        {isSelected && <Check className="w-3.5 h-3.5 text-amber-400" />}
+                      </button>
+                    )
+                  })}
                 </div>
-                {languages.map((lang) => {
-                  const isSelected = currentLang === lang.name
-                  return (
-                    <button
-                      key={lang.name}
-                      onClick={() => changeLanguage(lang.name)}
-                      className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium cursor-pointer transition ${
-                        isSelected ? "bg-zinc-800 text-white border border-zinc-700 shadow-sm" : "hover:bg-zinc-800/50 text-zinc-400 hover:text-zinc-200 border border-transparent"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-base">{lang.flag}</span>
-                        <span>{lang.name}</span>
-                      </div>
-                      {isSelected && <Check className="w-3.5 h-3.5 text-amber-400" />}
-                    </button>
-                  )
-                })}
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          <div className="w-64 relative">
-            <div className="relative flex items-center">
-              <Search className="absolute left-3 w-4 h-4 text-zinc-500 pointer-events-none" />
+            <div className="relative w-40 sm:w-[247px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
               <input
                 type="text"
                 placeholder={t("searchPlaceholder")}
@@ -625,202 +863,390 @@ export default function Home() {
                   if (errorText) setErrorText("")
                 }}
                 onKeyDown={handleKeyDown}
-                className={`w-full ${theme === "light" ? "bg-zinc-100" : "bg-black/30"} border ${themeStyles.border} rounded-xl pl-9 pr-9 py-2 text-xs placeholder-zinc-500 focus:outline-none ${themeStyles.accentInput} transition-colors`}
+                className="w-full bg-[#171d29] border border-transparent focus:border-amber-500/60 rounded-2xl pl-9 pr-9 py-2.5 text-xs placeholder-zinc-500 focus:outline-none transition-colors"
               />
-              <span className="absolute right-3 text-[10px] text-zinc-500 border border-zinc-700/50 px-1.5 py-0.5 rounded">/</span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-zinc-400 bg-[#0f141c] px-1.5 py-0.5 rounded">/</span>
+              {errorText && <span className="absolute -bottom-5 left-1 text-[10px] text-red-400 font-medium">{errorText}</span>}
             </div>
-            {errorText && <span className="absolute -bottom-4 left-1 text-[10px] text-red-400 font-medium">{errorText}</span>}
           </div>
+        </header>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsThemeOpen(!isThemeOpen)}
-              className={`p-2 rounded-xl ${theme === "light" ? "bg-zinc-100 hover:bg-zinc-200" : "bg-black/30 hover:bg-zinc-800/60"} border ${themeStyles.border} text-xs transition-colors cursor-pointer relative`}
-              title="Тема"
-            >
-              <Palette className="w-4 h-4 text-amber-400" />
-              {isThemeOpen && (
-                <div className={`absolute right-0 top-full mt-2 w-36 ${themeStyles.cardBg} border ${themeStyles.border} rounded-xl shadow-xl overflow-hidden z-50 p-1 flex flex-col gap-1 text-left`}>
-                  <button onClick={() => changeTheme("dark")} className="w-full px-2 py-1.5 rounded text-[11px] hover:bg-zinc-800/60 cursor-pointer">Dark</button>
-                  <button onClick={() => changeTheme("midnight")} className="w-full px-2 py-1.5 rounded text-[11px] hover:bg-zinc-800/60 cursor-pointer">Midnight</button>
-                  <button onClick={() => changeTheme("sinus")} className="w-full px-2 py-1.5 rounded text-[11px] hover:bg-zinc-800/60 cursor-pointer">Sinus</button>
-                  <button onClick={() => changeTheme("light")} className="w-full px-2 py-1.5 rounded text-[11px] hover:bg-zinc-800/60 cursor-pointer">Light ☀️</button>
+        {/* ===== HOME ===== */}
+        {activeTab === "home" && (
+          <div className="flex flex-col gap-12">
+            {/* Hero + Top players */}
+            <section className={`${CARD} rounded-3xl overflow-hidden grid grid-cols-1 lg:grid-cols-2`}>
+              <div className="p-10 flex flex-col justify-center gap-6 bg-gradient-to-br from-[#121923] to-[#0f151e]">
+                <img src="/logo.png" alt="IncTiers Logo" className="h-20 w-auto object-contain self-start" />
+                <div>
+                  <h2 className="text-3xl font-extrabold tracking-tight mb-3">{t("heroTitle")}</h2>
+                  <p className="text-zinc-400 text-sm leading-relaxed max-w-md">{t("heroDesc")}</p>
                 </div>
-              )}
-            </button>
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => goTo("rankings", "overall")}
+                    className="flex items-center gap-2 bg-[#f4f4f5] hover:bg-white text-black font-bold px-5 py-3 rounded-xl transition text-xs cursor-pointer"
+                  >
+                    <span>{t("viewRankings")}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={scrollToTierTest}
+                    className="bg-[#1a2230] hover:bg-[#222c3e] text-white font-semibold px-5 py-3 rounded-xl transition text-xs cursor-pointer"
+                  >
+                    {t("getTierTested")}
+                  </button>
+                </div>
+              </div>
 
-            <button
-              onClick={() => setIsInfoOpen(true)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl ${theme === "light" ? "bg-zinc-100 hover:bg-zinc-200" : "bg-black/30 hover:bg-zinc-800/60"} border ${themeStyles.border} text-xs font-medium transition-colors cursor-pointer`}
-            >
-              <Info className="w-4 h-4 text-cyan-400" />
-              <span>{t("information")}</span>
-            </button>
-          </div>
-        </div>
-      </header>
+              <div className="p-6 lg:border-l border-[#171f2b] flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-[11px] font-bold tracking-wider text-zinc-300">
+                    <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{t("topPlayers")}</span>
+                  </div>
+                  <button onClick={() => goTo("rankings", "overall")} className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1 cursor-pointer transition">
+                    {t("fullLeaderboard")} <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+                <RankingTable players={rankedPlayers.slice(0, 3)} selectedMode="overall" />
+              </div>
+            </section>
 
-      {/* ВКЛАДКА: HOME */}
-      {activeTab === "home" && (
-        <div className="w-full max-w-[1720px] flex flex-col gap-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div className={`lg:col-span-5 ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden`}>
+            {/* Server bar */}
+            <section className={`${CARD} rounded-2xl px-6 py-4 flex flex-wrap items-center gap-x-8 gap-y-3`}>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-amber-500/15 flex items-center justify-center">
+                  <Trophy className="w-5 h-5 text-amber-400" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <div className="text-[9px] tracking-wider text-zinc-400 uppercase leading-none">{t("serverIpLabel")}</div>
+                  <IpPill />
+                </div>
+              </div>
+              <div className="flex flex-col gap-0.5 text-xs">
+                <div className="flex items-center gap-2 font-semibold text-white">
+                  <span className={`w-2 h-2 rounded-full ${status ? (status.online ? "bg-emerald-500" : "bg-red-500") : "bg-zinc-600"}`} />
+                  {status ? (status.online ? t("online") : t("offline")) : "…"}
+                </div>
+                {status?.online && status.players !== undefined && (
+                  <div className="text-zinc-400 text-[11px]">
+                    {status.players.toLocaleString()} / {(status.max ?? 0).toLocaleString()} {t("playersOnline")}
+                  </div>
+                )}
+              </div>
+              <div className="text-[11px] text-zinc-400">{VERSIONS}</div>
+              <button onClick={() => goTo("server-ip")} className="ml-auto text-[11px] text-zinc-400 hover:text-white flex items-center gap-1 cursor-pointer transition">
+                {t("serverIp")} <ArrowRight className="w-3 h-3" />
+              </button>
+            </section>
+
+            {/* Gamemodes */}
+            <section className="flex flex-col gap-5">
+              <PageHeading>{t("gamemodes")}</PageHeading>
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+                {GAMEMODE_IDS.map((id) => {
+                  const m = modeById(id)!
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => goTo("rankings", id)}
+                      className={`${CARD} rounded-2xl py-5 flex flex-col items-center gap-3 hover:border-[#2a3750] hover:-translate-y-0.5 transition cursor-pointer`}
+                    >
+                      <div className="w-14 h-14 rounded-xl bg-[#0b1018] border border-[#171f2b] flex items-center justify-center">
+                        <img src={m.icon} alt={m.label} className="w-8 h-8 object-contain" />
+                      </div>
+                      <span className="text-xs font-bold text-zinc-200">{m.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </section>
+
+            {/* Get tier tested */}
+            <section id="tier-test" className={`${CARD} rounded-3xl p-10 grid grid-cols-1 lg:grid-cols-2 gap-10 bg-gradient-to-br from-[#101722] to-[#14161b]`}>
+              <div className="flex flex-col justify-center gap-4">
+                <h2 className="text-2xl font-extrabold">{t("getTierTestedTitle")}</h2>
+                <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">{t("getTierTestedDesc")}</p>
+                <div className="flex flex-wrap items-center gap-3 mt-2">
+                  <IpPill />
+                  <button onClick={() => setIsInfoOpen(true)} className="flex items-center gap-1.5 bg-[#1a2230] hover:bg-[#222c3e] text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition cursor-pointer">
+                    {t("learnMore")} <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+              <ol className="flex flex-col">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <li key={n} className="relative flex items-center gap-4 pb-5 last:pb-0 min-h-[52px]">
+                    {n < 5 && <span className="absolute left-[17px] top-9 bottom-0 w-px bg-zinc-700/60" />}
+                    <span className={`z-10 w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-xs font-bold ${n === 5 ? "bg-amber-500/15 text-amber-400 border border-amber-500/70" : "bg-[#1a2230] text-white"}`}>
+                      {n}
+                    </span>
+                    <p className="text-[13px] text-zinc-300">
+                      {n === 1 && (<>{t("step1Pre")} <b className="text-white">{SERVER_IP}</b> {t("step1Post")}</>)}
+                      {n === 2 && (<>{t("step2Pre")} <b className="text-white">/tiertest</b> {t("step2Post")}</>)}
+                      {n === 3 && t("step3")}
+                      {n === 4 && t("step4")}
+                      {n === 5 && t("step5")}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            {/* Tiers and points + Titles */}
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className={`${CARD} rounded-3xl p-6 flex flex-col gap-4`}>
+                <div>
+                  <h3 className="text-lg font-extrabold">{t("tiersAndPoints")}</h3>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{t("tiersAndPointsDesc")}</p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {TIER_ROWS.map((row, i) => (
+                    <div key={row.name} className={`flex items-center justify-between rounded-lg px-4 py-3 ${row.row}`}>
+                      <div className="flex items-center gap-2 text-sm font-bold">
+                        {row.trophy ? <Trophy className={`w-4 h-4 ${row.trophy}`} /> : <span className="w-4" />}
+                        <span>{row.name}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] font-bold">
+                        <span className="flex items-center gap-1 bg-black/30 rounded-full px-2.5 py-1">
+                          <ChevronsUp className="w-3 h-3" /> HT{i + 1} · {row.ht} {t("pts")}
+                        </span>
+                        <span className="flex items-center gap-1 bg-black/30 rounded-full px-2.5 py-1">
+                          <ChevronUp className="w-3 h-3" /> LT{i + 1} · {row.lt} {t("pts")}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className={`${CARD} rounded-3xl p-6 flex flex-col gap-4`}>
+                <div>
+                  <h3 className="text-lg font-extrabold">{t("titles")}</h3>
+                  <p className="text-xs text-zinc-400 mt-1">{t("titlesDesc")}</p>
+                </div>
+                <div className="flex flex-col gap-3.5">
+                  {TITLE_ROWS.map((row) => (
+                    <div key={row.name} className="flex items-start gap-3">
+                      <Gem className="w-5 h-5 mt-0.5 shrink-0" style={{ color: row.color }} />
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="font-bold" style={{ color: row.color }}>{row.name}</span>
+                          <span className="text-zinc-400 text-[11px]">
+                            {row.min === 0 ? `${t("under")} 10 ${t("pointsWord")}` : `${row.min}+ ${t("pointsWord")}`}
+                          </span>
+                        </div>
+                        <div className="h-1 bg-zinc-800 rounded-full mt-1.5 overflow-hidden">
+                          <div className="h-full rounded-full" style={{ width: `${row.width}%`, backgroundColor: row.color }} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Upcoming events */}
+            <section className="flex flex-col gap-5">
+              <PageHeading
+                action={
+                  <button onClick={() => goTo("events")} className="text-[11px] text-zinc-400 hover:text-white flex items-center gap-1 cursor-pointer transition">
+                    {t("allEvents")} <ArrowRight className="w-3 h-3" />
+                  </button>
+                }
+              >
+                {t("upcomingEvents")}
+              </PageHeading>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {EVENTS.map((ev) => <EventCard key={ev.title} ev={ev} />)}
+              </div>
+            </section>
+
+            {/* FAQ */}
+            <section className="flex flex-col gap-4">
               <div>
-                <img src="/logo.png" alt="IncTiers Logo" className="h-14 w-auto object-contain mb-6" />
-                <h1 className="text-3xl lg:text-4xl font-black tracking-tight mb-4 text-white">
-                  {t("heroTitle")}
-                </h1>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-8">
-                  {t("heroDesc")}
-                </p>
+                <h2 className="text-xl font-extrabold tracking-tight">{t("faqTitle")}</h2>
+                <p className="text-xs text-zinc-400 mt-1">{t("faqDesc")}</p>
               </div>
-              <div className="flex flex-wrap gap-4">
-                <button 
-                  onClick={() => setActiveTab("rankings")}
-                  className="flex items-center gap-2 bg-[#f4f4f5] hover:bg-white text-black font-bold px-5 py-3 rounded-xl transition text-xs cursor-pointer shadow-md"
-                >
-                  <span>{t("viewRankings")}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <button 
-                  onClick={copyServerIp}
-                  className="flex items-center gap-2 bg-[#181d28] hover:bg-[#202736] text-white font-medium px-5 py-3 rounded-xl transition text-xs border border-zinc-700/80 cursor-pointer"
-                >
-                  <span>{t("getTierTested")}</span>
-                </button>
+              <div className={`${CARD} rounded-2xl overflow-hidden divide-y divide-[#171f2b]`}>
+                {FAQ_KEYS.map((n) => {
+                  const open = openFaq === n
+                  return (
+                    <div key={n} className={`relative ${open ? "bg-[#121923]" : ""}`}>
+                      {open && <span className="absolute left-0 top-0 bottom-0 w-0.5 bg-amber-400" />}
+                      <button
+                        onClick={() => setOpenFaq(open ? null : n)}
+                        className="w-full flex items-center gap-4 px-6 py-5 text-left cursor-pointer"
+                      >
+                        <span className={`text-[11px] font-semibold w-5 ${open ? "text-amber-400" : "text-zinc-500"}`}>{String(n).padStart(2, "0")}</span>
+                        <span className="flex-1 text-sm font-semibold text-white">{t(`faq${n}q`)}</span>
+                        <span className={`w-7 h-7 rounded-md flex items-center justify-center ${open ? "bg-amber-500/15 text-amber-400" : "bg-[#1a2230] text-zinc-300"}`}>
+                          {open ? <X className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                        </span>
+                      </button>
+                      {open && (
+                        <div className="px-6 pb-6 pl-[68px] max-w-3xl">
+                          <p className="text-[13px] text-zinc-400 leading-relaxed">{t(`faq${n}a`)}</p>
+                          <button onClick={() => setIsInfoOpen(true)} className="mt-3 text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer">
+                            {t("learnMore")} <ArrowRight className="w-3 h-3" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
-            </div>
+            </section>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* ВКЛАДКА: RANKINGS (Идентично скриншотам 1, 2 и 3) */}
-      {activeTab === "rankings" && (
-        <div className="w-full max-w-[1720px] flex flex-col gap-6 mb-8">
-          
-          {/* Панель выбора режимов со иконками (как на скриншоте 1) */}
-          <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} p-3 rounded-2xl shadow-xl overflow-x-auto scrollbar-none`}>
-            <div className="flex items-center gap-2 min-w-max">
-              {modes.map((mode) => {
+        {/* ===== RANKINGS ===== */}
+        {activeTab === "rankings" && (
+          <div className="flex flex-col">
+            {/* Вкладки режимов */}
+            <div className="flex items-end gap-0.5 overflow-x-auto scrollbar-none relative z-10">
+              {MODES.map((mode) => {
                 const isActive = selectedMode === mode.id
                 return (
                   <button
                     key={mode.id}
                     onClick={() => setSelectedMode(mode.id)}
-                    className={`flex items-center gap-2.5 px-5 py-3 rounded-xl transition-all cursor-pointer border ${
-                      isActive 
-                        ? "bg-[#182236] border-amber-500/80 text-white shadow-md ring-1 ring-amber-500/20 font-bold" 
-                        : "bg-black/20 border-zinc-800/80 hover:bg-zinc-800/40 text-zinc-400 hover:text-zinc-200"
+                    className={`w-[100px] shrink-0 flex flex-col items-center gap-1.5 pt-3 pb-2.5 rounded-t-2xl border border-b-0 transition cursor-pointer ${
+                      isActive
+                        ? "bg-[#0f151e] border-[#171f2b] text-white border-b-2 border-b-white"
+                        : "bg-[#0c1119] border-[#141b26] text-zinc-500 hover:text-zinc-300"
                     }`}
                   >
-                    <img src={mode.icon} alt={mode.label} className={`w-4 h-4 object-contain ${isActive ? "opacity-100 filter drop-shadow(0 0 5px rgba(245,158,11,0.5))" : "opacity-60"}`} />
-                    <span className={`text-xs tracking-wide ${isActive ? "text-amber-400" : ""}`}>{mode.label}</span>
+                    <img src={mode.icon} alt={mode.label} className={`w-6 h-6 object-contain ${isActive ? "" : "opacity-50"}`} />
+                    <span className="text-xs font-bold">{mode.label}</span>
                   </button>
                 )
               })}
             </div>
-          </div>
 
-          {/* Таблица рейтингов или конкретный режим */}
-          <div className={`w-full ${themeStyles.cardBg} border ${themeStyles.border} rounded-3xl shadow-xl overflow-hidden p-6 flex flex-col gap-6`}>
-            {selectedMode === "overall" ? (
-              <RankingTable players={rankedPlayers} selectedMode={selectedMode} />
-            ) : (
-              <KitTier selectedKit={selectedMode} />
-            )}
-          </div>
-        </div>
-      )}
+            {/* Контент режима */}
+            <div className={`${CARD} rounded-3xl rounded-tl-none p-6 -mt-px`}>
+              {selectedMode === "overall" && (
+                <>
+                  <CardHeader
+                    title={t("overallTitle")}
+                    subtitle={`${rankedPlayers.length.toLocaleString()} ${t("playersRanked")}`}
+                  />
+                  <RankingTable players={rankedPlayers} selectedMode={selectedMode} />
+                </>
+              )}
 
-      {/* ВКЛАДКА: SERVER IP */}
-      {activeTab === "server-ip" && (
-        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-8`}>
-          <div>
-            <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Minecraft Server</div>
-            <h1 className="text-4xl font-black text-white mb-4">IncTiers Server IP</h1>
-            <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed">
-              IP-адрес сервера IncTiers — <span className="text-white font-bold">IncorrectSMP.play.ski</span>.
-            </p>
-          </div>
+              {selectedMode === "LTMs" && (
+                <>
+                  <CardHeader title={t("ltmTitle")} />
+                  <div className="py-8 text-center flex flex-col items-center gap-3">
+                    <h2 className="text-xl font-bold text-white">{t("ltmComing")}</h2>
+                    <p className="text-sm text-zinc-400 max-w-xl leading-relaxed">{t("ltmDesc")}</p>
+                  </div>
+                  <div className="h-16" />
+                </>
+              )}
 
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={copyServerIp}
-              className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-3.5 rounded-xl transition text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
-            >
-              <span>{copiedIp ? t("copied") : "IncorrectSMP.play.ski"}</span>
-              <Server className="w-4 h-4" />
-            </button>
+              {selectedMode !== "overall" && selectedMode !== "LTMs" && (
+                <>
+                  <CardHeader title={modeById(selectedMode)?.title || selectedMode} subtitle={t("tierRange")} />
+                  <KitTier selectedKit={selectedMode} />
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* ВКЛАДКА: EVENTS */}
-      {activeTab === "events" && (
-        <div className={`w-full max-w-[1720px] ${themeStyles.cardBg} border ${themeStyles.border} p-10 rounded-3xl shadow-xl flex flex-col gap-6`}>
-          <div>
-            <div className="text-amber-500 font-bold text-xs uppercase tracking-wider mb-2">Tournaments & Battles</div>
-            <h1 className="text-4xl font-black text-white mb-2">{t("upcomingEvents")}</h1>
+        {/* ===== SERVER IP ===== */}
+        {activeTab === "server-ip" && (
+          <div className={`${CARD} p-10 rounded-3xl flex flex-col gap-8`}>
+            <div>
+              <div className="text-amber-400 font-bold text-[11px] uppercase tracking-wider mb-2">Minecraft Server</div>
+              <h1 className="text-3xl font-extrabold text-white mb-3">IncTiers {t("serverIp")}</h1>
+              <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed">
+                {t("serverIpLabel")}: <span className="text-white font-bold">{SERVER_IP}</span> · {VERSIONS}
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <IpPill />
+              <a href={DISCORD_URL} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-[#2f5bff] hover:bg-[#4a70ff] text-white text-xs font-semibold px-4 py-3 rounded-lg transition">
+                <DiscordIcon className="w-4 h-4" /> Discord
+              </a>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Фирменный футер (как на скриншоте 3) */}
-      <footer className="w-full max-w-[1720px] mt-16 pt-12 pb-8 border-t border-zinc-800/60 text-zinc-400 text-xs flex flex-col md:flex-row justify-between gap-10">
-        <div className="flex flex-col gap-4 max-w-sm">
-          <img src="/logo.png" alt="IncTiers Logo" className="h-8 w-auto object-contain" />
-          <p className="text-zinc-500 leading-relaxed text-[11px]">
-            The Minecraft PvP tier list. Rankings, tier tests and events for Java and Bedrock players.
-          </p>
-          <div className="flex items-center gap-3 bg-[#10141d] border border-zinc-800 p-2.5 px-3 rounded-xl w-fit">
-            <span className="text-white font-bold">IncorrectSMP.play.ski</span>
-            <button onClick={copyServerIp} className="text-zinc-400 hover:text-white cursor-pointer">
-              <Server className="w-3.5 h-3.5" />
-            </button>
+        {/* ===== EVENTS ===== */}
+        {activeTab === "events" && (
+          <div className="flex flex-col gap-5">
+            <PageHeading>{t("upcomingEvents")}</PageHeading>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {EVENTS.map((ev) => <EventCard key={ev.title} ev={ev} />)}
+            </div>
           </div>
-          <div className="text-[10px] text-zinc-600">Java 1.21 - 26.3 • Bedrock</div>
-        </div>
+        )}
+      </div>
 
-        <div className="grid grid-cols-2 gap-12">
-          <div>
-            <div className="font-bold text-white text-[11px] uppercase tracking-wider mb-3">Rankings</div>
-            <div className="flex flex-col gap-2">
-              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("overall"); }} className="hover:text-white text-left transition cursor-pointer">Overall</button>
-              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("Vanilla"); }} className="hover:text-white text-left transition cursor-pointer">Vanilla</button>
-              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("UHC"); }} className="hover:text-white text-left transition cursor-pointer">UHC</button>
-              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("Pot"); }} className="hover:text-white text-left transition cursor-pointer">Pot</button>
-              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("NethOP"); }} className="hover:text-white text-left transition cursor-pointer">NethOP</button>
-              <button onClick={() => { setActiveTab("rankings"); setSelectedMode("Sword"); }} className="hover:text-white text-left transition cursor-pointer">Sword</button>
+      {/* ===== ФУТЕР ===== */}
+      <footer className="w-full mt-16 border-t border-[#171f2b] bg-[#0f151e]">
+        <div className={`${MaxW} pt-12 pb-6 flex flex-col gap-10`}>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-10 text-xs text-zinc-400">
+            <div className="flex flex-col gap-4 max-w-sm">
+              <img src="/logo.png" alt="IncTiers Logo" className="h-9 w-auto object-contain self-start" />
+              <p className="leading-relaxed text-[13px]">{t("footerDesc")}</p>
+              <IpPill />
+              <div className="text-[10px] text-zinc-500">{VERSIONS}</div>
+            </div>
+
+            <div>
+              <div className="font-bold text-zinc-400 text-[10px] uppercase tracking-wider mb-4">{t("rankings")}</div>
+              <div className="grid grid-cols-2 gap-x-6">
+                {[FOOTER_COL_1, FOOTER_COL_2].map((col, ci) => (
+                  <div key={ci} className="flex flex-col gap-3">
+                    {col.map((id) => {
+                      const m = modeById(id)!
+                      return (
+                        <button key={id} onClick={() => goTo("rankings", id)} className="flex items-center gap-2 text-[13px] hover:text-white text-left transition cursor-pointer">
+                          <img src={m.icon} alt="" className="w-3.5 h-3.5 object-contain" />
+                          <span>{m.label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div className="font-bold text-zinc-400 text-[10px] uppercase tracking-wider mb-4">{t("explore")}</div>
+              <div className="flex flex-col gap-3 text-[13px]">
+                <button onClick={() => goTo("server-ip")} className="hover:text-white text-left transition cursor-pointer">{t("serverIp")}</button>
+                <button onClick={() => goTo("events")} className="hover:text-white text-left transition cursor-pointer">{t("events")}</button>
+                <button onClick={() => setIsInfoOpen(true)} className="hover:text-white text-left transition cursor-pointer">{t("guides")}</button>
+                <button onClick={() => { goTo("home"); setOpenFaq(1) }} className="hover:text-white text-left transition cursor-pointer">FAQ</button>
+              </div>
             </div>
           </div>
 
-          <div>
-            <div className="font-bold text-white text-[11px] uppercase tracking-wider mb-3">Explore</div>
-            <div className="flex flex-col gap-2">
-              <button onClick={() => setActiveTab("server-ip")} className="hover:text-white text-left transition cursor-pointer">Server IP</button>
-              <button onClick={() => setActiveTab("events")} className="hover:text-white text-left transition cursor-pointer">Events</button>
-              <button onClick={() => setIsInfoOpen(true)} className="hover:text-white text-left transition cursor-pointer">Guides</button>
-              <button onClick={() => setIsInfoOpen(true)} className="hover:text-white text-left transition cursor-pointer">FAQ</button>
-            </div>
+          <div className="border-t border-[#171f2b] pt-5 text-[11px] text-zinc-400 flex flex-col sm:flex-row justify-between gap-2">
+            <div>© 2026 IncTiers. All rights reserved.</div>
+            <div>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</div>
           </div>
         </div>
       </footer>
-
-      <div className="w-full max-w-[1720px] pb-6 text-[10px] text-zinc-600 flex flex-col sm:flex-row justify-between gap-2 border-t border-zinc-900 pt-4">
-        <div>© 2026 IncTiers. All rights reserved.</div>
-        <div>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</div>
-      </div>
 
       <PlayerModal player={selectedPlayer} isOpen={!!selectedPlayer} onClose={() => setSelectedPlayer(null)} />
 
       {/* Модальное окно Information */}
       {isInfoOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className={`${themeStyles.cardBg} border ${themeStyles.border} rounded-2xl w-full max-w-lg p-6 relative shadow-2xl`}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setIsInfoOpen(false)}>
+          <div className={`${CARD} rounded-2xl w-full max-w-lg p-6 relative shadow-2xl`} onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setIsInfoOpen(false)} className="absolute top-4 right-4 text-zinc-400 hover:text-white bg-zinc-900/80 p-1.5 rounded-lg border border-zinc-800 cursor-pointer">
               <X className="w-4 h-4" />
             </button>
-            <div className="text-lg font-bold text-white mb-4">Information</div>
+            <div className="text-lg font-bold text-white mb-3">{t("information")}</div>
+            <p className="text-sm text-zinc-400 leading-relaxed">{t("faq2a")}</p>
           </div>
         </div>
       )}
