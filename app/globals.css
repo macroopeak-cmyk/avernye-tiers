@@ -183,7 +183,35 @@
     background-position: 0% 50%;
   }
 }
+/* --- Анимация плавного появления снизу вверх (Fade In Up) --- */
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Задержки для каскадного появления нескольких кнопок подряд */
+.animation-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
 .animate-bg-gradient {
   background: linear-gradient(-45deg, #0f0a1a, #181028, #261642, #1b0f30, #0f0a1a) !important;
   background-size: 400% 400% !important;
