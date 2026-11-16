@@ -1158,98 +1158,211 @@ export default function Home() {
           </div>
         )}
 
-        {/* ===== SERVER IP ===== */}
+{/* ===== SERVER IP ===== */}
         {activeTab === "server-ip" && (
-          <div className={`${CARD} p-10 rounded-3xl flex flex-col gap-8`}>
-            <div>
-              <div className="text-amber-400 font-bold text-[11px] uppercase tracking-wider mb-2">Minecraft Server</div>
-              <h1 className="text-3xl font-extrabold text-white mb-3">IncTiers {t("serverIp")}</h1>
-              <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed">
-                {t("serverIpLabel")}: <span className="text-white font-bold">{SERVER_IP}</span> · {VERSIONS}
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <IpPill />
-              <a href={DISCORD_URL} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-[#2f5bff] hover:bg-[#4a70ff] text-white text-xs font-semibold px-4 py-3 rounded-lg transition">
-                <DiscordIcon className="w-4 h-4" /> Discord
-              </a>
-            </div>
-          </div>
-        )}
+          <div className="flex flex-col gap-10 pb-4">
+            {/* Верхний баннер с IP и статусом сервера */}
+            <section className={`${CARD} rounded-3xl p-8 md:p-10 bg-gradient-to-br from-[#131924] via-[#0f151e] to-[#0f151e] flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8`}>
+              <div className="flex flex-col gap-5 max-w-xl">
+                <div className="flex items-center gap-2.5 text-[11px] font-bold tracking-widest text-amber-400 uppercase">
+                  <span className="w-4 h-[2px] bg-amber-400 inline-block" />
+                  <span>MINECRAFT SERVER</span>
+                </div>
+                <h1 className="text-4xl md:text-[42px] font-extrabold text-white tracking-tight leading-none">
+                  IncTiers Server IP
+                </h1>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  The IncTiers Minecraft server IP is <span className="text-white font-bold">{SERVER_IP}</span>. Java players can join on any version from 1.21 - 26.3, and Bedrock players can join on port 19132.
+                </p>
+                <div className="pt-1">
+                  <IpPill />
+                </div>
+              </div>
 
-        {/* ===== EVENTS ===== */}
-        {activeTab === "events" && (
-          <div className="flex flex-col gap-5">
-            <PageHeading>{t("upcomingEvents")}</PageHeading>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              {EVENTS.map((ev) => <EventCard key={ev.title} ev={ev} />)}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* ===== ФУТЕР ===== */}
-      <footer className="w-full mt-16 border-t border-[#171f2b] bg-[#0f151e]">
-        <div className={`${MaxW} pt-12 pb-6 flex flex-col gap-10`}>
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-10 text-xs text-zinc-400">
-            <div className="flex flex-col gap-4 max-w-sm">
-              <img src="/logo.png" alt="IncTiers Logo" className="h-9 w-auto object-contain self-start" />
-              <p className="leading-relaxed text-[13px]">{t("footerDesc")}</p>
-              <IpPill />
-              <div className="text-[10px] text-zinc-500">{VERSIONS}</div>
-            </div>
-
-            <div>
-              <div className="font-bold text-zinc-400 text-[10px] uppercase tracking-wider mb-4">{t("rankings")}</div>
-              <div className="grid grid-cols-2 gap-x-6">
-                {[FOOTER_COL_1, FOOTER_COL_2].map((col, ci) => (
-                  <div key={ci} className="flex flex-col gap-3">
-                    {col.map((id) => {
-                      const m = modeById(id)!
-                      return (
-                        <button key={id} onClick={() => goTo("rankings", id)} className="flex items-center gap-2 text-[13px] hover:text-white text-left transition cursor-pointer">
-                          <img src={m.icon} alt="" className="w-3.5 h-3.5 object-contain" />
-                          <span>{m.label}</span>
-                        </button>
-                      )
-                    })}
+              {/* Правая карточка SERVER STATUS */}
+              <div className="bg-[#0b1018] border border-[#171f2b] rounded-2xl px-6 py-5 flex items-center gap-5 w-full lg:w-auto lg:min-w-[340px]">
+                <div className="w-16 h-16 rounded-2xl bg-amber-500/15 flex items-center justify-center shrink-0">
+                  <Trophy className="w-9 h-9 text-amber-400" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <div className="text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
+                    SERVER STATUS
                   </div>
-                ))}
+                  <div className="flex items-center gap-2 text-lg font-extrabold text-white">
+                    <span className={`w-2.5 h-2.5 rounded-full ${status ? (status.online ? "bg-emerald-500" : "bg-red-500") : "bg-emerald-500"}`} />
+                    <span>{status ? (status.online ? t("online") : t("offline")) : t("online")}</span>
+                  </div>
+                  <div className="text-xs text-zinc-400">
+                    {status?.online && status.players !== undefined
+                      ? `${status.players.toLocaleString()} / ${(status.max ?? 10000).toLocaleString()} ${t("playersOnline")}`
+                      : `2,583 / 10,000 ${t("playersOnline")}`}
+                  </div>
+                </div>
               </div>
-            </div>
+            </section>
 
-            <div>
-              <div className="font-bold text-zinc-400 text-[10px] uppercase tracking-wider mb-4">{t("explore")}</div>
-              <div className="flex flex-col gap-3 text-[13px]">
-                <button onClick={() => goTo("server-ip")} className="hover:text-white text-left transition cursor-pointer">{t("serverIp")}</button>
-                <button onClick={() => goTo("events")} className="hover:text-white text-left transition cursor-pointer">{t("events")}</button>
-                <button onClick={() => setIsInfoOpen(true)} className="hover:text-white text-left transition cursor-pointer">{t("guides")}</button>
-                <button onClick={() => { goTo("home"); setOpenFaq(1) }} className="hover:text-white text-left transition cursor-pointer">FAQ</button>
+            {/* 4 карточки характеристик */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className={`${CARD} rounded-2xl px-6 py-5 flex flex-col gap-1.5`}>
+                <span className="text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
+                  {t("serverAddress")}
+                </span>
+                <span className="text-base font-extrabold text-white">{SERVER_IP}</span>
               </div>
-            </div>
-          </div>
+              <div className={`${CARD} rounded-2xl px-6 py-5 flex flex-col gap-1.5`}>
+                <span className="text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
+                  {t("javaEdition")}
+                </span>
+                <span className="text-base font-extrabold text-white">1.21 - 26.3</span>
+              </div>
+              <div className={`${CARD} rounded-2xl px-6 py-5 flex flex-col gap-1.5`}>
+                <span className="text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
+                  {t("bedrockEdition")}
+                </span>
+                <span className="text-base font-extrabold text-white">Port 19132</span>
+              </div>
+              <div className={`${CARD} rounded-2xl px-6 py-5 flex flex-col gap-1.5`}>
+                <span className="text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
+                  TIER TESTS
+                </span>
+                <span className="text-base font-extrabold text-white">/tiertest</span>
+              </div>
+            </section>
 
-          <div className="border-t border-[#171f2b] pt-5 text-[11px] text-zinc-400 flex flex-col sm:flex-row justify-between gap-2">
-            <div>© 2026 IncTiers. All rights reserved.</div>
-            <div>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</div>
-          </div>
-        </div>
-      </footer>
+            {/* Инструкции: How to join */}
+            <section className="flex flex-col gap-5">
+              <PageHeading>How to join the IncTiers server</PageHeading>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                {/* Java Edition */}
+                <div className={`${CARD} rounded-2xl p-7 flex flex-col gap-5`}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-[#161d2a] border border-[#1f293a] flex items-center justify-center">
+                      <img src="/vanilla.svg" alt="Java" className="w-5 h-5 object-contain" />
+                    </div>
+                    <h3 className="text-base font-extrabold text-white">Java Edition</h3>
+                  </div>
+                  <ol className="flex flex-col gap-3.5 text-[13px] text-zinc-400">
+                    <li className="flex items-center gap-3.5">
+                      <span className="w-6 h-6 rounded-md bg-[#1a2230] text-zinc-200 font-bold text-xs flex items-center justify-center shrink-0">1</span>
+                      <span>Open Minecraft: Java Edition (any version from 1.21 - 26.3).</span>
+                    </li>
+                    <li className="flex items-center gap-3.5">
+                      <span className="w-6 h-6 rounded-md bg-[#1a2230] text-zinc-200 font-bold text-xs flex items-center justify-center shrink-0">2</span>
+                      <span>Click Multiplayer, then Add Server.</span>
+                    </li>
+                    <li className="flex items-center gap-3.5">
+                      <span className="w-6 h-6 rounded-md bg-[#1a2230] text-zinc-200 font-bold text-xs flex items-center justify-center shrink-0">3</span>
+                      <span>Enter <b className="text-white">{SERVER_IP}</b> as the Server Address and click Done.</span>
+                    </li>
+                    <li className="flex items-center gap-3.5">
+                      <span className="w-6 h-6 rounded-md bg-[#1a2230] text-zinc-200 font-bold text-xs flex items-center justify-center shrink-0">4</span>
+                      <span>Select IncTiers in the server list and click Join Server.</span>
+                    </li>
+                  </ol>
+                </div>
 
-      <PlayerModal player={selectedPlayer} isOpen={!!selectedPlayer} onClose={() => setSelectedPlayer(null)} />
+                {/* Bedrock Edition */}
+                <div className={`${CARD} rounded-2xl p-7 flex flex-col gap-5`}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-[#161d2a] border border-[#1f293a] flex items-center justify-center">
+                      <img src="/smp.svg" alt="Bedrock" className="w-5 h-5 object-contain" />
+                    </div>
+                    <h3 className="text-base font-extrabold text-white">Bedrock Edition</h3>
+                  </div>
+                  <ol className="flex flex-col gap-3.5 text-[13px] text-zinc-400">
+                    <li className="flex items-center gap-3.5">
+                      <span className="w-6 h-6 rounded-md bg-[#1a2230] text-zinc-200 font-bold text-xs flex items-center justify-center shrink-0">1</span>
+                      <span>Open Minecraft: Bedrock Edition and go to Play, then Servers.</span>
+                    </li>
+                    <li className="flex items-center gap-3.5">
+                      <span className="w-6 h-6 rounded-md bg-[#1a2230] text-zinc-200 font-bold text-xs flex items-center justify-center shrink-0">2</span>
+                      <span>Scroll down and tap Add Server.</span>
+                    </li>
+                    <li className="flex items-center gap-3.5">
+                      <span className="w-6 h-6 rounded-md bg-[#1a2230] text-zinc-200 font-bold text-xs flex items-center justify-center shrink-0">3</span>
+                      <span>Enter <b className="text-white">{SERVER_IP}</b> as the Server Address and <b className="text-white">19132</b> as the Port.</span>
+                    </li>
+                    <li className="flex items-center gap-3.5">
+                      <span className="w-6 h-6 rounded-md bg-[#1a2230] text-zinc-200 font-bold text-xs flex items-center justify-center shrink-0">4</span>
+                      <span>Save, then tap IncTiers in your server list to join.</span>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </section>
 
-      {/* Модальное окно Information */}
-      {isInfoOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setIsInfoOpen(false)}>
-          <div className={`${CARD} rounded-2xl w-full max-w-lg p-6 relative shadow-2xl`} onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setIsInfoOpen(false)} className="absolute top-4 right-4 text-zinc-400 hover:text-white bg-zinc-900/80 p-1.5 rounded-lg border border-zinc-800 cursor-pointer">
-              <X className="w-4 h-4" />
-            </button>
-            <div className="text-lg font-bold text-white mb-3">{t("information")}</div>
-            <p className="text-sm text-zinc-400 leading-relaxed">{t("faq2a")}</p>
+            {/* Аккордеон Server questions */}
+            <section className="flex flex-col items-center gap-6 pt-2">
+              <h2 className="text-xl font-extrabold text-white tracking-tight text-center">
+                Server questions
+              </h2>
+
+              <div className={`${CARD} w-full max-w-[760px] rounded-2xl overflow-hidden divide-y divide-[#171f2b]`}>
+                {[
+                  {
+                    q: "What is the IncTiers server IP?",
+                    a: `The server IP is ${SERVER_IP}. Java Edition uses the default port 25565, so you don't need to add a port. On Bedrock Edition, use port 19132.`,
+                  },
+                  {
+                    q: "Which Minecraft versions can join?",
+                    a: "Java Edition players can join on any version from 1.21 - 26.3. Bedrock players should use an up-to-date version of Bedrock Edition.",
+                  },
+                  {
+                    q: "Can I join from Bedrock Edition?",
+                    a: `Yes. Bedrock players on Windows, phones and tablets can join at ${SERVER_IP} on port 19132, and they don't need a Java account.`,
+                  },
+                  {
+                    q: "Can I join on Xbox, PlayStation or Switch?",
+                    a: "Consoles don't let you add custom servers directly, so the easiest way to play on Bedrock is from Windows, a phone or a tablet.",
+                  },
+                  {
+                    q: "Why can't I connect?",
+                    a: `Check that you typed ${SERVER_IP} correctly and, on Bedrock, that the port is 19132. If the status on this page shows the server as offline, try again later.`,
+                  },
+                ].map((item, idx) => {
+                  const n = idx + 1
+                  const open = openFaq === n
+                  return (
+                    <div
+                      key={n}
+                      className={`relative transition-colors ${
+                        open ? "bg-gradient-to-r from-[#1c1a15] via-[#141922] to-[#121822]" : ""
+                      }`}
+                    >
+                      {open && <span className="absolute left-0 top-0 bottom-0 w-[2px] bg-amber-400" />}
+                      <button
+                        onClick={() => setOpenFaq(open ? null : n)}
+                        className="w-full flex items-center gap-4 px-6 py-5 text-left cursor-pointer"
+                      >
+                        <span className={`text-[11px] font-semibold w-5 ${open ? "text-amber-400" : "text-zinc-500"}`}>
+                          {String(n).padStart(2, "0")}
+                        </span>
+                        <span className="flex-1 text-sm font-bold text-white">{item.q}</span>
+                        <span
+                          className={`w-7 h-7 rounded-md flex items-center justify-center transition ${
+                            open ? "bg-amber-500/20 text-amber-400" : "bg-[#1a2230] text-zinc-400 hover:text-white"
+                          }`}
+                        >
+                          {open ? <X className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                        </span>
+                      </button>
+                      {open && (
+                        <div className="px-6 pb-6 pl-[60px] pr-12">
+                          <p className="text-[13px] text-zinc-400 leading-relaxed">{item.a}</p>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+
+              <button
+                onClick={() => goTo("rankings", "overall")}
+                className="mt-2 flex items-center gap-2 bg-[#f4f4f5] hover:bg-white text-black font-bold px-6 py-3.5 rounded-xl transition text-xs cursor-pointer shadow-lg"
+              >
+                <span>Explore the rankings</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </section>
           </div>
-        </div>
-      )}
-    </main>
-  )
-}
+        )}
