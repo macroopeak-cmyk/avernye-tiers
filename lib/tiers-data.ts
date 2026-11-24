@@ -40,7 +40,7 @@ const RAW_PLAYERS: Player[] = [
       Axe: "HT4", 
       NethOP: "HT1", 
       Pot: "HT4", 
-      SMP: "HT1", 
+      SMP: "HT3", 
       NethPot: "HT2", 
       Mace: "LT3" 
     },
