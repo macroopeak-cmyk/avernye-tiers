@@ -38,10 +38,10 @@ const RAW_PLAYERS: Player[] = [
       Vanilla: "HT3", 
       UHC: "HT3", 
       Axe: "HT4", 
-      NethOP: "HT1", 
+      NethOP: "HT3", 
       Pot: "HT4", 
       SMP: "HT3", 
-      NethPot: "HT2", 
+      NethPot: "HT3", 
       Mace: "LT3" 
     },
   },
@@ -73,7 +73,7 @@ const RAW_PLAYERS: Player[] = [
       Vanilla: { tier: "HT3", status: "Active", peak: "HT1" },
       UHC: { tier: "LT3", status: "Active", peak: "LT1" },
       Axe: { tier: "HT4", status: "Active", peak: "LT1" },
-      NethOP: { tier: "HT1", status: "Active", peak: "HT1" },
+      NethOP: { tier: "HT3", status: "Active", peak: "HT1" },
       Pot: { tier: "HT4", status: "Active", peak: "HT1" },
       SMP: { tier: "HT4", status: "Active", peak: "HT1" },
       NethPot: { tier: "LT3", status: "Active", peak: "HT1" },
@@ -280,7 +280,7 @@ const RAW_PLAYERS: Player[] = [
       UHC: "HT3",
       SMP: "HT3",
       Axe: "HT4",
-      NethOP: "HT1",
+      NethOP: "HT3",
       Mace: "HT3",
       Sword: "LT4",
       NethPot: "HT4",
@@ -501,7 +501,7 @@ const RAW_PLAYERS: Player[] = [
     id: 62,
     username: "CrimsonWolf",
     region: "EU",
-    tiers: { Sword: "LT4", NethOP: "HT2", SMP: "HT4", UHC: "HT5" },
+    tiers: { Sword: "LT4", NethOP: "HT3", SMP: "HT4", UHC: "HT5" },
   },
   {
     id: 63,
@@ -693,7 +693,7 @@ const RAW_PLAYERS: Player[] = [
     tiers: { Vanilla: "LT3", Axe: "HT4" }
   },
   { id: 306, username: "StormBreaker", region: "CIS",
-    tiers: { SMP: "HT1" }
+    tiers: { SMP: "HT3" }
   },
   { id: 307, username: "NightWolf", region: "AS",
     tiers: { Pot: "HT4", Mace: "HT3" }
