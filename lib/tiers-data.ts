@@ -840,7 +840,7 @@ const RAW_PLAYERS: Player[] = [
     username: "K1RBE",
     region: "EU",
     tiers: {
-      Vanilla: "HT1',
+      Vanilla: "HT1",
     },
   },
   // --- 30 НОВЫХ ИГРОКОВ ---
@@ -1028,20 +1028,29 @@ const RAW_PLAYERS: Player[] = [
   { id: 2150, username: "Allay2150", region: "NA", tiers: { Vanilla: "HT3", NethPot: "LT3" } }
 ]
 
+/** Приводит запись тира (строка или объект) к единому виду */
+export function normalizeTierEntry(entry: TierEntry): TierDetails & { status: TierStatus } {
+  if (typeof entry === "string") return { tier: entry, status: "Active" }
+  return { tier: entry.tier, status: entry.status || "Active", peak: entry.peak }
+}
+
 function enforceSingleHT1(players: Player[]): Player[] {
   const seenHT1Kits = new Set<string>()
 
   return players.map((player) => {
     if (player.username === "cherno") return player // cherno не трогаем
 
-    const newTiers = { ...player.tiers }
-    for (const [kit, tier] of Object.entries(newTiers)) {
-      if (tier.toUpperCase() === "HT1") {
-        if (seenHT1Kits.has(kit)) {
-          newTiers[kit] = "HT2"
-        } else {
-          seenHT1Kits.add(kit)
-        }
+    const newTiers: Record<string, TierEntry> = { ...player.tiers }
+    for (const [kit, entry] of Object.entries(newTiers)) {
+      const d = normalizeTierEntry(entry)
+      if (d.tier.toUpperCase().trim() !== "HT1") continue
+      // Retired / Inactive HT1 не занимают место единственного действующего HT1
+      if (d.status !== "Active") continue
+
+      if (seenHT1Kits.has(kit)) {
+        newTiers[kit] = typeof entry === "string" ? "HT2" : { ...entry, tier: "HT2" }
+      } else {
+        seenHT1Kits.add(kit)
       }
     }
     return { ...player, tiers: newTiers }
@@ -1070,10 +1079,12 @@ export function formatTierDisplay(tier: string): string {
   return tier
 }
 
-export function calculatePlayerPoints(tiers: Record<string, string>): number {
+export function calculatePlayerPoints(tiers: Record<string, TierEntry>): number {
   let total = 0
-  for (const tierValue of Object.values(tiers)) {
-    const cleanTier = tierValue.toUpperCase().trim()
+  for (const entry of Object.values(tiers || {})) {
+    const d = normalizeTierEntry(entry)
+    if (d.status === "Untested") continue
+    const cleanTier = String(d.tier || "").toUpperCase().trim()
     for (const [key, points] of Object.entries(TIER_POINTS)) {
       if (cleanTier === key || cleanTier.includes(key)) {
         total += points
@@ -1084,9 +1095,9 @@ export function calculatePlayerPoints(tiers: Record<string, string>): number {
   return total
 }
 
-export function getPlayerTitle(points: number, tiers?: Record<string, string>): { title: string; color: string } {
+export function getPlayerTitle(points: number, tiers?: Record<string, TierEntry>): { title: string; color: string } {
   if (tiers && Object.keys(tiers).length > 0) {
-    const allHT1 = Object.values(tiers).every((t) => t.toUpperCase().includes("HT1"))
+    const allHT1 = Object.values(tiers).every((t) => normalizeTierEntry(t).tier.toUpperCase().includes("HT1"))
     if (allHT1) {
       return { title: "The Strongest", color: "text-red-500 font-black animate-pulse" }
     }
