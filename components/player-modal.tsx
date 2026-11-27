@@ -84,7 +84,7 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
         className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
       />
 
-      <div className="relative w-full max-w-[420px] bg-[#0b0e14] border border-zinc-800/80 rounded-2xl p-6 shadow-2xl text-white z-10 animate-in fade-in zoom-in-95 duration-200 flex flex-col items-center max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full max-w-[420px] bg-[#0b0e14] border border-zinc-800/80 rounded-2xl p-6 shadow-2xl text-white z-10 animate-in fade-in zoom-in-95 duration-200 flex flex-col items-center max-h-[90vh] overflow-y-auto [&>*]:shrink-0">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-white transition cursor-pointer border border-zinc-800"
@@ -93,7 +93,7 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
         </button>
 
         {/* Аватарка */}
-        <div className="relative flex items-center justify-center w-24 h-24 rounded-full bg-[#12161f] border-2 border-amber-400/80 shadow-lg mb-3 select-none overflow-hidden">
+        <div className="relative flex items-center justify-center w-24 h-24 min-h-[96px] shrink-0 rounded-full bg-[#12161f] border-2 border-amber-400/80 shadow-lg mb-3 select-none overflow-hidden">
           <img
             src={skinUrl}
             alt={player.username}
@@ -169,7 +169,7 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
               const tierPoints = getTierPoints(tier)
 
               return (
-                <div key={mode} className="relative group/tier flex flex-col items-center justify-center">
+                <div key={mode} className="relative group/tier flex flex-col items-stretch justify-center">
                   {/* Tooltip */}
                   <div className="absolute bottom-full mb-2 hidden group-hover/tier:flex flex-col items-center z-30 pointer-events-none animate-in fade-in zoom-in-95 duration-150">
                     <div className="bg-[#0b0e14] border border-zinc-700/80 text-white px-3 py-1.5 rounded-xl shadow-2xl text-center whitespace-nowrap">
@@ -189,7 +189,7 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
 
                   {/* Карточка тира */}
                   <div
-                    className={`w-full border transition rounded-xl p-2 flex flex-col items-center justify-center gap-1 cursor-pointer ${
+                    className={`w-full h-full border transition rounded-xl p-2 flex flex-col items-center justify-center gap-1 cursor-pointer ${
                       isRetired
                         ? "bg-sky-950/20 hover:bg-sky-950/30 border-sky-500/30"
                         : "bg-[#181c27] hover:bg-[#202533] border-zinc-800/60"
