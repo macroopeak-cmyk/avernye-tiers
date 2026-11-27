@@ -66,7 +66,7 @@ const RAW_PLAYERS: Player[] = [
 {
     id: 5,
     username: "Novawww",
-    skinUsername: "Marlowww",
+    skinUsername: "Camcal",
     region: "EU",
     tiers: { 
       Sword: { tier: "HT4", status: "Active", peak: "HT1" },
