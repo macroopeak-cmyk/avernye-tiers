@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { RankedPlayer, Mode, Player, formatTierDisplay } from "@/lib/tiers-data"
+import { RankedPlayer, Mode, Player, formatTierDisplay, normalizeTierEntry, getTierPoints } from "@/lib/tiers-data"
 import { PlayerModal } from "./player-modal"
 import { Trophy, Info, Server, Copy, Check, Disc } from "lucide-react"
 
@@ -231,15 +231,14 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
                 className="hidden sm:flex items-center gap-1.5 bg-black/30 p-2 rounded-xl border border-white/10 max-w-[480px] overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
               >
                 {player.tiers && Object.entries(player.tiers).map(([modeKey, tierData]) => {
-                  const rawTier = typeof tierData === 'string' ? tierData : (tierData as any)?.tier || (tierData as any)?.value || ""
+                  const { tier: rawTier, status, peak } = normalizeTierEntry(tierData)
+                  if (!rawTier || status === "Untested") return null
+
                   const displayTier = formatTierDisplay(rawTier)
                   const t = rawTier.toUpperCase()
-
-                  const tierObj = typeof tierData === 'object' && tierData !== null ? (tierData as any) : {}
-                  const modePoints = tierObj.points || tierObj.score || 0
-                  const isRetired = tierObj.retired === true || tierObj.isRetired === true || tierObj.status === 'retired' || tierObj.is_retired === true
-                  const rawPeak = tierObj.peak || tierObj.peakTier || tierObj.maxTier || null
-                  const peakTier = rawPeak ? formatTierDisplay(rawPeak) : null
+                  const isRetired = status === "Retired"
+                  const peakTier = peak ? formatTierDisplay(peak) : null
+                  const modePoints = getTierPoints(rawTier)
 
                   let textColor = "text-amber-300"
                   let cupIcon = "/tier_1.svg"
@@ -264,41 +263,52 @@ export function RankingTable({ players, selectedMode }: RankingTableProps) {
                   const modeIcon = MODE_ICONS[modeKey] || MODE_ICONS[modeKey.toLowerCase()]
 
                   return (
-                    <div 
-                      key={modeKey} 
-                      className="relative group flex flex-col items-center px-2 py-1 bg-black/30 rounded-lg min-w-[44px] shrink-0 cursor-pointer hover:bg-black/50 transition-colors"
+                    <div
+                      key={modeKey}
+                      className={`relative group flex flex-col items-center px-2 py-1 rounded-lg min-w-[48px] shrink-0 cursor-pointer transition-colors ${
+                        isRetired ? "bg-sky-950/30 border border-sky-500/30 hover:bg-sky-950/50" : "bg-black/30 hover:bg-black/50"
+                      }`}
                     >
                       <div className="absolute bottom-full mb-1.5 hidden group-hover:flex flex-col items-center z-50 pointer-events-none">
                         <div className="px-2.5 py-1 text-xs font-bold text-amber-300 bg-[#12161f] border border-zinc-700/80 rounded-md shadow-xl whitespace-nowrap tracking-wide flex items-center gap-1.5">
-                          {isRetired && <span className="text-red-400 font-semibold">[Retired]</span>}
+                          {isRetired && <span className="text-sky-400 font-semibold">[Retired]</span>}
+                          <span>{displayTier}</span>
                           {peakTier && <span className="text-zinc-400 font-normal">Peak: {peakTier}</span>}
-                          {modePoints > 0 && <span className="text-zinc-400 font-normal">({modePoints} pts)</span>}
-                          {!isRetired && !peakTier && modePoints === 0 && <span>{displayTier}</span>}
+                          <span className="text-zinc-400 font-normal">({modePoints} pts)</span>
                         </div>
                         <div className="w-1.5 h-1.5 bg-[#12161f] border-r border-b border-zinc-700/80 transform rotate-45 -mt-1"></div>
                       </div>
 
                       {modeIcon ? (
-                        <img src={modeIcon} alt={modeKey} className="w-4 h-4 object-contain opacity-80" />
+                        <img src={modeIcon} alt={modeKey} className={`w-4 h-4 object-contain ${isRetired ? "opacity-50" : "opacity-80"}`} />
                       ) : (
                         <span className="text-[10px] uppercase font-bold tracking-tight text-zinc-400">
                           {modeKey.slice(0, 3)}
                         </span>
                       )}
-                      
+
                       <div className="flex items-center gap-1 mt-0.5">
-                        <img 
-                          src={cupIcon} 
-                          alt="" 
+                        <img
+                          src={cupIcon}
+                          alt=""
                           className="w-3 h-3 object-contain"
                           onError={(e) => {
-                            ;(e.target as HTMLElement).style.display = 'none'
+                            ;(e.target as HTMLElement).style.display = "none"
                           }}
                         />
-                        <span className={`text-xs font-black drop-shadow ${textColor}`}>
+                        <span className={`text-xs font-black drop-shadow ${textColor} ${isRetired ? "opacity-70" : ""}`}>
                           {displayTier}
                         </span>
                       </div>
+
+                      {isRetired && (
+                        <span className="text-[8px] font-bold uppercase tracking-wider text-sky-400 leading-tight">Retired</span>
+                      )}
+                      {peakTier && (
+                        <span className="text-[8px] font-semibold text-zinc-400 leading-tight">
+                          Peak <span className="text-amber-300">{peakTier}</span>
+                        </span>
+                      )}
                     </div>
                   )
                 })}
