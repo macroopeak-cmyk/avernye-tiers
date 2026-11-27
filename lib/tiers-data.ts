@@ -832,7 +832,15 @@ const RAW_PLAYERS: Player[] = [
     tiers: {
       Vanilla: "LT1",
       Sword: "HT1",
-      Pot: "HT1",
+      Pot: "HT1",  
+    },
+  },
+   {
+    id: 411,
+    username: "K1RBE",
+    region: "EU",
+    tiers: {
+      Vanilla: "HT1',
     },
   },
   // --- 30 НОВЫХ ИГРОКОВ ---
