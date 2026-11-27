@@ -70,7 +70,7 @@ const RAW_PLAYERS: Player[] = [
     region: "EU",
     tiers: { 
       Sword: { tier: "HT4", status: "Active", peak: "HT1" },
-      Vanilla: { tier: "HT3", status: "Active", peak: "HT1" },
+      Vanilla: { tier: "LT1", status: "Active", peak: "HT1" },
       UHC: { tier: "LT3", status: "Active", peak: "LT1" },
       Axe: { tier: "HT4", status: "Active", peak: "LT1" },
       NethOP: { tier: "HT3", status: "Active", peak: "HT1" },
