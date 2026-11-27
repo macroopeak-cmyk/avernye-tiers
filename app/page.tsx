@@ -1337,7 +1337,7 @@ export default function Home() {
                         <span className={`text-[11px] font-semibold w-5 ${open ? "text-amber-400" : "text-zinc-500"}`}>
                           {String(n).padStart(2, "0")}
                         </span>
-                        <span className="flex-1 text-sm font-bold text-white">{item.q}</span>
+<span className="flex-1 text-sm font-bold text-white">{item.q}</span>
                         <span
                           className={`w-7 h-7 rounded-md flex items-center justify-center transition ${
                             open ? "bg-amber-500/20 text-amber-400" : "bg-[#1a2230] text-zinc-400 hover:text-white"
@@ -1365,3 +1365,6 @@ export default function Home() {
               </button>
             </section>
           </div>
+        </div>
+      </div>
+    </main>
