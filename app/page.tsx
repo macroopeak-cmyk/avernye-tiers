@@ -5,7 +5,6 @@ import { INITIAL_PLAYERS, calculatePlayerPoints, getPlayerTitle, RankedPlayer, P
 import { RankingTable } from "@/components/ranking-table"
 import KitTier from "@/components/kit-tier"
 import { PlayerModal } from "@/components/player-modal"
-import { PlayerBody } from "@/components/player-body"
 import {
   Info, X, Search, Home as HomeIcon, Trophy, Gamepad2, ChevronDown, ExternalLink,
   Server, Calendar, ArrowRight, Check, Copy, Plus, ChevronsUp, ChevronUp, Gem
@@ -1365,6 +1364,84 @@ export default function Home() {
               </button>
             </section>
           </div>
-        </div>
+        )}
+
+        {/* ===== EVENTS ===== */}
+        {activeTab === "events" && (
+          <div className="flex flex-col gap-6 pb-4">
+            <PageHeading>{t("upcomingEvents")}</PageHeading>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {EVENTS.map((ev) => <EventCard key={ev.title} ev={ev} />)}
+            </div>
+          </div>
+        )}
+
+        {/* ===== FOOTER ===== */}
+        <footer className={`${CARD} rounded-2xl px-8 py-8 mb-8 grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-8`}>
+          <div className="flex flex-col gap-3">
+            <img src="/logo.png" alt="IncTiers Logo" className="h-9 w-auto object-contain self-start" />
+            <p className="text-xs text-zinc-400 leading-relaxed max-w-xs">{t("footerDesc")}</p>
+          </div>
+          <div className="flex flex-col gap-2 text-xs">
+            {FOOTER_COL_1.map((id) => (
+              <button key={id} onClick={() => goTo("rankings", id)} className="text-left text-zinc-400 hover:text-white transition cursor-pointer">
+                {modeById(id)?.label || id}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-col gap-2 text-xs">
+            {FOOTER_COL_2.map((id) => (
+              <button key={id} onClick={() => goTo("rankings", id)} className="text-left text-zinc-400 hover:text-white transition cursor-pointer">
+                {modeById(id)?.label || id}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-col gap-2 text-xs">
+            <button onClick={() => goTo("server-ip")} className="text-left text-zinc-400 hover:text-white transition cursor-pointer">{t("serverIp")}</button>
+            <button onClick={() => goTo("events")} className="text-left text-zinc-400 hover:text-white transition cursor-pointer">{t("events")}</button>
+            <a href={DISCORD_URL} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-white transition">Discord</a>
+          </div>
+        </footer>
       </div>
+
+      {/* ===== INFORMATION MODAL ===== */}
+      {isInfoOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div onClick={() => setIsInfoOpen(false)} className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+          <div className="relative z-10 w-full max-w-md max-h-[90vh] overflow-y-auto bg-[#0b0e14] border border-zinc-800/80 rounded-2xl p-6 shadow-2xl">
+            <button
+              onClick={() => setIsInfoOpen(false)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-white transition cursor-pointer border border-zinc-800"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <h3 className="text-lg font-extrabold mb-1">{t("tiersAndPoints")}</h3>
+            <p className="text-xs text-zinc-400 mb-4">{t("tiersAndPointsDesc")}</p>
+            <div className="flex flex-col gap-2 mb-6">
+              {TIER_ROWS.map((row) => (
+                <div key={row.name} className={`flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold ${row.row}`}>
+                  <span>{row.name}</span>
+                  <span>HT {row.ht} · LT {row.lt}</span>
+                </div>
+              ))}
+            </div>
+            <h3 className="text-lg font-extrabold mb-1">{t("titles")}</h3>
+            <p className="text-xs text-zinc-400 mb-4">{t("titlesDesc")}</p>
+            <div className="flex flex-col gap-2">
+              {TITLE_ROWS.map((row) => (
+                <div key={row.name} className="flex items-center justify-between text-xs">
+                  <span className="font-bold" style={{ color: row.color }}>{row.name}</span>
+                  <span className="text-zinc-400">{row.min}+</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedPlayer && (
+        <PlayerModal player={selectedPlayer} isOpen={!!selectedPlayer} onClose={() => setSelectedPlayer(null)} />
+      )}
     </main>
+  )
+}
