@@ -1,28 +1,13 @@
 "use client"
 
-import { useState } from "react"
-import { Player, calculatePlayerPoints, getPlayerTitle, INITIAL_PLAYERS, getStaffRoleBadge, normalizeTierEntry, getTierPoints } from "@/lib/tiers-data"
+import { Player, calculatePlayerPoints, INITIAL_PLAYERS, getStaffRoleBadge } from "@/lib/tiers-data"
 import { X, Trophy, ExternalLink } from "lucide-react"
+import { RankBadge, TierChip, getTierItems, getTitleInfo, skinOf } from "./mc-ui"
 
 interface PlayerModalProps {
   player: Player | null
   isOpen?: boolean
   onClose: () => void
-}
-
-const MODE_ICONS: Record<string, string> = {
-  Vanilla: "/vanilla.svg",
-  UHC: "/uhc.svg",
-  Pot: "/pot.svg",
-  NethOP: "/smp.svg",
-  NethPot: "/nethop.svg",
-  SMP: "/smp2.png",
-  Sword: "/sword.svg",
-  Axe: "/axe.svg",
-  Mace: "/mace.svg",
-  Cart: "/minecart-e4204998.svg",
-  SpearMace: "/spearmace.png",
-  Spear: "/spearmace.png",
 }
 
 // 🎨 Кастомные анимированные градиенты для ников
@@ -33,38 +18,27 @@ const CUSTOM_NAME_GRADIENTS: Record<string, string> = {
   "Ekho017": "bg-gradient-to-r from-purple-500 via-fuchsia-400 to-pink-400 bg-[length:200%_auto] animate-gradient text-transparent bg-clip-text",
 }
 
+const REGION_NAMES: Record<string, string> = {
+  EU: "Europe",
+  NA: "North America",
+  CIS: "CIS",
+  AS: "Asia",
+  ME: "Middle East",
+}
+
 export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps) {
   if (!isOpen || !player) return null
 
   const points = calculatePlayerPoints(player.tiers)
-  const titleInfo = getPlayerTitle(points)
+  const title = getTitleInfo(points)
   const roleBadge = getStaffRoleBadge(player.staffRole)
+  const items = getTierItems(player.tiers)
 
-  const sortedPlayers = [...INITIAL_PLAYERS].sort((a, b) => {
-    return calculatePlayerPoints(b.tiers) - calculatePlayerPoints(a.tiers)
-  })
-  const playerRank = sortedPlayers.findIndex((p) => p.id === player.id) + 1
+  const sorted = [...INITIAL_PLAYERS].sort((a, b) => calculatePlayerPoints(b.tiers) - calculatePlayerPoints(a.tiers))
+  const playerRank = sorted.findIndex((p) => p.id === player.id) + 1
 
-  const skinUrl = `https://visage.surgeplay.com/bust/120/${player.username}`
-
-  const getRankBadgeInfo = (totalPoints: number) => {
-    if (totalPoints >= 400) return { icon: "/combat_grandmaster.webp", name: titleInfo.title, color: "text-amber-400" }
-    if (totalPoints >= 250) return { icon: "/combat_grandmaster.webp", name: titleInfo.title, color: "text-amber-400" }
-    if (totalPoints >= 100) return { icon: "/combat_ace.webp", name: titleInfo.title, color: "text-rose-400" }
-    if (totalPoints >= 50) return { icon: "/combat_specialist.svg", name: titleInfo.title, color: "text-purple-300" }
-    if (totalPoints >= 20) return { icon: "/combat_cadet.svg", name: titleInfo.title, color: "text-purple-300" }
-    if (totalPoints >= 10) return { icon: "/combat_novice.svg", name: titleInfo.title, color: "text-purple-300" }
-    return { icon: "/rookie.svg", name: titleInfo.title, color: "text-zinc-300" }
-  }
-
-  // Все режимы игрока (кроме Untested): сначала активные, затем retired/прочие
-  const tierCards = Object.entries(player.tiers || {})
-    .map(([mode, entry]) => ({ mode, ...normalizeTierEntry(entry) }))
-    .filter((c) => c.tier && c.status !== "Untested")
-    .sort((a, b) => Number(a.status !== "Active") - Number(b.status !== "Active"))
-
-  const rankBadge = getRankBadgeInfo(points)
-  const nameStyle = CUSTOM_NAME_GRADIENTS[player.username] || "text-white"
+  const nameStyle = CUSTOM_NAME_GRADIENTS[player.username] || "text-[#dfe5ee]"
+  const nameMc = `https://namemc.com/profile/${player.username}`
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -74,169 +48,87 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
-        .animate-gradient {
-          animation: gradientMove 4s ease infinite;
-        }
+        .animate-gradient { animation: gradientMove 4s ease infinite; }
       `}</style>
 
-      <div
-        onClick={onClose}
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
-      />
+      <div onClick={onClose} className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200" />
 
-      <div className="relative w-full max-w-[420px] bg-[#0b0e14] border border-zinc-800/80 rounded-2xl p-6 shadow-2xl text-white z-10 animate-in fade-in zoom-in-95 duration-200 flex flex-col items-center max-h-[90vh] overflow-y-auto [&>*]:shrink-0">
+      <div className="relative z-10 w-full max-w-[460px] max-h-[92vh] overflow-y-auto overflow-x-hidden bg-[#121926] border border-[#1c2638] rounded-2xl px-8 py-8 shadow-2xl text-white flex flex-col items-center [&>*]:shrink-0 animate-in fade-in zoom-in-95 duration-200">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-white transition cursor-pointer border border-zinc-800"
+          className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-[#1b2435] hover:bg-[#243049] text-zinc-300 hover:text-white transition cursor-pointer"
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5" />
         </button>
 
-        {/* Аватарка */}
-        <div className="relative flex items-center justify-center w-24 h-24 min-h-[96px] shrink-0 rounded-full bg-[#12161f] border-2 border-amber-400/80 shadow-lg mb-3 select-none overflow-hidden">
+        {/* Аватар */}
+        <div className="relative w-[100px] h-[100px] min-h-[100px] rounded-full bg-[#1a2232] border-2 border-[#e8b830] overflow-hidden flex items-end justify-center">
           <img
-            src={skinUrl}
+            src={skinOf(player, 120)}
             alt={player.username}
-            className="h-28 object-contain drop-shadow-xl translate-y-1"
+            className="h-[110px] object-contain translate-y-1"
             onError={(e) => {
               ;(e.target as HTMLImageElement).src = "https://visage.surgeplay.com/bust/120/MHF_Steve"
             }}
           />
         </div>
 
-        {/* Ник */}
-        <h2 className={`text-2xl font-black mb-1.5 ${nameStyle}`}>
-          {player.username}
-        </h2>
+        <h2 className={`text-[30px] leading-tight font-bold mt-3 ${nameStyle}`}>{player.username}</h2>
 
         {roleBadge && (
-          <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold mb-2 ${roleBadge.color}`}>
-            {roleBadge.label}
-          </span>
+          <span className={`mt-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${roleBadge.color}`}>{roleBadge.label}</span>
         )}
 
-        {/* Плашка титула */}
-        <div className="flex items-center gap-1.5 bg-[#161a23] border border-amber-500/30 px-3 py-1 rounded-full mb-1.5 shadow-sm">
-          <img src={rankBadge.icon} alt="Rank Icon" className="w-4 h-4 object-contain" />
-          <span className="text-xs font-bold text-amber-300">
-            {rankBadge.name}
-          </span>
+        <div className={`mt-3 flex items-center gap-2 px-4 py-1.5 rounded-full ${title.pill}`}>
+          <img src={title.icon} alt="" className="w-[22px] h-[22px] object-contain" />
+          <span className="text-[15px] font-semibold">{title.name}</span>
         </div>
 
-        {/* Регион */}
-        <div className="text-xs text-zinc-500 font-semibold tracking-wide mb-2.5">
-          {player.region === "EU" ? "Europe" : player.region === "NA" ? "North America" : player.region === "CIS" ? "CIS" : "Asia"}
+        <div className="mt-4 text-[17px] font-bold text-[#8b97ab]">{REGION_NAMES[player.region] || player.region}</div>
+
+        <div className="mt-3 flex items-center gap-2">
+          <a
+            href={`https://namemc.com/search?q=${player.username}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1b2435] hover:bg-[#243049] transition text-xs font-medium text-zinc-300"
+          >
+            <span className="w-5 h-5 rounded-[5px] bg-black border border-zinc-600 flex items-center justify-center text-[11px] font-black text-white leading-none">n</span>
+            <span>NameMC</span>
+            <ExternalLink className="w-3 h-3 text-zinc-400" />
+          </a>
+          <a
+            href={nameMc}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1b2435] hover:bg-[#243049] transition text-xs font-medium text-zinc-300"
+          >
+            <span>View full profile</span>
+            <ExternalLink className="w-3 h-3 text-zinc-400" />
+          </a>
         </div>
 
-        {/* Кнопка NameMC */}
-        <a
-          href={`https://namemc.com/search?q=${player.username}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#181c27] hover:bg-[#202533] border border-zinc-800 transition text-xs font-medium text-zinc-300 hover:text-white mb-5 cursor-pointer shadow-sm"
-        >
-          <span className="w-2 h-2 rounded-full bg-zinc-400 inline-block"></span>
-          <span>NameMC</span>
-          <ExternalLink className="w-3 h-3 text-zinc-400" />
-        </a>
-
-        {/* Секция POSITION */}
-        <div className="w-full mb-4">
-          <div className="text-[11px] font-bold text-zinc-400 tracking-wider mb-1.5">POSITION</div>
-          <div className="flex items-center bg-gradient-to-r from-amber-500/20 via-[#161a23] to-[#161a23] border border-amber-500/40 rounded-xl p-2.5 relative overflow-hidden">
-            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-amber-500"></div>
-            <div className="flex items-center gap-3 pl-2">
-              <span className="text-lg font-black italic text-amber-400">#{playerRank}.</span>
-              <div className="flex items-center gap-2">
-                <Trophy className="w-4 h-4 text-amber-400" />
-                <span className="text-xs font-extrabold tracking-wider text-white uppercase">OVERALL</span>
-              </div>
-            </div>
-            <div className="ml-auto text-xs font-bold text-zinc-400">
-              ({points} points)
+        {/* POSITION */}
+        <div className="w-full mt-6">
+          <div className="text-[17px] text-[#9aa6b8] font-medium mb-2">POSITION</div>
+          <div className="flex items-stretch h-[46px] rounded-[10px] bg-[#0e1520] border border-[#1a2333]">
+            <RankBadge rank={playerRank} size="xs" />
+            <div className="flex items-center gap-2 pl-3">
+              <Trophy className="w-5 h-5 text-[#f59e0b] fill-[#f59e0b]" />
+              <span className="text-[19px] font-extrabold text-white tracking-wide">OVERALL</span>
+              <span className="text-sm text-[#7d8aa0]">({points} points)</span>
             </div>
           </div>
         </div>
 
-        {/* Секция TIERS: активные + retired, с пиками */}
-        <div className="w-full">
-          <div className="text-[11px] font-bold text-zinc-400 tracking-wider mb-1.5">TIERS</div>
-          <div className="bg-[#12161f] border border-zinc-800/80 rounded-2xl p-3 grid grid-cols-3 gap-2">
-            {tierCards.map(({ mode, tier, status, peak }) => {
-              const isHt = tier.toUpperCase().startsWith("HT")
-              const isRetired = status === "Retired"
-              const iconPath = MODE_ICONS[mode] || MODE_ICONS[Object.keys(MODE_ICONS).find((k) => k.toLowerCase() === mode.toLowerCase()) || ""]
-              const tierPoints = getTierPoints(tier)
-
-              return (
-                <div key={mode} className="relative group/tier flex flex-col items-stretch justify-center">
-                  {/* Tooltip */}
-                  <div className="absolute bottom-full mb-2 hidden group-hover/tier:flex flex-col items-center z-30 pointer-events-none animate-in fade-in zoom-in-95 duration-150">
-                    <div className="bg-[#0b0e14] border border-zinc-700/80 text-white px-3 py-1.5 rounded-xl shadow-2xl text-center whitespace-nowrap">
-                      <div className="text-xs font-bold tracking-wide flex items-center gap-1.5 justify-center">
-                        {status !== "Active" && <span className="text-sky-400">[{status}]</span>}
-                        <span className={isHt ? "text-amber-400" : "text-purple-400"}>{tier}</span>
-                      </div>
-                      {peak && (
-                        <div className="text-[10px] text-zinc-400 font-medium">
-                          Peak: <span className="text-amber-300">{peak}</span>
-                        </div>
-                      )}
-                      <div className="text-[10px] text-zinc-400 font-medium">{tierPoints} points</div>
-                    </div>
-                    <div className="w-2 h-2 bg-[#0b0e14] border-r border-b border-zinc-700/80 rotate-45 -mt-1"></div>
-                  </div>
-
-                  {/* Карточка тира */}
-                  <div
-                    className={`w-full h-full border transition rounded-xl p-2 flex flex-col items-center justify-center gap-1 cursor-pointer ${
-                      isRetired
-                        ? "bg-sky-950/20 hover:bg-sky-950/30 border-sky-500/30"
-                        : "bg-[#181c27] hover:bg-[#202533] border-zinc-800/60"
-                    }`}
-                  >
-                    {iconPath ? (
-                      <img src={iconPath} alt={mode} className={`w-4 h-4 object-contain ${isRetired ? "opacity-60" : ""}`} />
-                    ) : (
-                      <div className="w-4 h-4 bg-zinc-800 rounded-sm" />
-                    )}
-                    <span className="text-[9px] text-zinc-500 font-semibold uppercase tracking-wide">{mode}</span>
-
-                    <span
-                      className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded ${
-                        isHt
-                          ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
-                          : "bg-purple-500/15 text-purple-400 border border-purple-500/30"
-                      } ${isRetired ? "opacity-70" : ""}`}
-                    >
-                      {tier}
-                    </span>
-
-                    {isRetired && (
-                      <span className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-px rounded bg-sky-500/15 text-sky-400 border border-sky-500/30">
-                        Retired
-                      </span>
-                    )}
-                    {status === "Inactive" && (
-                      <span className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-px rounded bg-orange-500/15 text-orange-400 border border-orange-500/30">
-                        Inactive
-                      </span>
-                    )}
-                    {status === "Sub-Tier" && (
-                      <span className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-px rounded bg-purple-500/15 text-purple-400 border border-purple-500/30">
-                        Sub-Tier
-                      </span>
-                    )}
-
-                    {peak && (
-                      <span className="text-[9px] font-semibold text-zinc-400">
-                        Peak: <span className="text-amber-300">{peak}</span>
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )
-            })}
+        {/* TIERS */}
+        <div className="w-full mt-5">
+          <div className="text-[17px] text-[#9aa6b8] font-medium mb-2">TIERS</div>
+          <div className="rounded-[10px] bg-[#0e1520] border border-[#1a2333] px-3 pt-4 pb-3 flex flex-wrap gap-x-2 gap-y-4">
+            {items.map((item) => (
+              <TierChip key={item.mode} item={item} />
+            ))}
+            {items.length === 0 && <span className="text-sm text-zinc-500">No tiers yet</span>}
           </div>
         </div>
       </div>
