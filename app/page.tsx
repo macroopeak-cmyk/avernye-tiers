@@ -5,6 +5,7 @@ import { INITIAL_PLAYERS, calculatePlayerPoints, getPlayerTitle, RankedPlayer, P
 import { RankingTable } from "@/components/ranking-table"
 import KitTier from "@/components/kit-tier"
 import { PlayerModal } from "@/components/player-modal"
+import { getModeIcon } from "@/lib/mode-icons"
 import {
   Info, X, Search, Home as HomeIcon, Trophy, Gamepad2, ChevronDown, ExternalLink,
   Server, Calendar, ArrowRight, Check, Copy, Plus, ChevronsUp, ChevronUp, Gem
@@ -560,6 +561,7 @@ export default function Home() {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
   const [errorText, setErrorText] = useState<string>("")
   const [isInfoOpen, setIsInfoOpen] = useState<boolean>(false)
+  const [infoTab, setInfoTab] = useState<"titles" | "points" | "test" | "kit">("titles")
   const [isDiscordMenuOpen, setIsDiscordMenuOpen] = useState<boolean>(false)
   const [copiedIp, setCopiedIp] = useState<boolean>(false)
   const [openFaq, setOpenFaq] = useState<number | null>(1)
@@ -648,6 +650,12 @@ export default function Home() {
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
+  const openInfo = () => {
+    goTo("rankings", "overall")
+    setInfoTab("titles")
+    setIsInfoOpen(true)
+  }
+
   const scrollToTierTest = () => {
     document.getElementById("tier-test")?.scrollIntoView({ behavior: "smooth", block: "center" })
   }
@@ -694,6 +702,126 @@ export default function Home() {
     </div>
   )
 
+  const INFO_TABS = [
+    { id: "titles", label: "Titles" },
+    { id: "points", label: "Points" },
+    { id: "test", label: "Tier Test" },
+    { id: "kit", label: "Testing Kit" },
+  ] as const
+
+  const TITLE_ICONS: Record<string, string> = {
+    "Combat Grandmaster": "/combat_grandmaster.webp",
+    "Combat Master": "/combat_master.webp",
+    "Combat Ace": "/combat_ace.webp",
+    "Combat Specialist": "/combat_specialist.svg",
+    "Combat Cadet": "/combat_cadet.svg",
+    "Combat Novice": "/combat_novice.svg",
+    Rookie: "/rookie.svg",
+  }
+  const TIER_CHIP: string[] = [
+    "bg-amber-500/15 text-amber-400 border-amber-500/40",
+    "bg-zinc-500/15 text-zinc-300 border-zinc-500/40",
+    "bg-orange-500/15 text-orange-400 border-orange-500/40",
+    "bg-zinc-700/30 text-zinc-300 border-zinc-600/50",
+    "bg-zinc-700/30 text-zinc-300 border-zinc-600/50",
+  ]
+
+  const InfoPanel = () => {
+    const modeTitle = modeById(selectedMode)?.label
+    const kitName = selectedMode !== "overall" && selectedMode !== "LTMs" ? modeTitle : "a gamemode"
+    return (
+      <>
+        <div className="fixed inset-0 z-40" onClick={() => setIsInfoOpen(false)} />
+        <div className="absolute right-0 top-full mt-2 w-[300px] z-50 bg-[#0b1019] border border-[#1a2332] rounded-2xl p-2 shadow-2xl">
+          <div className="grid grid-cols-4 gap-1 bg-[#121926] rounded-xl p-1">
+            {INFO_TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setInfoTab(tab.id)}
+                className={`py-1.5 rounded-lg text-[11px] font-semibold transition cursor-pointer border ${
+                  infoTab === tab.id ? "text-white border-zinc-500 bg-[#1a2333]" : "text-zinc-400 border-transparent hover:text-white"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="px-3 pt-3 pb-2 text-white">
+            {infoTab === "titles" && (
+              <>
+                <div className="text-xs font-bold mb-3">How to obtain Achievement Titles</div>
+                <div className="flex flex-col gap-2.5">
+                  {TITLE_ROWS.map((row) => (
+                    <div key={row.name} className="flex items-start gap-2">
+                      <img src={TITLE_ICONS[row.name]} alt="" className="w-4 h-4 mt-0.5 object-contain" />
+                      <div>
+                        <div className="text-[13px] font-medium leading-tight" style={{ color: row.color }}>{row.name}</div>
+                        <div className="text-[10px] text-zinc-400 leading-tight mt-0.5">
+                          {row.min > 0 ? `Obtained ${row.min}+ total points.` : "Starting rank for players with less than 10 points."}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {infoTab === "points" && (
+              <>
+                <div className="text-xs font-bold mb-3">How ranking points are calculated</div>
+                <div className="flex flex-col gap-3">
+                  {TIER_ROWS.map((row, i) => (
+                    <div key={row.name}>
+                      <div className="flex items-center gap-1.5 text-[13px] font-medium mb-1.5">
+                        {i < 3 && <img src={`/tier_${i + 1}.svg`} alt="" className="w-4 h-4 object-contain" />}
+                        <span className={i === 0 ? "text-amber-400" : i === 2 ? "text-orange-400" : "text-zinc-300"}>{row.name}</span>
+                      </div>
+                      <div className="flex gap-1.5">
+                        <span className={`flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-semibold ${TIER_CHIP[i]}`}>
+                          <ChevronsUp className="w-3 h-3" /> {row.ht} {row.ht === 1 ? "Point" : "Points"}
+                        </span>
+                        <span className={`flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-semibold ${TIER_CHIP[i]} opacity-80`}>
+                          <ChevronUp className="w-3 h-3" /> {row.lt} {row.lt === 1 ? "Point" : "Points"}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {infoTab === "test" && (
+              <div className="text-[12px] text-zinc-300 leading-relaxed flex flex-col gap-3">
+                <div className="text-xs font-bold text-white">How to get Tier Tested</div>
+                <p>
+                  To get tier tested in {kitName}, join <b className="text-white">{SERVER_IP}</b> and type <b className="text-white">/tiertest</b>.
+                </p>
+                <p>Choose your gamemode, pick your region and you'll join the testing queue. Your position is shown on screen.</p>
+                <p>When a tester in your region is free, you're teleported to a private arena with the official kit (see Testing Kit).</p>
+                <p>Fight your tester. Once the test is over, your tier is added to your profile.</p>
+                <p className="text-white">Good luck!</p>
+              </div>
+            )}
+
+            {infoTab === "kit" && (
+              <div className="flex items-center justify-center py-4">
+                <img
+                  src="/bring-your-own.png"
+                  alt="Bring Your Own"
+                  className="w-[200px] h-[200px] object-contain"
+                  onError={(e) => {
+                    ;(e.target as HTMLElement).replaceWith(Object.assign(document.createElement("div"), { className: "text-sm text-zinc-400 text-center py-10", textContent: "Bring your own kit!" }))
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </>
+    )
+  }
+
   const CardHeader = ({ title, subtitle }: { title: string; subtitle?: string }) => (
     <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
       <div>
@@ -701,13 +829,16 @@ export default function Home() {
         {subtitle && <p className="text-[11px] text-zinc-400 mt-1">{subtitle}</p>}
       </div>
       <div className="flex items-center gap-5">
-        <button
-          onClick={() => setIsInfoOpen(true)}
-          className="flex items-center gap-2 bg-[#1a2230] hover:bg-[#222c3e] text-white text-xs font-medium px-3.5 py-2 rounded-lg transition cursor-pointer"
-        >
-          <Info className="w-3.5 h-3.5" />
-          <span>{t("information")}</span>
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setIsInfoOpen(!isInfoOpen)}
+            className="flex items-center gap-2 bg-[#161e2c] hover:bg-[#1d2738] text-white text-[13px] font-medium px-4 py-2.5 rounded-lg transition cursor-pointer"
+          >
+            <Info className="w-4 h-4" />
+            <span>{t("information")}</span>
+          </button>
+          {isInfoOpen && InfoPanel()}
+        </div>
         <ServerBadge />
       </div>
     </div>
@@ -790,11 +921,21 @@ export default function Home() {
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>
               {isDiscordMenuOpen && (
-                <div className="absolute left-0 top-full mt-2 w-56 bg-[#0f141c] border border-[#171f2b] rounded-xl shadow-xl overflow-hidden z-50 p-1.5 flex flex-col gap-1 text-left">
-                  <a href={DISCORD_URL} target="_blank" rel="noreferrer" className="w-full px-3 py-2 rounded-lg text-xs hover:bg-zinc-800/60 text-zinc-300 hover:text-white flex items-center justify-between transition-colors">
-                    <span className="font-medium">STiers</span>
-                    <ExternalLink className="w-3.5 h-3.5 text-zinc-500" />
-                  </a>
+                <div className="absolute left-0 top-full mt-2 w-[404px] bg-[#0f1620] border border-[#1a2332] rounded-xl shadow-2xl z-50 p-3 grid grid-cols-2 gap-x-4 gap-y-2 text-left">
+                  {GAMEMODE_IDS.map((id) => (
+                    <a
+                      key={id}
+                      href={DISCORD_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-3 p-1 rounded-lg hover:bg-white/5 transition"
+                    >
+                      <span className="w-9 h-9 rounded-lg bg-[#0b111a] border border-[#1f2a3b] flex items-center justify-center">
+                        <img src={getModeIcon(id) || modeById(id)?.icon} alt="" className="w-5 h-5 object-contain" />
+                      </span>
+                      <span className="text-sm font-semibold text-zinc-300">{modeById(id)?.label || id}</span>
+                    </a>
+                  ))}
                 </div>
               )}
             </div>
@@ -908,7 +1049,7 @@ export default function Home() {
                     {t("fullLeaderboard")} <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>
-                <RankingTable players={rankedPlayers.slice(0, 3)} selectedMode="overall" />
+                <RankingTable players={rankedPlayers.slice(0, 3)} selectedMode="overall" compact />
               </div>
             </section>
 
@@ -969,7 +1110,7 @@ export default function Home() {
                 <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">{t("getTierTestedDesc")}</p>
                 <div className="flex flex-wrap items-center gap-3 mt-2">
                   <IpPill />
-                  <button onClick={() => setIsInfoOpen(true)} className="flex items-center gap-1.5 bg-[#1a2230] hover:bg-[#222c3e] text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition cursor-pointer">
+                  <button onClick={openInfo} className="flex items-center gap-1.5 bg-[#1a2230] hover:bg-[#222c3e] text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition cursor-pointer">
                     {t("learnMore")} <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -1087,7 +1228,7 @@ export default function Home() {
                       {open && (
                         <div className="px-6 pb-6 pl-[68px] max-w-3xl">
                           <p className="text-[13px] text-zinc-400 leading-relaxed">{t(`faq${n}a`)}</p>
-                          <button onClick={() => setIsInfoOpen(true)} className="mt-3 text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer">
+                          <button onClick={openInfo} className="mt-3 text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer">
                             {t("learnMore")} <ArrowRight className="w-3 h-3" />
                           </button>
                         </div>
@@ -1403,41 +1544,6 @@ export default function Home() {
           </div>
         </footer>
       </div>
-
-      {/* ===== INFORMATION MODAL ===== */}
-      {isInfoOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div onClick={() => setIsInfoOpen(false)} className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-          <div className="relative z-10 w-full max-w-md max-h-[90vh] overflow-y-auto bg-[#0b0e14] border border-zinc-800/80 rounded-2xl p-6 shadow-2xl">
-            <button
-              onClick={() => setIsInfoOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-white transition cursor-pointer border border-zinc-800"
-            >
-              <X className="w-4 h-4" />
-            </button>
-            <h3 className="text-lg font-extrabold mb-1">{t("tiersAndPoints")}</h3>
-            <p className="text-xs text-zinc-400 mb-4">{t("tiersAndPointsDesc")}</p>
-            <div className="flex flex-col gap-2 mb-6">
-              {TIER_ROWS.map((row) => (
-                <div key={row.name} className={`flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold ${row.row}`}>
-                  <span>{row.name}</span>
-                  <span>HT {row.ht} · LT {row.lt}</span>
-                </div>
-              ))}
-            </div>
-            <h3 className="text-lg font-extrabold mb-1">{t("titles")}</h3>
-            <p className="text-xs text-zinc-400 mb-4">{t("titlesDesc")}</p>
-            <div className="flex flex-col gap-2">
-              {TITLE_ROWS.map((row) => (
-                <div key={row.name} className="flex items-center justify-between text-xs">
-                  <span className="font-bold" style={{ color: row.color }}>{row.name}</span>
-                  <span className="text-zinc-400">{row.min}+</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
       {selectedPlayer && (
         <PlayerModal player={selectedPlayer} isOpen={!!selectedPlayer} onClose={() => setSelectedPlayer(null)} />
