@@ -1,319 +1,77 @@
 "use client"
 
 import { useState } from "react"
-import { RankedPlayer, Mode, Player, formatTierDisplay, normalizeTierEntry, getTierPoints } from "@/lib/tiers-data"
+import { RankedPlayer, Mode, Player } from "@/lib/tiers-data"
 import { PlayerModal } from "./player-modal"
-import { Trophy, Info, Server, Copy, Check, Disc } from "lucide-react"
+import { RankBadge, TierChip, getTierItems, getTitleInfo, regionStyle, skinOf } from "./mc-ui"
 
 interface RankingTableProps {
   players: RankedPlayer[]
   selectedMode: Mode | "overall" | string
+  compact?: boolean // для маленьких блоков (Home): без колонки тиров
 }
 
-const MODE_ICONS: Record<string, string> = {
-  "LTMs": "/ltm's.svg",
-  "Vanilla": "/vanilla.svg",
-  "UHC": "/uhc.svg",
-  "Pot": "/pot.svg",
-  "NethOP": "/smp.svg",
-  "NethPot": "/nethop.svg",
-  "SMP": "/smp2.png",
-  "Sword": "/sword.svg",
-  "Axe": "/axe.svg",
-  "Mace": "/mace.svg",
-  "Cart": "/minecart-e4204998.svg",
-  "Spear": "/spearmace.png",
-  "ltms": "/ltm's.svg",
-  "vanilla": "/vanilla.svg",
-  "uhc": "/uhc.svg",
-  "pot": "/pot.svg",
-  "nethop": "/smp.svg",
-  "nethpot": "/nethop.svg",
-  "smp": "/smp2.png",
-  "sword": "/sword.svg",
-  "axe": "/axe.svg",
-  "mace": "/mace.svg",
-  "cart": "/minecart-e4204998.svg",
-  "spear": "/spearmace.png",
-  "swo": "/sword.svg",
-  "van": "/vanilla.svg",
-  "net": "/nethop.svg",
-  "car": "/minecart-e4204998.svg",
-  "spe": "/spearmace.png"
-}
-
-export function RankingTable({ players, selectedMode }: RankingTableProps) {
+export function RankingTable({ players, compact = false }: RankingTableProps) {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
   const [skinErrors, setSkinErrors] = useState<Record<string, boolean>>({})
-  const [copied, setCopied] = useState(false)
-  const [isInfoOpen, setIsInfoOpen] = useState(false)
-
-  const copyIp = () => {
-    navigator.clipboard.writeText("playmctiers.com")
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
-  const getPlayerTitleInfo = (points: number) => {
-    if (points >= 400) return { name: "Combat Grandmaster", icon: "/combat_grandmaster.webp" }
-    if (points >= 250) return { name: "Combat Master", icon: "/combat_master.webp" }
-    if (points >= 100) return { name: "Combat Ace", icon: "/combat_ace.webp" }
-    if (points >= 50) return { name: "Combat Specialist", icon: "/combat_specialist.svg" }
-    if (points >= 20) return { name: "Combat Cadet", icon: "/combat_cadet.svg" }
-    if (points >= 10) return { name: "Combat Novice", icon: "/combat_novice.svg" }
-    return { name: "Rookie", icon: "/rookie.svg" }
-  }
-
-  const getRankBadgeStyle = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return {
-          bg: "bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 text-black border-yellow-300 shadow-[0_0_15px_rgba(252,211,77,0.4)]",
-          numberText: "text-black",
-        }
-      case 2:
-        return {
-          bg: "bg-gradient-to-r from-slate-100 via-slate-300 to-zinc-300 text-black border-slate-200 shadow-[0_0_15px_rgba(226,232,240,0.4)]",
-          numberText: "text-black",
-        }
-      case 3:
-        return {
-          bg: "bg-gradient-to-r from-amber-600 via-amber-700 to-yellow-900 text-white border-amber-500 shadow-[0_0_15px_rgba(217,119,6,0.4)]",
-          numberText: "text-white",
-        }
-      default:
-        return {
-          bg: "bg-[#181d28] text-zinc-300 border-zinc-700/50",
-          numberText: "text-zinc-200",
-        }
-    }
-  }
-
-  const getRegionBadgeStyle = (region: string) => {
-    switch (region?.toUpperCase()) {
-      case "NA": return "bg-rose-500/20 text-rose-500 border border-rose-500/30"
-      case "EU": return "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-      case "ME": return "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-      case "AS": return "bg-purple-500/20 text-purple-400 border border-purple-500/30"
-      default: return "bg-zinc-800 text-zinc-300 border border-zinc-700"
-    }
-  }
 
   return (
-    <div className="w-full flex flex-col gap-5">
-      <style jsx global>{`
-        @keyframes shine-sweep {
-          0% {
-            transform: translateX(-150%) skewX(-20deg);
-          }
-          100% {
-            transform: translateX(250%) skewX(-20deg);
-          }
-        }
-        .animate-full-shine {
-          animation: shine-sweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-      `}</style>
-
-      {/* Верхняя шапка таблицы Rankings как на скриншоте 1 */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 px-2">
-        <div>
-          <h1 className="text-2xl font-black text-white">Overall Minecraft PvP Rankings</h1>
-          <p className="text-xs text-zinc-400 mt-1">
-            {players.length} players ranked by points across 8 gamemodes
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={() => setIsInfoOpen(true)}
-            className="flex items-center gap-2 bg-[#121620] hover:bg-[#181e2b] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-300 shadow-sm transition cursor-pointer"
-          >
-            <Info className="w-4 h-4 text-cyan-400" />
-            <span>Information</span>
-          </button>
-
-          <div className="flex items-center gap-3 bg-[#121620] border border-zinc-800 px-4 py-2.5 rounded-xl text-xs shadow-sm">
-            <div className="flex items-center gap-1.5">
-              <span className="text-zinc-500 font-bold uppercase text-[10px]">SERVER IP</span>
-              <span className="text-white font-bold">playmctiers.com</span>
-            </div>
-            <button 
-              onClick={copyIp}
-              className="text-zinc-400 hover:text-white transition cursor-pointer p-1"
-              title="Копировать IP"
-            >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-            </button>
-            <a href="https://discord.gg/Y8e2REfz3A" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-indigo-400 transition ml-1">
-              <Disc className="w-4 h-4" />
-            </a>
+    <div className="w-full flex flex-col gap-2">
+      {!compact && (
+        <div className="hidden md:grid grid-cols-[1fr_auto_auto] px-4 pb-1 text-[11px] font-bold tracking-[0.2em] text-zinc-600 uppercase select-none">
+          <div className="flex gap-16">
+            <span>#</span>
+            <span>Player</span>
           </div>
+          <span className="w-[66px] text-center">Region</span>
+          <span className="w-[352px] text-center">Tiers</span>
         </div>
-      </div>
-
-      <div className="w-full hidden md:flex items-center justify-between px-6 py-1 text-xs font-bold tracking-wider text-zinc-500 uppercase select-none">
-        <div className="flex items-center gap-4">
-          <span className="min-w-[40px] text-left">#</span>
-          <span className="ml-[110px]">Player</span>
-        </div>
-        <div className="flex items-center gap-16">
-          <span>REGION</span>
-          <span className="mr-8">TIERS</span>
-        </div>
-      </div>
+      )}
 
       {players.map((player, index) => {
         const rank = index + 1
-        const style = getRankBadgeStyle(rank)
-        const titleInfo = getPlayerTitleInfo(player.points)
-        
-        const hasError = skinErrors[player.id]
-        const skinUrl = hasError
-          ? "https://visage.surgeplay.com/bust/70/MHF_Steve"
-          : `https://visage.surgeplay.com/bust/70/${player.username}`
+        const title = getTitleInfo(player.points)
+        const region = regionStyle(player.region)
+        const items = getTierItems(player.tiers)
+        const skinUrl = skinErrors[player.id]
+          ? "https://visage.surgeplay.com/bust/100/MHF_Steve"
+          : skinOf(player, 100)
 
         return (
           <div
             key={player.id}
             onClick={() => setSelectedPlayer(player)}
-            className="relative rounded-2xl border border-zinc-700/60 bg-gradient-to-r from-[#1b2230] via-[#141a26] to-[#0e131d] shadow-xl transition-all duration-200 hover:scale-[1.01] hover:border-zinc-500 cursor-pointer flex items-center justify-between px-5 py-3.5 overflow-hidden"
+            className="group relative flex items-stretch min-h-[70px] rounded-[10px] bg-[#131b28] border border-[#1a2333] hover:border-[#2b3a54] transition-colors cursor-pointer"
           >
-            <div className="flex items-center gap-5 z-10">
-              <div 
-                className={`relative overflow-hidden flex items-center gap-3.5 px-3.5 py-2 border rounded-xl md:rounded-2xl ${style.bg}`}
-                style={{ clipPath: rank <= 3 ? "polygon(0 0, 90% 0, 100% 100%, 0% 100%)" : "none" }}
-              >
-                {rank <= 3 && (
-                  <div className="absolute inset-0 pointer-events-none z-0">
-                    <div className="absolute -inset-y-4 w-12 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-full-shine" />
-                  </div>
-                )}
+            <RankBadge
+              rank={rank}
+              skinUrl={skinUrl}
+              size={compact ? "sm" : "md"}
+              onSkinError={() => setSkinErrors((p) => ({ ...p, [player.id]: true }))}
+            />
 
-                <span className={`relative z-10 text-2xl md:text-3xl font-black italic tracking-wider ${style.numberText} min-w-[34px] text-center drop-shadow-sm`}>
-                  {rank}.
-                </span>
-
-                <div className="relative z-10 h-12 md:h-14 w-12 md:w-14 flex items-end justify-center flex-shrink-0 select-none overflow-hidden">
-                  <img
-                    src={skinUrl}
-                    alt={player.username}
-                    className="h-full object-contain drop-shadow-lg"
-                    onError={() => {
-                      setSkinErrors((prev) => ({ ...prev, [player.id]: true }))
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-0.5">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-lg md:text-xl font-extrabold text-white tracking-wide">
-                    {player.username}
-                  </span>
-                  {rank === 1 && <Trophy className="w-4 h-4 text-yellow-400 fill-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />}
-                </div>
-
-                <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-400">
-                  <img src={titleInfo.icon} alt="" className="w-4 h-4 object-contain shrink-0" />
-                  <span>{titleInfo.name}</span>
-                  <span className="opacity-75">({player.points} points)</span>
-                </div>
+            <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5 pl-4 pr-3 py-2">
+              <span className="text-[20px] leading-tight font-semibold text-[#e3e8f0] truncate">{player.username}</span>
+              <div className="flex items-center gap-1.5 text-[13px] text-[#c5cddb] min-w-0">
+                <img src={title.icon} alt="" className="w-[18px] h-[18px] object-contain shrink-0" />
+                <span className="truncate">{title.name}</span>
+                <span className="text-[#5d6a80] whitespace-nowrap">({player.points} points)</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-6 z-10">
-              <div className={`px-3.5 py-1 rounded-lg text-xs font-black tracking-wider ${getRegionBadgeStyle(player.region)}`}>
+            <div className="flex items-center justify-center w-[66px] shrink-0 bg-[#0f1621]">
+              <span className={`min-w-[38px] text-center px-1.5 py-2 rounded-md text-[15px] font-extrabold ${region.box}`}>
                 {player.region || "EU"}
-              </div>
-
-              <div 
-                className="hidden sm:flex items-center gap-1.5 bg-black/30 p-2 rounded-xl border border-white/10 max-w-[480px] overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-              >
-                {player.tiers && Object.entries(player.tiers).map(([modeKey, tierData]) => {
-                  const { tier: rawTier, status, peak } = normalizeTierEntry(tierData)
-                  if (!rawTier || status === "Untested") return null
-
-                  const displayTier = formatTierDisplay(rawTier)
-                  const t = rawTier.toUpperCase()
-                  const isRetired = status === "Retired"
-                  const peakTier = peak ? formatTierDisplay(peak) : null
-                  const modePoints = getTierPoints(rawTier)
-
-                  let textColor = "text-amber-300"
-                  let cupIcon = "/tier_1.svg"
-
-                  if (t.includes("1")) {
-                    textColor = "text-amber-400"
-                    cupIcon = "/tier_1.svg"
-                  } else if (t.includes("2")) {
-                    textColor = "text-slate-300"
-                    cupIcon = "/tier_2.svg"
-                  } else if (t.includes("3")) {
-                    textColor = "text-amber-600"
-                    cupIcon = "/tier_3.svg"
-                  } else if (t.includes("4")) {
-                    textColor = "text-slate-400"
-                    cupIcon = "/tier_4.svg"
-                  } else if (t.includes("5")) {
-                    textColor = "text-slate-500"
-                    cupIcon = "/tier_5.svg"
-                  }
-
-                  const modeIcon = MODE_ICONS[modeKey] || MODE_ICONS[modeKey.toLowerCase()]
-
-                  return (
-                    <div
-                      key={modeKey}
-                      className={`relative group flex flex-col items-center px-2 py-1 rounded-lg min-w-[48px] shrink-0 cursor-pointer transition-colors ${
-                        isRetired ? "bg-sky-950/30 border border-sky-500/30 hover:bg-sky-950/50" : "bg-black/30 hover:bg-black/50"
-                      }`}
-                    >
-                      <div className="absolute bottom-full mb-1.5 hidden group-hover:flex flex-col items-center z-50 pointer-events-none">
-                        <div className="px-2.5 py-1 text-xs font-bold text-amber-300 bg-[#12161f] border border-zinc-700/80 rounded-md shadow-xl whitespace-nowrap tracking-wide flex items-center gap-1.5">
-                          {isRetired && <span className="text-sky-400 font-semibold">[Retired]</span>}
-                          <span>{displayTier}</span>
-                          {peakTier && <span className="text-zinc-400 font-normal">Peak: {peakTier}</span>}
-                          <span className="text-zinc-400 font-normal">({modePoints} pts)</span>
-                        </div>
-                        <div className="w-1.5 h-1.5 bg-[#12161f] border-r border-b border-zinc-700/80 transform rotate-45 -mt-1"></div>
-                      </div>
-
-                      {modeIcon ? (
-                        <img src={modeIcon} alt={modeKey} className={`w-4 h-4 object-contain ${isRetired ? "opacity-50" : "opacity-80"}`} />
-                      ) : (
-                        <span className="text-[10px] uppercase font-bold tracking-tight text-zinc-400">
-                          {modeKey.slice(0, 3)}
-                        </span>
-                      )}
-
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <img
-                          src={cupIcon}
-                          alt=""
-                          className="w-3 h-3 object-contain"
-                          onError={(e) => {
-                            ;(e.target as HTMLElement).style.display = "none"
-                          }}
-                        />
-                        <span className={`text-xs font-black drop-shadow ${textColor} ${isRetired ? "opacity-70" : ""}`}>
-                          {displayTier}
-                        </span>
-                      </div>
-
-                      {isRetired && (
-                        <span className="text-[8px] font-bold uppercase tracking-wider text-sky-400 leading-tight">Retired</span>
-                      )}
-                      {peakTier && (
-                        <span className="text-[8px] font-semibold text-zinc-400 leading-tight">
-                          Peak <span className="text-amber-300">{peakTier}</span>
-                        </span>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
+              </span>
             </div>
+
+            {!compact && (
+              <div className="hidden md:flex items-center justify-center gap-1.5 w-[352px] shrink-0 px-3 bg-[#101824] rounded-r-[10px]">
+                {items.map((item) => (
+                  <TierChip key={item.mode} item={item} />
+                ))}
+              </div>
+            )}
           </div>
         )
       })}
