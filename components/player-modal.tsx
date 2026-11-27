@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Player, calculatePlayerPoints, getPlayerTitle, INITIAL_PLAYERS, getStaffRoleBadge, TierEntry, TierDetails } from "@/lib/tiers-data"
+import { Player, calculatePlayerPoints, getPlayerTitle, INITIAL_PLAYERS, getStaffRoleBadge, normalizeTierEntry, getTierPoints } from "@/lib/tiers-data"
 import { X, Trophy, ExternalLink } from "lucide-react"
 
 interface PlayerModalProps {
@@ -33,33 +33,6 @@ const CUSTOM_NAME_GRADIENTS: Record<string, string> = {
   "Ekho017": "bg-gradient-to-r from-purple-500 via-fuchsia-400 to-pink-400 bg-[length:200%_auto] animate-gradient text-transparent bg-clip-text",
 }
 
-// Функция для подсчета очков за конкретный тир
-const getTierPoints = (tier: string) => {
-  switch (tier) {
-    case "HT1": return 60
-    case "LT1": return 45
-    case "HT2": return 35
-    case "LT2": return 25
-    case "HT3": return 20
-    case "LT3": return 15
-    case "HT4": return 10
-    case "LT4": return 5
-    default: return 0
-  }
-}
-
-// Нормализатор записи тира (поддерживает и старый формат строк, и новый объект)
-const normalizeTierEntry = (entry: TierEntry): TierDetails => {
-  if (typeof entry === "string") {
-    return { tier: entry, status: "Active" }
-  }
-  return {
-    tier: entry.tier,
-    status: entry.status || "Active",
-    peak: entry.peak,
-  }
-}
-
 export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps) {
   if (!isOpen || !player) return null
 
@@ -83,6 +56,12 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
     if (totalPoints >= 10) return { icon: "/combat_novice.svg", name: titleInfo.title, color: "text-purple-300" }
     return { icon: "/rookie.svg", name: titleInfo.title, color: "text-zinc-300" }
   }
+
+  // Все режимы игрока (кроме Untested): сначала активные, затем retired/прочие
+  const tierCards = Object.entries(player.tiers || {})
+    .map(([mode, entry]) => ({ mode, ...normalizeTierEntry(entry) }))
+    .filter((c) => c.tier && c.status !== "Untested")
+    .sort((a, b) => Number(a.status !== "Active") - Number(b.status !== "Active"))
 
   const rankBadge = getRankBadgeInfo(points)
   const nameStyle = CUSTOM_NAME_GRADIENTS[player.username] || "text-white"
@@ -179,19 +158,19 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
           </div>
         </div>
 
-        {/* Секция TIERS с Tooltip-менюшками при наведении */}
+        {/* Секция TIERS: активные + retired, с пиками */}
         <div className="w-full">
           <div className="text-[11px] font-bold text-zinc-400 tracking-wider mb-1.5">TIERS</div>
-          <div className="bg-[#12161f] border border-zinc-800/80 rounded-2xl p-3 grid grid-cols-5 gap-2">
-            {Object.entries(player.tiers).map(([mode, entry]) => {
-              const { tier, status, peak } = normalizeTierEntry(entry)
+          <div className="bg-[#12161f] border border-zinc-800/80 rounded-2xl p-3 grid grid-cols-3 gap-2">
+            {tierCards.map(({ mode, tier, status, peak }) => {
               const isHt = tier.toUpperCase().startsWith("HT")
-              const iconPath = MODE_ICONS[mode] || MODE_ICONS[mode.toLowerCase()] || MODE_ICONS[Object.keys(MODE_ICONS).find(k => k.toLowerCase() === mode.toLowerCase()) || ""]
+              const isRetired = status === "Retired"
+              const iconPath = MODE_ICONS[mode] || MODE_ICONS[Object.keys(MODE_ICONS).find((k) => k.toLowerCase() === mode.toLowerCase()) || ""]
               const tierPoints = getTierPoints(tier)
 
               return (
                 <div key={mode} className="relative group/tier flex flex-col items-center justify-center">
-                  {/* Всплывающее меню (Tooltip) при наведении */}
+                  {/* Tooltip */}
                   <div className="absolute bottom-full mb-2 hidden group-hover/tier:flex flex-col items-center z-30 pointer-events-none animate-in fade-in zoom-in-95 duration-150">
                     <div className="bg-[#0b0e14] border border-zinc-700/80 text-white px-3 py-1.5 rounded-xl shadow-2xl text-center whitespace-nowrap">
                       <div className="text-xs font-bold tracking-wide flex items-center gap-1.5 justify-center">
@@ -203,28 +182,57 @@ export function PlayerModal({ player, isOpen = true, onClose }: PlayerModalProps
                           Peak: <span className="text-amber-300">{peak}</span>
                         </div>
                       )}
-                      <div className="text-[10px] text-zinc-400 font-medium">
-                        {tierPoints} points
-                      </div>
+                      <div className="text-[10px] text-zinc-400 font-medium">{tierPoints} points</div>
                     </div>
-                    {/* Стрелочка тултипа */}
                     <div className="w-2 h-2 bg-[#0b0e14] border-r border-b border-zinc-700/80 rotate-45 -mt-1"></div>
                   </div>
 
                   {/* Карточка тира */}
-                  <div className="w-full bg-[#181c27] hover:bg-[#202533] border border-zinc-800/60 transition rounded-xl p-1.5 flex flex-col items-center justify-center gap-1 cursor-pointer">
+                  <div
+                    className={`w-full border transition rounded-xl p-2 flex flex-col items-center justify-center gap-1 cursor-pointer ${
+                      isRetired
+                        ? "bg-sky-950/20 hover:bg-sky-950/30 border-sky-500/30"
+                        : "bg-[#181c27] hover:bg-[#202533] border-zinc-800/60"
+                    }`}
+                  >
                     {iconPath ? (
-                      <img src={iconPath} alt={mode} className="w-4 h-4 object-contain" />
+                      <img src={iconPath} alt={mode} className={`w-4 h-4 object-contain ${isRetired ? "opacity-60" : ""}`} />
                     ) : (
                       <div className="w-4 h-4 bg-zinc-800 rounded-sm" />
                     )}
-                    <span className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded ${
-                      isHt 
-                        ? "bg-amber-500/15 text-amber-400 border border-amber-500/30" 
-                        : "bg-purple-500/15 text-purple-400 border border-purple-500/30"
-                    }`}>
+                    <span className="text-[9px] text-zinc-500 font-semibold uppercase tracking-wide">{mode}</span>
+
+                    <span
+                      className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded ${
+                        isHt
+                          ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
+                          : "bg-purple-500/15 text-purple-400 border border-purple-500/30"
+                      } ${isRetired ? "opacity-70" : ""}`}
+                    >
                       {tier}
                     </span>
+
+                    {isRetired && (
+                      <span className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-px rounded bg-sky-500/15 text-sky-400 border border-sky-500/30">
+                        Retired
+                      </span>
+                    )}
+                    {status === "Inactive" && (
+                      <span className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-px rounded bg-orange-500/15 text-orange-400 border border-orange-500/30">
+                        Inactive
+                      </span>
+                    )}
+                    {status === "Sub-Tier" && (
+                      <span className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-px rounded bg-purple-500/15 text-purple-400 border border-purple-500/30">
+                        Sub-Tier
+                      </span>
+                    )}
+
+                    {peak && (
+                      <span className="text-[9px] font-semibold text-zinc-400">
+                        Peak: <span className="text-amber-300">{peak}</span>
+                      </span>
+                    )}
                   </div>
                 </div>
               )
