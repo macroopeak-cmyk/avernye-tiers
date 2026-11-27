@@ -34,7 +34,7 @@ const RAW_PLAYERS: Player[] = [
     username: "ItzRealZevs",
     region: "EU",
     tiers: { 
-      Sword: "LT4", 
+      Sword: "LT4",  status: "Active", peak: "HT1" },
       Vanilla: "HT3", 
       UHC: "HT3", 
       Axe: "HT4", 
